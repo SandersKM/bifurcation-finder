@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/bifurcation-finder/static/css/main.2cce8147.chunk.css",
+    "main.js": "/bifurcation-finder/static/js/main.c7586ccf.chunk.js",
+    "main.js.map": "/bifurcation-finder/static/js/main.c7586ccf.chunk.js.map",
+    "runtime~main.js": "/bifurcation-finder/static/js/runtime~main.a37518ca.js",
+    "runtime~main.js.map": "/bifurcation-finder/static/js/runtime~main.a37518ca.js.map",
+    "static/js/2.93e159a3.chunk.js": "/bifurcation-finder/static/js/2.93e159a3.chunk.js",
+    "static/js/2.93e159a3.chunk.js.map": "/bifurcation-finder/static/js/2.93e159a3.chunk.js.map",
+    "index.html": "/bifurcation-finder/index.html",
+    "precache-manifest.bda015b27852f60649b6337011ee67eb.js": "/bifurcation-finder/precache-manifest.bda015b27852f60649b6337011ee67eb.js",
+    "service-worker.js": "/bifurcation-finder/service-worker.js",
+    "static/css/main.2cce8147.chunk.css.map": "/bifurcation-finder/static/css/main.2cce8147.chunk.css.map",
+    "static/media/logo.svg": "/bifurcation-finder/static/media/logo.5d5d9eef.svg"
+  }
+}
