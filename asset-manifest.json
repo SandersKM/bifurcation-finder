@@ -1,16 +1,15 @@
 {
   "files": {
     "main.css": "/bifurcation-finder/static/css/main.2cce8147.chunk.css",
-    "main.js": "/bifurcation-finder/static/js/main.e80302b6.chunk.js",
-    "main.js.map": "/bifurcation-finder/static/js/main.e80302b6.chunk.js.map",
+    "main.js": "/bifurcation-finder/static/js/main.f24542ae.chunk.js",
+    "main.js.map": "/bifurcation-finder/static/js/main.f24542ae.chunk.js.map",
     "runtime~main.js": "/bifurcation-finder/static/js/runtime~main.0ec9e987.js",
     "runtime~main.js.map": "/bifurcation-finder/static/js/runtime~main.0ec9e987.js.map",
-    "static/js/2.0eeb41fb.chunk.js": "/bifurcation-finder/static/js/2.0eeb41fb.chunk.js",
-    "static/js/2.0eeb41fb.chunk.js.map": "/bifurcation-finder/static/js/2.0eeb41fb.chunk.js.map",
+    "static/js/2.f08ddcd2.chunk.js": "/bifurcation-finder/static/js/2.f08ddcd2.chunk.js",
+    "static/js/2.f08ddcd2.chunk.js.map": "/bifurcation-finder/static/js/2.f08ddcd2.chunk.js.map",
     "index.html": "/bifurcation-finder/index.html",
-    "precache-manifest.b9c355258a9a2ca799a32acf50bcacc4.js": "/bifurcation-finder/precache-manifest.b9c355258a9a2ca799a32acf50bcacc4.js",
+    "precache-manifest.10efc12d804e2fc55e9f0624dcd1c4dd.js": "/bifurcation-finder/precache-manifest.10efc12d804e2fc55e9f0624dcd1c4dd.js",
     "service-worker.js": "/bifurcation-finder/service-worker.js",
-    "static/css/main.2cce8147.chunk.css.map": "/bifurcation-finder/static/css/main.2cce8147.chunk.css.map",
-    "static/media/logo.svg": "/bifurcation-finder/static/media/logo.5d5d9eef.svg"
+    "static/css/main.2cce8147.chunk.css.map": "/bifurcation-finder/static/css/main.2cce8147.chunk.css.map"
   }
 }
