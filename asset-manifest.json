@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/bifurcation-finder/static/css/main.2cce8147.chunk.css",
-    "main.js": "/bifurcation-finder/static/js/main.03ec7272.chunk.js",
-    "main.js.map": "/bifurcation-finder/static/js/main.03ec7272.chunk.js.map",
+    "main.js": "/bifurcation-finder/static/js/main.2fb4f795.chunk.js",
+    "main.js.map": "/bifurcation-finder/static/js/main.2fb4f795.chunk.js.map",
     "runtime~main.js": "/bifurcation-finder/static/js/runtime~main.0ec9e987.js",
     "runtime~main.js.map": "/bifurcation-finder/static/js/runtime~main.0ec9e987.js.map",
-    "static/js/2.f08ddcd2.chunk.js": "/bifurcation-finder/static/js/2.f08ddcd2.chunk.js",
-    "static/js/2.f08ddcd2.chunk.js.map": "/bifurcation-finder/static/js/2.f08ddcd2.chunk.js.map",
+    "static/js/2.dedd9434.chunk.js": "/bifurcation-finder/static/js/2.dedd9434.chunk.js",
+    "static/js/2.dedd9434.chunk.js.map": "/bifurcation-finder/static/js/2.dedd9434.chunk.js.map",
     "index.html": "/bifurcation-finder/index.html",
-    "precache-manifest.93f6566efe02ad8950d6a0806dcf735f.js": "/bifurcation-finder/precache-manifest.93f6566efe02ad8950d6a0806dcf735f.js",
+    "precache-manifest.ea79e937333d41548e70e57a6406088d.js": "/bifurcation-finder/precache-manifest.ea79e937333d41548e70e57a6406088d.js",
     "service-worker.js": "/bifurcation-finder/service-worker.js",
     "static/css/main.2cce8147.chunk.css.map": "/bifurcation-finder/static/css/main.2cce8147.chunk.css.map"
   }
