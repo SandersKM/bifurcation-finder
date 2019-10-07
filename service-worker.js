@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/bifurcation-finder/precache-manifest.ea79e937333d41548e70e57a6406088d.js"
+  "/bifurcation-finder/precache-manifest.dc28821dc6325a937675754b96d3bc23.js"
 );
 
 self.addEventListener('message', (event) => {
