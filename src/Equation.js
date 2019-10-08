@@ -1,4 +1,5 @@
 import { create, all } from 'mathjs'
+import { parseExpression } from '@babel/parser'
 //import { newtonRaphson } from 'root-finding'
 
 
@@ -23,41 +24,46 @@ export const calculateG = () => {
 export const rootG = () => {
   const config = { }
   const math = create(all, config)
-  const parser = math.parser()
-  parser.set('h', 0.1)
-  parser.set('x', 1.0)
-  parser.set('alpha', 0.5)
-  parser.set('x0', 1.1)
-  parser.set('sourceWeight', [1, 1])
-  parser.set('sourceY', [1, 1])
-  parser.set('sinkX', 2)
+  let scope = {
+    h: 0.1,
+    alpha: 0.5,
+    x0: 1.1,
+    sourceWeight: [1, 1],
+    sourceY: [1, 1],
+    sinkX: 2
+  }
   // calculate carpool cost
-  parser.evaluate('edgeLength = sinkX - x')
-  parser.set('combinedWeight', 0)
-  math.forEach(parser.get('sourceWeight'), function(value) {
-    parser.set('value', value)
-    parser.evaluate("combinedWeight = combinedWeight + value")
+  let edgeLength = '(' + scope.sinkX.toString() + ' - x)'
+  let combinedWeight = 0
+  math.forEach(scope.sourceWeight, function(weight) {
+    combinedWeight = combinedWeight + weight
   })
-  parser.evaluate('alphaAdjustedWeight = combinedWeight^alpha')
-  parser.evaluate('carpoolCost = alphaAdjustedWeight * edgeLength')
+  let carpoolCost = (combinedWeight ** scope.alpha).toString() + "*" + edgeLength
   // calculate individual cost
-  parser.set("totalIndCost", 0)
-  math.forEach(parser.get('sourceY'), function(value) {
-    parser.set('value', value)
-    parser.evaluate("totalIndCost = totalIndCost + sqrt(value + x^2)")
+  let totalIndCost = ""
+  math.forEach(scope.sourceY, function(value) {
+    totalIndCost = totalIndCost + "sqrt(" + value + " + x^2) + "
   })
-  parser.evaluate('M = (totalIndCost + carpoolCost)^2')
+  let M = '(' + totalIndCost + carpoolCost +')^2'
+
+
   // calculate fill
-  parser.set('totalArea', 0)
-  math.forEach(math.range(1, parser.get('sourceWeight').length + 1), function(i) {
-    parser.set('i', i)
-    parser.evaluate("triangle = ((x0 - x) * ((sourceWeight[i])^alpha) * sourceY[i]) / 2")
-    parser.evaluate('totalArea = totalArea + triangle')
+  let totalArea = ""
+  math.forEach(math.range(0, scope.sourceWeight.length), function(i) {
+    let triangle = "(((" + scope.x0 + " - x) *  " + ( ( ( scope.sourceWeight[i] ) ** scope.alpha ) * scope.sourceY[i]).toString() + ") / 2) "
+    if (i !== 0) {
+      triangle = " + " + triangle
+    }
+    totalArea = totalArea + triangle
   })
-  parser.evaluate('fill = (totalArea^2)/h')
-  parser.evaluate('G = fill + M')
-  console.log(parser.get("G"))
-  //return parser.get("sourceY")
+  let fill = "((( " + totalArea + ")^2) / " + scope.h.toString() + ")"
+  let G = fill + " + " + M
+  console.log(G) 
+  console.log(math.derivative(G, "x").toString()) 
+  
+  scope.x = 1.0
+  console.log(math.evaluate(G, scope))
+
 }
 
 function calculateFill(sourceWeight, alpha, sourceY, x0, x, h) {
