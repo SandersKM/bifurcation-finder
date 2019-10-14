@@ -1,7 +1,5 @@
 import { create, all } from 'mathjs'
-import { parseExpression } from '@babel/parser'
-//import { newtonRaphson } from 'root-finding'
-
+import 'root-finding'
 
 
 export const calculateG = () => {
@@ -18,7 +16,24 @@ export const calculateG = () => {
   let fill = calculateFill(sourceWeight, alpha, sourceY, x0, x, h);
   //console.log(math.chain().derivative('x^2 + x', 'x'))
   rootG()
+  console.log("G_x: " + G_x(x))
   return fill + M;
+}
+
+export const G_x = (x) => {
+  let scope = {
+    h: 0.1,
+    alpha: 0.5,
+    x0: 1.1,
+    sourceWeight: [1, 1],
+    sourceY: [1, 1],
+    sinkX: 2
+  }
+  let M = calculateTotalCosts(scope.sourceY, x)
+  let carpoolCost = calculateCarpoolCost(scope.sourceWeight, scope.alpha, scope.sinkX, x);
+  M = Math.pow(M + carpoolCost, 2)
+  let fill = calculateFill(scope.sourceWeight, scope.alpha, scope.sourceY, scope.x0, x, scope.h);
+  return fill + M
 }
 
 export const rootG = () => {
@@ -64,7 +79,14 @@ export const rootG = () => {
   scope.x = 1.0
   console.log(math.evaluate(G, scope))
 
+  //console.log(newtonRaphson(1, 0.1, 10, 0.001, FofX))
+
 }
+
+function FofX(x) {
+  return x + 2; // Our expression is f(x) = x + 2.
+}
+
 
 function calculateFill(sourceWeight, alpha, sourceY, x0, x, h) {
   let totalArea = 0;
