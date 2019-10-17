@@ -6,8 +6,7 @@ import typing
 from typing  import List
 import math
 
-
-# this needs to be a class
+# make a class to represent the network itself (nodes + bifurcation point?), then a class to analyze a flow
 
 class Flow:
 
@@ -46,20 +45,24 @@ class Flow:
 
 
 h: float = 0.1
-x0: float = 1.1
+x0: float = 2.0
 alpha: float = 0.5
 sourceWeight = [1, 1]
 sourceY = [1, 2]
 sinkX: float = 2
 
 sourceNodeList=[]
-sourceNodeList.append(Node(1,Point(0,1), NodeType.SOURCE))
+sourceNodeList.append(Node(1,Point(0,3), NodeType.SOURCE))
 sourceNodeList.append(Node(1,Point(0,1), NodeType.SOURCE))
 
-sinkNode=Node(2, Point(2,0), NodeType.SINK)
+sinkNode=Node(2, Point(2,2), NodeType.SINK)
 
-flow = Flow(h, alpha, sourceNodeList, sinkNode, Point(1.1, 0))
-x = flow.calculateG(1.0)
-print(x)
-#y = minimize_scalar(flow.calculateG)
-#print(y.x)
+flow = Flow(h, alpha, sourceNodeList, sinkNode, Point(x0, 0))
+i = 0
+minimized = minimize_scalar(flow.calculateG).x
+print(f"minimized {i}: {minimized} \t {flow.calculateG(minimized)}\n")
+while i < 1000:
+    flow = Flow(h, alpha, sourceNodeList, sinkNode, Point(minimized, 0))
+    i += 1
+    minimized = minimize_scalar(flow.calculateG).x
+    print(f"minimized {i}: {minimized} \t {flow.calculateG(minimized)} \n")
