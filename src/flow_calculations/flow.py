@@ -1,6 +1,7 @@
 from scipy.optimize import minimize_scalar
 from node import Node
 from point import Point
+from network import Network
 import numpy as np
 import typing
 from typing  import List
@@ -10,12 +11,11 @@ import math
 
 class Flow:
 
-    def __init__(self, h: float, alpha: float, sourceNodeList: List[Node], sinkNode: Node, oldBifurcationPoint: Point):
+    def __init__(self, h: float, alpha: float, network: Network):
         self.h: float = h
         self.alpha: float = alpha
-        self.sinkNode: Node = sinkNode
-        self.sourceNodeList: List[Node] = sourceNodeList
-        self.oldBifurcationPoint: Point = oldBifurcationPoint
+        self.network: Network = network
+        self.oldBifurcationPoint: Point = network.getBifurcationPoints()[0]
 
     def calculateG(self, newBifurcationPoint: float) -> float: 
         M: float = (self.calculateIndividualCost(newBifurcationPoint) + self.calculateCarpoolCost(newBifurcationPoint))**2
@@ -26,27 +26,26 @@ class Flow:
 
     def calculateFill(self, x) -> float: 
         totalArea: float = 0
-        for node in self.sourceNodeList:
+        for node in self.network.getSources():
             triangle: float = ((self.oldBifurcationPoint.getX() - x) * (node.getWeight() ** self.alpha) * node.getPoint().getY()) / 2
             totalArea += triangle
         return (totalArea ** 2) / self.h 
 
     def calculateIndividualCost(self, x) -> float: 
         total: float = 0
-        for node in self.sourceNodeList:
-            total += ((x ** 2) + (node.getPoint().getY() - self.sinkNode.getPoint().getY())**2)**(1/2)
+        sinkPointY = self.network.getSinkPoints()[0].getY()
+        for point in self.network.getSourcePoints():
+            total += ((x ** 2) + (point.getY() - sinkPointY)**2)**(1/2)
         return total 
 
     def calculateCarpoolCost(self, x) -> float: 
-        edgeLength: float = ( self.sinkNode.getPoint().getX() - x )
+        edgeLength: float = ( self.network.getSinkPoints()[0].getX() - x )
         combinedWeight: float = 0
-        for node in self.sourceNodeList:
-            combinedWeight += node.getWeight()
+        for weight in self.network.getSourceWeights():
+            combinedWeight += weight
         alphaAdjustedWeight: float = (combinedWeight ** self.alpha)
         return  alphaAdjustedWeight * edgeLength
     
-
-
 
 h: float = 0.1
 x0: float = 4
@@ -55,29 +54,24 @@ sourceWeight = [1, 1]
 sourceY = [1, 5]
 sinkX: float = 4
 
-sourceNodeList=[]
-sourceNodeList.append(Node(1,Point(0,5)))
-sourceNodeList.append(Node(1,Point(0,1)))
 
-sinkNode=Node(2, Point(4,3))
+network = Network()
+network.addSource(Node(1,Point(0,5)))
+network.addSource(Node(1,Point(0,1)))
 
-flow = Flow(h, alpha, sourceNodeList, sinkNode, sinkNode.getPoint())
+network.addSink(Node(2, Point(4,3)))
+
+network.addBifurcation(Point(4,3))
+
+flow = Flow(h, alpha, network)
 i = 0
 minimized = minimize_scalar(flow.calculateG).x
 print(f"minimized {i}: {minimized} \t {flow.calculateG(minimized)}\n")
-while i < 1:
-    flow = Flow(h, alpha, sourceNodeList, sinkNode, Point(minimized, 0))
+while i < 1000:
+    network.popBifurcation()
+    network.addBifurcation(Point(minimized, 3))
+    flow = Flow(h, alpha,network)
     i += 1
     minimized = minimize_scalar(flow.calculateG).x
     if (i % 1 == 0):
-        print(f"minimized {i}: {minimized} \t {flow.calculateG(minimized)} \t {sourceNodeList[0].getThetaSelf(sinkNode.getPoint(), Point(minimized, 2)) + sourceNodeList[1].getThetaSelf(sinkNode.getPoint(), Point(minimized, 2))}\n")
-
-
-t1 = sourceNodeList[0].getThetaSelf(sinkNode.getPoint(), Point(minimized, 2))
-st1 = sourceNodeList[0].thetaSelfShouldEqual(sourceNodeList[1], alpha)
-print(f"{t1}  =? {st1}")
-t2 = sourceNodeList[1].getThetaSelf(sinkNode.getPoint(), Point(minimized, 2))
-st2 = sourceNodeList[1].thetaSelfShouldEqual(sourceNodeList[0], alpha)
-print(f"{t2}  =? {st2}")
-st3 = sourceNodeList[1].thetaAddedShouldEqual(sourceNodeList[1], alpha)
-print(f"{t1  + t2} =? {st3}")
+        print(f"minimized {i}: {minimized} \t {flow.calculateG(minimized)}")

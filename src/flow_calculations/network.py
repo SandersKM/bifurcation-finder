@@ -21,6 +21,9 @@ class Network:
     def addBifurcation(self, point: Point) -> None:
         self.bifurcations.append(point)
 
+    def popBifurcation(self) -> Point:
+        return self.bifurcations.pop()
+
     def getSinks(self):
         return self.sinks
 
