@@ -20,8 +20,6 @@ class Flow:
     def calculateG(self, newBifurcationPoint: float) -> float: 
         M: float = (self.calculateIndividualCost(newBifurcationPoint) + self.calculateCarpoolCost(newBifurcationPoint))**2
         fill: float = self.calculateFill(newBifurcationPoint)
-        #print(f"{self.calculateIndividualCost(newBifurcationPoint)} , {self.calculateCarpoolCost(newBifurcationPoint)}")
-        #print(f"{newBifurcationPoint} : {M} + {fill}")
         return fill + M
 
     def calculateFill(self, x) -> float: 
