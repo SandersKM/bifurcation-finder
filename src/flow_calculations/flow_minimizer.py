@@ -14,15 +14,15 @@ class FlowMinimizer:
         minimized = minimize_scalar(fl.calculateG).x
         new_value = fl.calculateG(minimized)
         while i < max_iterations and abs(flow_diff) > difference_cuttoff:
-            network.popBifurcation()
-            network.addBifurcation(Point(minimized, 3))
-            fl = Flow(h, alpha,network)
+            fl.network.popBifurcation()
+            fl.network.addBifurcation(Point(minimized, 3))
+            fl = Flow(fl.h, fl.alpha, fl.network)
             i += 1
             minimized = minimize_scalar(fl.calculateG).x
             old_value: float = new_value
             new_value = fl.calculateG(minimized)
             flow_diff = new_value - old_value
-        return flow
+        return fl
 
     def get_flow_steps(self, fl: Flow, max_iterations: int = 10000, difference_cuttoff: float = .0000001):
         i: int = 0
@@ -31,12 +31,12 @@ class FlowMinimizer:
         new_value = fl.calculateG(minimized)
         flow_steps = [minimized]
         while i < max_iterations and abs(flow_diff) > difference_cuttoff:
-            network.popBifurcation()
-            network.addBifurcation(Point(minimized, 3))
-            fl = Flow(h, alpha,network)
+            fl.network.popBifurcation()
+            fl.network.addBifurcation(Point(minimized, 3))
+            fl = Flow(fl.h, fl.alpha, fl.network)
             i += 1
             minimized = minimize_scalar(fl.calculateG).x
-            flow_steps.append[minimized]
+            flow_steps.append(minimized)
             old_value: float = new_value
             new_value = fl.calculateG(minimized)
             flow_diff = new_value - old_value
