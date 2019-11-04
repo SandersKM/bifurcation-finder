@@ -17,6 +17,13 @@ class Flow:
         self.network: Network = network
         self.oldBifurcationPoint: Point = network.getBifurcationPoints()[0]
 
+    def getNetwork(self) -> Network:
+        return self.network
+
+    def updateNetwork(self, network: Network) -> None:
+        self.network = network
+        self.oldBifurcationPoint = network.getBifurcationPoints()[0]
+
     def calculateG(self, newBifurcationPoint: float) -> float: 
         M: float = (self.calculateIndividualCost(newBifurcationPoint) + self.calculateCarpoolCost(newBifurcationPoint))**2
         fill: float = self.calculateFill(newBifurcationPoint)

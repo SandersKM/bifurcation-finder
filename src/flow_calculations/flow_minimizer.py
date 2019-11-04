@@ -13,11 +13,11 @@ class FlowMinimizer:
         flow_diff: float = 1
         minimized = minimize_scalar(fl.calculateG).x
         new_value = fl.calculateG(minimized)
-        net: Network = fl.network
+        net: Network = fl.getNetwork()
         while i < max_iterations and abs(flow_diff) > difference_cuttoff:
             net.popBifurcation()
             net.addBifurcation(Point(minimized, 3))
-            fl = Flow(fl.h, fl.alpha, net)
+            fl.updateNetwork(net)
             i += 1
             minimized = minimize_scalar(fl.calculateG).x
             old_value: float = new_value
@@ -31,11 +31,11 @@ class FlowMinimizer:
         minimized = minimize_scalar(fl.calculateG).x
         new_value = fl.calculateG(minimized)
         flow_steps = [minimized]
-        net: Network = fl.network
+        net: Network = fl.getNetwork()
         while i < max_iterations and abs(flow_diff) > difference_cuttoff:
             net.popBifurcation()
             net.addBifurcation(Point(minimized, 3))
-            fl = Flow(fl.h, fl.alpha, net)
+            fl.updateNetwork(net)
             i += 1
             minimized = minimize_scalar(fl.calculateG).x
             flow_steps.append(minimized)
@@ -43,3 +43,4 @@ class FlowMinimizer:
             new_value = fl.calculateG(minimized)
             flow_diff = new_value - old_value
         return flow_steps
+
