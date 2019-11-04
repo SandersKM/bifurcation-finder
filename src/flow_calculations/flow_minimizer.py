@@ -8,12 +8,12 @@ from scipy.optimize import minimize_scalar
 
 class FlowMinimizer:
 
-    def minimize_flow(self, fl: Flow):
+    def get_minimum_flow(self, fl: Flow, max_iterations: int = 10000, difference_cuttoff: float = .0000001):
         i: int = 0
         flow_diff: float = 1
         minimized = minimize_scalar(fl.calculateG).x
         new_value = fl.calculateG(minimized)
-        while i < 1000 and abs(flow_diff) > .0000001:
+        while i < max_iterations and abs(flow_diff) > difference_cuttoff:
             network.popBifurcation()
             network.addBifurcation(Point(minimized, 3))
             fl = Flow(h, alpha,network)
@@ -24,17 +24,20 @@ class FlowMinimizer:
             flow_diff = new_value - old_value
         return flow
 
-
-
-
-h: float = 0.1
-alpha: float = 0.5
-network = Network()
-network.addSource(Node(1,Point(0,5)))
-network.addSource(Node(1,Point(0,1)))
-network.addSink(Node(2, Point(4,3)))
-network.addBifurcation(Point(4,3))
-flow = Flow(h, alpha, network)
-
-m = FlowMinimizer().minimize_flow(flow)
-print(m.network.getBifurcationPoints()[0].getX())
+    def get_flow_steps(self, fl: Flow, max_iterations: int = 10000, difference_cuttoff: float = .0000001):
+        i: int = 0
+        flow_diff: float = 1
+        minimized = minimize_scalar(fl.calculateG).x
+        new_value = fl.calculateG(minimized)
+        flow_steps = [minimized]
+        while i < max_iterations and abs(flow_diff) > difference_cuttoff:
+            network.popBifurcation()
+            network.addBifurcation(Point(minimized, 3))
+            fl = Flow(h, alpha,network)
+            i += 1
+            minimized = minimize_scalar(fl.calculateG).x
+            flow_steps.append[minimized]
+            old_value: float = new_value
+            new_value = fl.calculateG(minimized)
+            flow_diff = new_value - old_value
+        return flow_steps
