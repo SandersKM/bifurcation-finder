@@ -4,11 +4,11 @@ from bokeh.models import ColumnDataSource
 from bokeh.plotting import figure
 import typing
 from typing import List
-from flow_calculations.point import Point
-from flow_calculations.network import Network
-from flow_calculations.node import Node
-from flow_calculations.flow import Flow
-from flow_calculations.flow_minimizer import FlowMinimizer
+from point import Point
+from network import Network
+from node import Node
+from flow import Flow
+from flow_minimizer import FlowMinimizer
 
 
 class Notebook:
