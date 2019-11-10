@@ -3,8 +3,7 @@ from node import Node
 from point import Point
 from network import Network
 import numpy as np
-import typing
-from typing  import List
+from typing  import *
 import math
 
 # make a class to represent the network itself (nodes + bifurcation point?), then a class to analyze a flow
