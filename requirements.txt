@@ -1,6 +1,5 @@
 typing
 scipy
-math
 ipywidgets
 bokeh
 numpy
