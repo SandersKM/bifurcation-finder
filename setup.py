@@ -12,7 +12,7 @@ from shutil import rmtree
 from setuptools import find_packages, setup, Command
 
 # Package meta-data.
-NAME = 'bifurcation-finder'
+NAME = 'bifurcationFinder'
 DESCRIPTION = 'Senior Thesis: Programmatically finding bifurcation (branching) points for flow networks.'
 URL = 'https://github.com/SandersKM/bifurcation-finder'
 EMAIL = 'sanderkm@hendrix.edu'
