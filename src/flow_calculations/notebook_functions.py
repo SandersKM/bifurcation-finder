@@ -2,6 +2,7 @@ from ipywidgets import interact, widgets
 from IPython.display import display
 from bokeh.models import ColumnDataSource
 from bokeh.plotting import figure
+from bokeh.io import push_notebook
 import typing
 from typing import List
 from point import Point
@@ -62,24 +63,32 @@ class Notebook:
         return Flow(self.w_h.value, self.w_alpha.value, self.network)
 
     def get_steps(self):
-        return FlowMinimizer().get_flow_steps(self.make_flow(), self.max_steps.value, self.min_diff.value)
+        self.steps = FlowMinimizer().get_flow_steps(self.make_flow(), self.max_steps.value, self.min_diff.value)
 
-    def get_point_data(self):
-        x_values = [n.getX() for n in  self.network.getSourcePoints() + self.network.getSinkPoints() + self.network.getSinkPoints() ]
+    def make_point_data(self):
+        self.x_values = [n.getX() for n in  self.network.getSourcePoints() + self.network.getSinkPoints() + self.network.getSinkPoints() ]
         y_values = [n.getY() for n in  self.network.getSourcePoints() + self.network.getSinkPoints() + self.network.getSinkPoints() ]
         data = {"x_values": x_values, 'y_values': y_values}
-        return ColumnDataSource(data=data)
+        self.point_source =  ColumnDataSource(data=data)
 
-    def get_line_data(self):
+    def make_line_data(self):
         x0 = [n.getX() for n in self.network.getSourcePoints() + self.network.getSinkPoints()]
         y0 = [n.getY() for n in self.network.getSourcePoints() + self.network.getSinkPoints()]
         x1 = [self.network.getSinkPoints()[0].getX(), self.network.getSinkPoints()[0].getX(), self.network.getSinkPoints()[0].getX()]
         y1 = [self.network.getSinkPoints()[0].getY(), self.network.getSinkPoints()[0].getY(), self.network.getSinkPoints()[0].getY()]
         segment_data = {"x0": x0, "y0": y0, "x1": x1, "y1": y1}
-        return ColumnDataSource(data=segment_data)
+        self.segment_source =  ColumnDataSource(data=segment_data)
 
     def get_figure(self):
+        self.make_line_data()
+        self.make_point_data()
         fig = figure()
-        fig.circle(x='x_values', y='y_values', source=self.get_point_data())
-        fig.segment(x0 = "x0", y0="y0", x1="x1", y1="y1", color="navy", line_width=3, source=self.get_line_data())
+        fig.circle(x='x_values', y='y_values', source=self.point_source)
+        fig.segment(x0 = "x0", y0="y0", x1="x1", y1="y1", color="navy", line_width=3, source=self.segment_source)
         return fig
+
+    def update(self, step: int):
+        current_step = self.steps[step]
+        self.point_source.patch({"x_values": [(len(self.x_values)-1, current_step)]})
+        self.segment_source.patch({"x1": [(slice(3), [current_step, current_step, current_step])]})
+        push_notebook() 
