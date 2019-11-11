@@ -12,17 +12,17 @@ from shutil import rmtree
 from setuptools import find_packages, setup, Command
 
 # Package meta-data.
-NAME = 'mypackage'
-DESCRIPTION = 'My short description for my project.'
-URL = 'https://github.com/me/myproject'
-EMAIL = 'me@example.com'
-AUTHOR = 'Awesome Soul'
+NAME = 'bifurcation-finder'
+DESCRIPTION = 'Senior Thesis: Programmatically finding bifurcation (branching) points for flow networks.'
+URL = 'https://github.com/SandersKM/bifurcation-finder'
+EMAIL = 'sanderkm@hendrix.edu'
+AUTHOR = 'Kate Sanders'
 REQUIRES_PYTHON = '>=3.6.0'
 VERSION = '0.1.0'
 
 # What packages are required for this module to be executed?
 REQUIRED = [
-    # 'requests', 'maya', 'records',
+    'sys', 'math', 'ipywidgets', 'bokeh', 'scipy', 'typing', 'IPython'
 ]
 
 # What packages are optional?

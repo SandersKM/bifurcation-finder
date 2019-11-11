@@ -1,5 +1,4 @@
 from point import Point
-from enum import Enum
 import typing
 import math
 

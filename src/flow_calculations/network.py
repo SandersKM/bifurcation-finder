@@ -1,6 +1,5 @@
 from node import Node
 from point import Point
-import numpy as np
 import typing
 from typing  import List
 import math

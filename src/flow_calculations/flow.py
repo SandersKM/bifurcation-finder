@@ -1,8 +1,6 @@
-from scipy.optimize import minimize_scalar
 from node import Node
 from point import Point
 from network import Network
-import numpy as np
 from typing  import *
 import math
 
