@@ -44,7 +44,7 @@ class Notebook:
         tab_children.append(self.get_accordion([self.w_h, self.w_alpha, self.max_steps, self.min_diff], ["h", "alpha", "maximum steps", "stop distance"]))
         return tab_children
 
-    def make_tab(self):
+    def get_tab(self):
         tab = widgets.Tab(children=self.get_tab_children())
         tab_titles = ["Source 1", "Source 2", "Sink", "Parameters"]
         for i in range(len(tab_titles)):
