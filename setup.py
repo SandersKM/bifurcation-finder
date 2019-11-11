@@ -22,7 +22,7 @@ VERSION = '0.1.0'
 
 # What packages are required for this module to be executed?
 REQUIRED = [
-    'sys', 'math', 'ipywidgets', 'bokeh', 'scipy', 'typing', 'IPython'
+    'ipywidgets', 'bokeh', 'scipy', 'typing', 'IPython'
 ]
 
 # What packages are optional?
