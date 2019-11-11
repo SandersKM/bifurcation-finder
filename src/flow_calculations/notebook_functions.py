@@ -73,8 +73,8 @@ class Notebook:
     def get_line_data(self):
         x0 = [n.getX() for n in self.network.getSourcePoints() + self.network.getSinkPoints()]
         y0 = [n.getY() for n in self.network.getSourcePoints() + self.network.getSinkPoints()]
-        x1 = [self.network.getSinkPoints()[0].getX() + self.network.getSinkPoints()[0].getX() + self.network.getSinkPoints()[0].getX()]
-        y1 = [self.network.getSinkPoints()[0].getY() + self.network.getSinkPoints()[0].getY() + self.network.getSinkPoints()[0].getY()]
+        x1 = [self.network.getSinkPoints()[0].getX(), self.network.getSinkPoints()[0].getX(), self.network.getSinkPoints()[0].getX()]
+        y1 = [self.network.getSinkPoints()[0].getY(), self.network.getSinkPoints()[0].getY(), self.network.getSinkPoints()[0].getY()]
         segment_data = {"x0": x0, "y0": y0, "x1": x1, "y1": y1}
         return ColumnDataSource(data=segment_data)
 
