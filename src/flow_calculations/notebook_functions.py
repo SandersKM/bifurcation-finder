@@ -46,7 +46,9 @@ class Notebook:
     def make_tab(self):
         tab = widgets.Tab(children=self.get_tab_children())
         tab_titles = ["Source 1", "Source 2", "Sink", "Parameters"]
-        for i in range(len(tab_titles)):
+        num_titles = len(tab_titles)
+        print(num_titles)
+        for i in range(num_titles):
             tab.set_title(i, tab_titles[i])
         return tab
 
