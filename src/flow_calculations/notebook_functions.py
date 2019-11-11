@@ -68,7 +68,7 @@ class Notebook:
     def make_point_data(self):
         self.x_values = [n.getX() for n in  self.network.getSourcePoints() + self.network.getSinkPoints() + self.network.getSinkPoints() ]
         y_values = [n.getY() for n in  self.network.getSourcePoints() + self.network.getSinkPoints() + self.network.getSinkPoints() ]
-        data = {"x_values": x_values, 'y_values': y_values}
+        data = {"x_values": self.x_values, 'y_values': y_values}
         self.point_source =  ColumnDataSource(data=data)
 
     def make_line_data(self):
@@ -87,7 +87,7 @@ class Notebook:
         fig.segment(x0 = "x0", y0="y0", x1="x1", y1="y1", color="navy", line_width=3, source=self.segment_source)
         return fig
 
-    def update(self, step: int):
+    def update(self, step: int = 0):
         current_step = self.steps[step]
         self.point_source.patch({"x_values": [(len(self.x_values)-1, current_step)]})
         self.segment_source.patch({"x1": [(slice(3), [current_step, current_step, current_step])]})
