@@ -46,9 +46,7 @@ class Notebook:
     def make_tab(self):
         tab = widgets.Tab(children=self.get_tab_children())
         tab_titles = ["Source 1", "Source 2", "Sink", "Parameters"]
-        num_titles = len(tab_titles)
-        print(num_titles)
-        for i in range(num_titles):
+        for i in range(len(tab_titles)):
             tab.set_title(i, tab_titles[i])
         return tab
 
@@ -64,7 +62,7 @@ class Notebook:
         return Flow(self.w_h.value, self.w_alpha.value, self.network)
 
     def get_steps(self):
-        return FlowMinimizer(self.make_flow(), self.max_steps.value, self.min_diff.value)
+        return FlowMinimizer().get_flow_steps(self.make_flow(), self.max_steps.value, self.min_diff.value)
 
     def get_point_data(self):
         x_values = [n.getX() for n in  self.network.getSourcePoints() + self.network.getSinkPoints() + self.network.getSinkPoints() ]
