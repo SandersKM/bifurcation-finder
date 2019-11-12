@@ -12,7 +12,7 @@ from shutil import rmtree
 from setuptools import find_packages, setup, Command
 
 # Package meta-data.
-NAME = 'bifurcation-finder'
+NAME = 'src'
 DESCRIPTION = 'Senior Thesis: Programmatically finding bifurcation (branching) points for flow networks.'
 URL = 'https://github.com/SandersKM/bifurcation-finder'
 EMAIL = 'sanderkm@hendrix.edu'
@@ -22,7 +22,7 @@ VERSION = '0.1.0'
 
 # What packages are required for this module to be executed?
 REQUIRED = [
-    'sys', 'math', 'ipywidgets', 'bokeh', 'scipy', 'typing', 'IPython'
+    'ipywidgets', 'bokeh', 'scipy', 'typing', 'IPython'
 ]
 
 # What packages are optional?
