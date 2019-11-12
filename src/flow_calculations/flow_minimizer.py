@@ -15,8 +15,8 @@ class FlowMinimizer:
         new_value = fl.calculateG(minimized)
         net: Network = fl.getNetwork()
         while i < max_iterations and abs(flow_diff) > difference_cuttoff:
-            net.popBifurcation()
-            net.addBifurcation(Point(minimized, 3))
+            b = net.popBifurcation()
+            net.addBifurcation(Point(minimized, b.getY()))
             fl.updateNetwork(net)
             i += 1
             minimized = minimize_scalar(fl.calculateG).x
