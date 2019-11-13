@@ -57,8 +57,7 @@ class Flow:
         denominator = 2 * length_bif_s0 * length_bif_s1
         cos_bif = numerator/denominator # Law of Cosines
         angle = math.acos(cos_bif)
-        if True:
-            return f"s0: {length_bif_s0}, s1:{length_bif_s1}, a:{length_s0_s1}, num:{numerator}, den:{denominator}, cos:{cos_bif}, ang:{math.degrees(angle)}"
+        # return f"s0: {length_bif_s0}, s1:{length_bif_s1}, a:{length_s0_s1}, num:{numerator}, den:{denominator}, cos:{cos_bif}, ang:{math.degrees(angle)}"
         return math.degrees(angle)
 
     
