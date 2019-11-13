@@ -22,11 +22,7 @@ class FlowMinimizer:
         flow_diff: float = 1
         minimized = minimize_scalar(self.fl.calculateG).x
         new_value = self.fl.calculateG(minimized)
-        s1 = self.fl.network.getSources()[0]
-        s2 = self.fl.network.getSources()[1]
-        start = self.fl.network.getSourcePoints()[0]
-        bifurcation = self.fl.network.getBifurcationPoints()[0]
-        self.theta = [s1.getThetaSelf(start, bifurcation) + s1.getThetaSelf(start, bifurcation)]
+        self.theta = [self.fl.calculateBifurcationAngle()]
         self.steps = [self.fl.oldBifurcationPoint.getX(), minimized]
         self.cost = [new_value]
         net: Network = self.fl.getNetwork()
@@ -40,7 +36,7 @@ class FlowMinimizer:
             flow_diff = minimized - self.steps[-1]
             self.steps.append(minimized)
             self.cost.append(self.fl.calculateG(minimized))
-            self.theta.append(s1.getThetaSelf(start, bifurcation) + s1.getThetaSelf(start, bifurcation))
+            self.theta.append(self.fl.calculateBifurcationAngle())
         return self.fl
 
 

@@ -47,5 +47,17 @@ class Flow:
             combinedWeight += weight
         alphaAdjustedWeight: float = (combinedWeight ** self.alpha)
         return  alphaAdjustedWeight * edgeLength
+
+    def calculateBifurcationAngle(self) -> float:
+        sourcePoints = self.network.getSourcePoints()
+        length_bif_s0 = sourcePoints[0].calculateDistance(self.oldBifurcationPoint)
+        length_bif_s1 = sourcePoints[1].calculateDistance(self.oldBifurcationPoint)
+        length_s0_s1 = sourcePoints[0].calculateDistance(sourcePoints[1])
+        numerator = length_bif_s0**2 + length_bif_s1**2 - length_s0_s1
+        denominator = 2 * length_bif_s0 * length_bif_s1
+        cos_bif = numerator/denominator
+        angle = math.acos(cos_bif)
+        return angle
+
     
 

@@ -30,8 +30,3 @@ class Node:
 
     def getDistanceTo(self, other):
         return self.getPoint().calculateDistance(other.getPoint())
-
-    def getThetaSelf(self, start: Point, bifurcation: Point):
-        bifurcationAngle = math.atan2(bifurcation.getY()-start.getY(), bifurcation.getX()-start.getX())
-        selfAngle = math.atan2(self.getPoint().getY()-start.getY(), self.getPoint().getX()-start.getX())
-        return math.degrees(math.cos(bifurcationAngle - selfAngle))
