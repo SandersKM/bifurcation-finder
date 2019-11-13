@@ -54,7 +54,7 @@ class Flow:
         length_bif_s1 = sourcePoints[1].calculateDistance(self.oldBifurcationPoint)
         length_s0_s1 = sourcePoints[0].calculateDistance(sourcePoints[1])
         if True:
-            return length_s0_s1
+            return length_bif_s1
         numerator = length_bif_s0**2 + length_bif_s1**2 - length_s0_s1
         denominator = 2 * length_bif_s0 * length_bif_s1
         cos_bif = numerator/denominator # Law of Cosines
