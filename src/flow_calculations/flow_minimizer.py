@@ -1,4 +1,5 @@
 from typing import *
+import math
 from node import Node
 from point import Point
 from network import Network
@@ -26,7 +27,7 @@ class FlowMinimizer:
         self.steps = [self.fl.oldBifurcationPoint.getX(), minimized]
         self.cost = [new_value]
         net: Network = self.fl.getNetwork()
-        while i < self.max_iterations and abs(flow_diff) > self.difference_cuttoff and self.theta[-1] > 90:
+        while i < self.max_iterations and abs(flow_diff) > self.difference_cuttoff and math.abs(self.theta[-1] - 90) > 0.1:
             b = net.popBifurcation()
             bifurcation = Point(minimized, b.getY())
             net.addBifurcation(bifurcation)
