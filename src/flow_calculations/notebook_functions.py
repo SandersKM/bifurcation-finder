@@ -63,7 +63,7 @@ class Notebook:
         return Flow(self.w_h.value, self.w_alpha.value, self.network)
 
     def make_steps(self):
-        self.steps = FlowMinimizer().get_flow_steps(self.make_flow(), self.max_steps.value, self.min_diff.value)
+        self.steps = FlowMinimizer(self.make_flow(), self.max_steps.value, self.min_diff.value).get_minimum_flow().steps
 
     def make_point_data(self):
         self.x_values = [n.getX() for n in  self.network.getSourcePoints() + self.network.getSinkPoints() + self.network.getSinkPoints() ]
