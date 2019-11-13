@@ -29,14 +29,14 @@ class FlowMinimizer:
         self.theta = [s1.getThetaSelf(start, bifurcation) + s1.getThetaSelf(start, bifurcation)]
         self.steps = [self.fl.oldBifurcationPoint.getX(), minimized]
         self.cost = [new_value]
-        net: Network = fl.getNetwork()
+        net: Network = self.fl.getNetwork()
         while i < self.max_iterations and abs(flow_diff) > self.difference_cuttoff:
             b = net.popBifurcation()
             bifurcation = Point(minimized, b.getY())
             net.addBifurcation(bifurcation)
             self.fl.updateNetwork(net)
             i += 1
-            minimized = minimize_scalar(fl.calculateG).x
+            minimized = minimize_scalar(self.fl.calculateG).x
             self.steps.append(minimized)
             old_value: float = new_value
             new_value = self.fl.calculateG(minimized)
