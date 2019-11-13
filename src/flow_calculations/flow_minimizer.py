@@ -26,7 +26,7 @@ class FlowMinimizer:
         self.steps = [self.fl.oldBifurcationPoint.getX(), minimized]
         self.cost = [new_value]
         net: Network = self.fl.getNetwork()
-        while i < self.max_iterations and abs(flow_diff) > self.difference_cuttoff and sef.theta[-1] > 90:
+        while i < self.max_iterations and abs(flow_diff) > self.difference_cuttoff and self.theta[-1] > 90:
             b = net.popBifurcation()
             bifurcation = Point(minimized, b.getY())
             net.addBifurcation(bifurcation)
