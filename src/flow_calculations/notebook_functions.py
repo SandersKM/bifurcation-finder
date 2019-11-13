@@ -58,12 +58,12 @@ class Notebook:
         self.network.addSink(Node(2, Point(self.w_sinkx.value, self.w_sinky.value)))
         self.network.addBifurcation(Point(self.w_sinkx.value, self.w_sinky.value)) 
 
-    def make_flow(self):
+    def get_flow(self):
         self.make_network()
         return Flow(self.w_h.value, self.w_alpha.value, self.network)
 
     def make_steps(self):
-        self.steps = FlowMinimizer(self.make_flow(), self.max_steps.value, self.min_diff.value).get_minimum_flow().steps
+        self.steps = FlowMinimizer(self.get_flow(), self.max_steps.value, self.min_diff.value).get_minimum_flow().steps
 
     def make_point_data(self):
         self.x_values = [n.getX() for n in  self.network.getSourcePoints() + self.network.getSinkPoints() + self.network.getSinkPoints() ]
