@@ -31,29 +31,6 @@ class Node:
     def getDistanceTo(self, other):
         return self.getPoint().calculateDistance(other.getPoint())
 
-    def __getK1(self, other) -> float:
-        return self.getWeight() / (self.getWeight() + other.getWeight())
-
-    def __getK2(self, other) -> float:
-        return other.getWeight() / (self.getWeight() + other.getWeight()) 
-
-    def thetaSelfShouldEqual(self, other, alpha: float):
-        k1: float = (self.__getK1(other))**(2*alpha)
-        k2: float = (self.__getK2(other))**(2*alpha)
-        print(f"K1: {k1} K2: {k2}")
-        print((k1 + 1 - k2) / (2 * k1))
-        return math.degrees((k1 + 1 - k2) / (2 * k1))
-
-    def thetaOtherShouldEqual(self, other, alpha: float):
-        k1: float = (self.__getK1(other))**(2*alpha)
-        k2: float = (self.__getK2(other))**(2*alpha)
-        return math.degrees((k2 + 1 - k1) / (2 * k2))
-
-    def thetaAddedShouldEqual(self, other, alpha: float):
-        k1: float = (self.__getK1(other))**(2*alpha)
-        k2: float = (self.__getK2(other))**(2*alpha)
-        return math.degrees((1 - k1 - k2) / (2 * k1 * k2))
-
     def getThetaSelf(self, start: Point, bifurcation: Point):
         bifurcationAngle = math.atan2(bifurcation.getY()-start.getY(), bifurcation.getX()-start.getX())
         selfAngle = math.atan2(self.getPoint().getY()-start.getY(), self.getPoint().getX()-start.getX())
