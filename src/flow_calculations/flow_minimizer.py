@@ -37,11 +37,9 @@ class FlowMinimizer:
             self.fl.updateNetwork(net)
             i += 1
             minimized = minimize_scalar(self.fl.calculateG).x
+            flow_diff = minimized - self.steps[-1]
             self.steps.append(minimized)
-            old_value: float = new_value
-            new_value = self.fl.calculateG(minimized)
-            flow_diff = new_value - old_value
-            self.cost.append(new_value)
+            self.cost.append(self.fl.calculateG(minimized))
             self.theta.append(s1.getThetaSelf(start, bifurcation) + s1.getThetaSelf(start, bifurcation))
         return self.fl
 
