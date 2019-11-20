@@ -16,8 +16,16 @@ class FlowMinimizer:
         self.steps = []
         self.cost = []
         self.theta = []
-    
 
+    def should_repeat(self, i: int, flow_diff: float):
+        if i > self.max_iterations:
+            return False
+        if abs(flow_diff) < self.difference_cuttoff:
+            return False
+        if abs(self.theta[-1] - 90) < 0.1:
+            return False
+        return True
+        
     def get_minimum_flow(self):
         i: int = 0
         flow_diff: float = 1
@@ -27,7 +35,7 @@ class FlowMinimizer:
         self.steps = [self.fl.oldBifurcationPoint.getX(), minimized]
         self.cost = [new_value]
         net: Network = self.fl.getNetwork()
-        while i < self.max_iterations and (abs(flow_diff) > self.difference_cuttoff or abs(self.theta[-1] - 90) > 0.1):
+        while self.should_repeat(i, flow_diff):
             b = net.popBifurcation()
             bifurcation = Point(minimized, b.getY())
             net.addBifurcation(bifurcation)
