@@ -51,7 +51,7 @@ class Notebook:
         self.w_h = self.get_bounded_float_text_widget(.001, .5)
         self.w_alpha = self.get_bounded_float_text_widget(.5, 1)
         self.max_steps = self.get_bounded_float_text_widget(100000, 10000000)
-        self.min_diff = self.get_bounded_float_text_widget(.001, 1)
+        self.min_diff = self.get_bounded_float_text_widget(.02, 1)
         tab_children.append(self.get_accordion([self.w_h, self.w_alpha, self.max_steps, self.min_diff], ["h", "alpha", "maximum steps", "stop distance"]))
         return tab_children
 
