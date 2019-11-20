@@ -20,8 +20,8 @@ class FlowMinimizer:
     def should_repeat(self, i: int, flow_diff: float):
         if i > self.max_iterations:
             return False
-        if abs(flow_diff) < self.difference_cuttoff:
-            return False
+        #if abs(flow_diff) < self.difference_cuttoff:
+        #    return False
         if abs(self.theta[-1] - 90) < 0.1:
             return False
         return True
