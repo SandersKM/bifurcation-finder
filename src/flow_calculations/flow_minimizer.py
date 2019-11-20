@@ -45,8 +45,7 @@ class FlowMinimizer:
             flow_diff = minimized - self.steps[-1]
             self.steps.append(minimized)
             self.cost.append(self.fl.calculateG(minimized))
-            self.theta.append(abs(self.theta[-1] - 90))
-            #self.theta.append(self.fl.calculateBifurcationAngle())
+            self.theta.append(abs(self.fl.calculateBifurcationAngle() - 90))
         return self.fl
 
 
