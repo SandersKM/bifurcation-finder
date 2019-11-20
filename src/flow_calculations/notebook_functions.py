@@ -74,6 +74,8 @@ class Notebook:
         flow_minimizer = FlowMinimizer(self.get_flow(), self.max_steps.value, self.min_diff.value)
         flow_minimizer.get_minimum_flow()
         self.steps = flow_minimizer.steps
+        self.theta = flow_minimizer.theta
+        self.cost = flow_minimizer.cost
 
     def make_point_data(self):
         self.x_values = [n.getX() for n in  self.network.getSourcePoints() + self.network.getSinkPoints() + self.network.getSinkPoints() ]
@@ -98,8 +100,14 @@ class Notebook:
         fig.segment(x0 = "x0", y0="y0", x1="x1", y1="y1", color="navy", line_width=3, source=self.segment_source)
         return fig
 
+    def get_output(self):
+        self.output_text = widgets.Output(layout={'border': '1px solid black'})
+        self.output_text.append_stdout(f"Theta: {self.theta[0]}\t Cost: {self.cost[0]}")
+
     def update(self, step: int = 0):
         current_step = self.steps[step]
         self.point_source.patch({"x_values": [(len(self.x_values)-1, current_step)]})
         self.segment_source.patch({"x1": [(slice(3), [current_step, current_step, current_step])]})
+        self.output_text.clear_output()
+        self.output_text.append_stdout(f"Theta: {self.theta[current_step]}\t Cost: {self.cost[current_step]}")
         push_notebook() 
