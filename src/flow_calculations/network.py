@@ -1,5 +1,5 @@
-from node import Node
-from point import Point
+from src.flow_calculations.node import Node
+from src.flow_calculations.point import Point
 import typing
 from typing  import List
 import math

@@ -1,6 +1,6 @@
-from node import Node
-from point import Point
-from network import Network
+from src.flow_calculations.node import Node
+from src.flow_calculations.point import Point
+from src.flow_calculations.network import Network
 from typing  import *
 import math
 

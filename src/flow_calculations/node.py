@@ -1,4 +1,4 @@
-from point import Point
+from src.flow_calculations.point import Point
 import typing
 import math
 

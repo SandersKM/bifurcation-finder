@@ -1,9 +1,9 @@
 from typing import *
 import math
-from node import Node
-from point import Point
-from network import Network
-from flow import Flow
+from src.flow_calculations.node import Node
+from src.flow_calculations.point import Point
+from src.flow_calculations.network import Network
+from src.flow_calculations.flow import Flow
 from scipy.optimize import minimize_scalar
 
 
