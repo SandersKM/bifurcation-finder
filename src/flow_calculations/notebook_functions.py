@@ -5,14 +5,17 @@ from bokeh.plotting import figure
 from bokeh.io import push_notebook
 import typing
 from typing import List
-from point import Point
-from network import Network
-from node import Node
-from flow import Flow
-from flow_minimizer import FlowMinimizer
+from src.flow_calculations.point import Point
+from src.flow_calculations.network import Network
+from src.flow_calculations.node import Node
+from src.flow_calculations.flow import Flow
+from src.flow_calculations.flow_minimizer import FlowMinimizer
 
 
 class Notebook:
+
+    def __init__(self):
+        pass
 
     def get_bounded_float_text_widget(self, value: float, maximum: float):
         minimum: float = 0
