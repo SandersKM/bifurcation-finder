@@ -20,13 +20,12 @@ class Notebook:
         return widgets.BoundedFloatText(value=value, min=minimum, max=maximum, step=step, description='', disabled=False)
 
     # https://github.com/minrk/ipython_extensions/blob/master/extensions/disable_autoscroll.py
-    def set_autoscroll_to_false(self):
-        disable_js = """
+    def get_string_to_set_autoscroll_to_false(self):
+        return """
         IPython.OutputArea.prototype._should_scroll = function(lines) {
             return false;
         }
         """
-        Javascript(disable_js)
 
     def get_accordion(self, children: List, titles: List):
         accordion = widgets.Accordion(children=children)
