@@ -105,7 +105,7 @@ class Notebook:
 
     def get_output(self):
         self.output_text = widgets.Output(layout={'border': '1px solid black'})
-        self.output_text.append_stdout(f"Theta: {self.theta[0]}\t Cost: {self.cost[0]}")
+        return self.output_text
 
     def update(self, step: int = 0):
         current_step = self.steps[step]
