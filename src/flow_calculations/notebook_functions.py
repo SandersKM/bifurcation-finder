@@ -1,5 +1,5 @@
 from ipywidgets import interact, widgets
-from IPython.display import display
+from IPython.display import display, Javascript
 from bokeh.models import ColumnDataSource
 from bokeh.plotting import figure
 from bokeh.io import push_notebook
@@ -18,6 +18,15 @@ class Notebook:
         minimum: float = 0
         step: float = 0.1
         return widgets.BoundedFloatText(value=value, min=minimum, max=maximum, step=step, description='', disabled=False)
+
+    # https://github.com/minrk/ipython_extensions/blob/master/extensions/disable_autoscroll.py
+    def set_autoscroll_to_false(self):
+        disable_js = """
+        IPython.OutputArea.prototype._should_scroll = function(lines) {
+            return false;
+        }
+        """
+        Javascript(disable_js)
 
     def get_accordion(self, children: List, titles: List):
         accordion = widgets.Accordion(children=children)

@@ -22,7 +22,7 @@ class FlowMinimizer:
             return False
         #if abs(flow_diff) < self.difference_cuttoff:
         #    return False
-        if abs(self.theta[-1] - 90) < 0.1:
+        if abs(self.theta[-1] - 90) < 0.01:
             return False
         return True
         
