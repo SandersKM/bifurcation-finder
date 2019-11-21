@@ -9,13 +9,13 @@ try:
     from src.flow_calculations.point import Point
     from src.flow_calculations.nodes import Nodes
     from src.flow_calculations.node import Node
-    from src.flow_calculations.flow import Flow
+    from src.flow_calculations.network import Network
     from src.flow_calculations.flow_minimizer import FlowMinimizer
 except ImportError:
     from point import Point
     from nodes import Nodes
     from node import Node
-    from flow import Flow
+    from network import Network
     from flow_minimizer import FlowMinimizer
 
 
@@ -69,19 +69,16 @@ class Notebook:
             tab.set_title(i, tab_titles[i])
         return tab
 
-    def make_network(self):
+    def get_network(self):
         self.nodes = Nodes()
         self.nodes.addSource(Node(1,Point(self.w_source1x.value, self.w_source1y.value)))
         self.nodes.addSource(Node(1,Point(self.w_source2x.value, self.w_source2y.value)))
         self.nodes.addSink(Node(2, Point(self.w_sinkx.value, self.w_sinky.value)))
         self.nodes.addBifurcation(Point(self.w_sinkx.value, self.w_sinky.value)) 
-
-    def get_flow(self):
-        self.make_network()
-        return Flow(self.w_h.value, self.w_alpha.value, self.nodes)
+        return Network(self.w_h.value, self.w_alpha.value, self.nodes)        
 
     def make_steps(self):
-        flow_minimizer = FlowMinimizer(self.get_flow(), self.max_steps.value, self.min_diff.value)
+        flow_minimizer = FlowMinimizer(self.get_network(), self.max_steps.value, self.min_diff.value)
         flow_minimizer.get_minimum_flow()
         self.steps = flow_minimizer.steps
         self.theta = flow_minimizer.theta
@@ -119,5 +116,5 @@ class Notebook:
         self.point_source.patch({"x_values": [(len(self.x_values)-1, current_step)]})
         self.segment_source.patch({"x1": [(slice(3), [current_step, current_step, current_step])]})
         self.output_text.clear_output()
-        self.output_text.append_stdout(f"Theta: {self.theta[step]}\t Cost: {self.cost[step]}")
+        self.output_text.append_stdout(f"Theta: {self.theta[step]}\t Cost: {self.cost[step]}\t Location: {current_step}")
         push_notebook() 

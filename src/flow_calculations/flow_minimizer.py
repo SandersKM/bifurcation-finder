@@ -5,18 +5,18 @@ try:
     from src.flow_calculations.node import Node
     from src.flow_calculations.point import Point
     from src.flow_calculations.nodes import Nodes
-    from src.flow_calculations.flow import Flow
+    from src.flow_calculations.network import Network
 except ImportError:
     from node import Node
     from point import Point
     from nodes import Nodes
-    from flow import Flow
+    from network import Network
 
 
 class FlowMinimizer:
 
-    def __init__(self, fl: Flow, max_iterations: int = 10000, difference_cuttoff: float = .0000001):
-        self.fl: Flow = fl
+    def __init__(self, fl: Network, max_iterations: int = 10000, difference_cuttoff: float = .0000001):
+        self.fl: Network = fl
         self.max_iterations = max_iterations
         self.difference_cuttoff = difference_cuttoff
         self.steps = []

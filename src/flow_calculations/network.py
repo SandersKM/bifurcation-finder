@@ -11,7 +11,7 @@ except ImportError:
 
 # make a class to represent the nodes itself (nodes + bifurcation point?), then a class to analyze a flow
 
-class Flow:
+class Network:
 
     def __init__(self, h: float, alpha: float, nodes: Nodes):
         self.h: float = h
