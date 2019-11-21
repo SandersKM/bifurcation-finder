@@ -18,19 +18,21 @@ except ImportError:
     from network import Network
     from flow import Flow
 
-
 class Notebook:
+    MAX_POINT_VALUE = 10
+    MIN_WIDGET_VALUE = 0
+    STEP_WIDGET_VALUE = 0.1
 
     def __init__(self):
         pass
 
     def get_bounded_float_text_widget(self, value: float, maximum: float):
-        minimum: float = 0
-        step: float = 0.1
-        return widgets.BoundedFloatText(value=value, min=minimum, max=maximum, step=step, description='', disabled=False)
+        return widgets.BoundedFloatText(
+            value = value, min = Notebook.MIN_WIDGET_VALUE, max = maximum, 
+            step = Notebook.STEP_WIDGET_VALUE, description = '', disabled = False)
 
     # https://github.com/minrk/ipython_extensions/blob/master/extensions/disable_autoscroll.py
-    def get_string_to_set_autoscroll_to_false(self):
+    def get_string_to_set_autoscroll_to_false(self) -> str:
         return """
         IPython.OutputArea.prototype._should_scroll = function(lines) {
             return false;
@@ -46,20 +48,22 @@ class Notebook:
     def get_tab_children(self):
         tab_children = []
         point_labels = ["X", "Y"]
-        self.w_source1x = self.get_bounded_float_text_widget(0.0, 10)
-        self.w_source1y= self.get_bounded_float_text_widget(1.0, 10)
+        self.w_source1x = self.get_bounded_float_text_widget(0.0, Notebook.MAX_POINT_VALUE)
+        self.w_source1y= self.get_bounded_float_text_widget(1.0, Notebook.MAX_POINT_VALUE)
         tab_children.append(self.get_accordion([self.w_source1x, self.w_source1y], point_labels))
-        self.w_source2x = self.get_bounded_float_text_widget(0.0, 10)
-        self.w_source2y= self.get_bounded_float_text_widget(5.0, 10)
+        self.w_source2x = self.get_bounded_float_text_widget(0.0, Notebook.MAX_POINT_VALUE)
+        self.w_source2y= self.get_bounded_float_text_widget(5.0, Notebook.MAX_POINT_VALUE)
         tab_children.append(self.get_accordion([self.w_source2x, self.w_source2y], point_labels))
-        self.w_sinkx = self.get_bounded_float_text_widget(4.0, 10)
-        self.w_sinky = self.get_bounded_float_text_widget(3.0, 10)
+        self.w_sinkx = self.get_bounded_float_text_widget(4.0, Notebook.MAX_POINT_VALUE)
+        self.w_sinky = self.get_bounded_float_text_widget(3.0, Notebook.MAX_POINT_VALUE)
         tab_children.append(self.get_accordion([self.w_sinkx, self.w_sinky], point_labels))
         self.w_h = self.get_bounded_float_text_widget(.001, .5)
         self.w_alpha = self.get_bounded_float_text_widget(.5, 1)
         self.max_steps = self.get_bounded_float_text_widget(100000, 10000000)
         self.min_diff = self.get_bounded_float_text_widget(.02, 1)
-        tab_children.append(self.get_accordion([self.w_h, self.w_alpha, self.max_steps, self.min_diff], ["h", "alpha", "maximum steps", "stop distance"]))
+        tab_children.append(self.get_accordion(
+            [self.w_h, self.w_alpha, self.max_steps, self.min_diff], 
+            ["h", "alpha", "maximum steps", "stop distance"]))
         return tab_children
 
     def get_tab(self):
@@ -85,8 +89,12 @@ class Notebook:
         self.cost = flow.cost
 
     def make_point_data(self):
-        self.x_values = [n.getX() for n in  self.nodes.getSourcePoints() + self.nodes.getSinkPoints() + self.nodes.getSinkPoints() ]
-        y_values = [n.getY() for n in  self.nodes.getSourcePoints() + self.nodes.getSinkPoints() + self.nodes.getSinkPoints() ]
+        self.x_values = [
+            n.getX() for n in  self.nodes.getSourcePoints() + self.nodes.getSinkPoints()
+            + self.nodes.getSinkPoints() ]
+        y_values = [
+            n.getY() for n in  self.nodes.getSourcePoints() + self.nodes.getSinkPoints()
+            + self.nodes.getSinkPoints() ]
         data = {"x_values": self.x_values, 'y_values': y_values}
         self.point_source =  ColumnDataSource(data=data)
 
