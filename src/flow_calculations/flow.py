@@ -38,6 +38,7 @@ class Flow:
     def get_flow(self):
         i: int = 0
         node_collection: Nodes = self.network.getNodes()
+        self.update_lists(node_collection.bifurcations[0].getX())
         while self.should_repeat(i):
             b = node_collection.popBifurcation()
             minimized = minimize_scalar(self.network.calculateG).x
