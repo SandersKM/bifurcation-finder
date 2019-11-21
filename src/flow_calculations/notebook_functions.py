@@ -5,11 +5,18 @@ from bokeh.plotting import figure
 from bokeh.io import push_notebook
 import typing
 from typing import List
-from src.flow_calculations.point import Point
-from src.flow_calculations.network import Network
-from src.flow_calculations.node import Node
-from src.flow_calculations.flow import Flow
-from src.flow_calculations.flow_minimizer import FlowMinimizer
+try:
+    from src.flow_calculations.point import Point
+    from src.flow_calculations.nodes import Nodes
+    from src.flow_calculations.node import Node
+    from src.flow_calculations.flow import Flow
+    from src.flow_calculations.flow_minimizer import FlowMinimizer
+except ImportError:
+    from point import Point
+    from nodes import Nodes
+    from node import Node
+    from flow import Flow
+    from flow_minimizer import FlowMinimizer
 
 
 class Notebook:
@@ -63,15 +70,15 @@ class Notebook:
         return tab
 
     def make_network(self):
-        self.network = Network()
-        self.network.addSource(Node(1,Point(self.w_source1x.value, self.w_source1y.value)))
-        self.network.addSource(Node(1,Point(self.w_source2x.value, self.w_source2y.value)))
-        self.network.addSink(Node(2, Point(self.w_sinkx.value, self.w_sinky.value)))
-        self.network.addBifurcation(Point(self.w_sinkx.value, self.w_sinky.value)) 
+        self.nodes = Nodes()
+        self.nodes.addSource(Node(1,Point(self.w_source1x.value, self.w_source1y.value)))
+        self.nodes.addSource(Node(1,Point(self.w_source2x.value, self.w_source2y.value)))
+        self.nodes.addSink(Node(2, Point(self.w_sinkx.value, self.w_sinky.value)))
+        self.nodes.addBifurcation(Point(self.w_sinkx.value, self.w_sinky.value)) 
 
     def get_flow(self):
         self.make_network()
-        return Flow(self.w_h.value, self.w_alpha.value, self.network)
+        return Flow(self.w_h.value, self.w_alpha.value, self.nodes)
 
     def make_steps(self):
         flow_minimizer = FlowMinimizer(self.get_flow(), self.max_steps.value, self.min_diff.value)
@@ -81,16 +88,16 @@ class Notebook:
         self.cost = flow_minimizer.cost
 
     def make_point_data(self):
-        self.x_values = [n.getX() for n in  self.network.getSourcePoints() + self.network.getSinkPoints() + self.network.getSinkPoints() ]
-        y_values = [n.getY() for n in  self.network.getSourcePoints() + self.network.getSinkPoints() + self.network.getSinkPoints() ]
+        self.x_values = [n.getX() for n in  self.nodes.getSourcePoints() + self.nodes.getSinkPoints() + self.nodes.getSinkPoints() ]
+        y_values = [n.getY() for n in  self.nodes.getSourcePoints() + self.nodes.getSinkPoints() + self.nodes.getSinkPoints() ]
         data = {"x_values": self.x_values, 'y_values': y_values}
         self.point_source =  ColumnDataSource(data=data)
 
     def make_line_data(self):
-        x0 = [n.getX() for n in self.network.getSourcePoints() + self.network.getSinkPoints()]
-        y0 = [n.getY() for n in self.network.getSourcePoints() + self.network.getSinkPoints()]
-        x1 = [self.network.getSinkPoints()[0].getX(), self.network.getSinkPoints()[0].getX(), self.network.getSinkPoints()[0].getX()]
-        y1 = [self.network.getSinkPoints()[0].getY(), self.network.getSinkPoints()[0].getY(), self.network.getSinkPoints()[0].getY()]
+        x0 = [n.getX() for n in self.nodes.getSourcePoints() + self.nodes.getSinkPoints()]
+        y0 = [n.getY() for n in self.nodes.getSourcePoints() + self.nodes.getSinkPoints()]
+        x1 = [self.nodes.getSinkPoints()[0].getX(), self.nodes.getSinkPoints()[0].getX(), self.nodes.getSinkPoints()[0].getX()]
+        y1 = [self.nodes.getSinkPoints()[0].getY(), self.nodes.getSinkPoints()[0].getY(), self.nodes.getSinkPoints()[0].getY()]
         segment_data = {"x0": x0, "y0": y0, "x1": x1, "y1": y1}
         self.segment_source =  ColumnDataSource(data=segment_data)
 

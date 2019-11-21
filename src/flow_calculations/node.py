@@ -1,6 +1,9 @@
-from src.flow_calculations.point import Point
 import typing
 import math
+try:
+    from src.flow_calculations.point import Point
+except ImportError:
+    from point import Point
 
 class Node:
     """ A class used to represent a transportation network node.

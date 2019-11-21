@@ -1,10 +1,16 @@
 from typing import *
-import math
-from src.flow_calculations.node import Node
-from src.flow_calculations.point import Point
-from src.flow_calculations.network import Network
-from src.flow_calculations.flow import Flow
 from scipy.optimize import minimize_scalar
+import math
+try:
+    from src.flow_calculations.node import Node
+    from src.flow_calculations.point import Point
+    from src.flow_calculations.nodes import Nodes
+    from src.flow_calculations.flow import Flow
+except ImportError:
+    from node import Node
+    from point import Point
+    from nodes import Nodes
+    from flow import Flow
 
 
 class FlowMinimizer:
@@ -34,7 +40,7 @@ class FlowMinimizer:
         self.theta = [self.fl.calculateBifurcationAngle()]
         self.steps = [self.fl.oldBifurcationPoint.getX(), minimized]
         self.cost = [new_value]
-        net: Network = self.fl.getNetwork()
+        net: Nodes = self.fl.getNetwork()
         while self.should_repeat(i, flow_diff):
             b = net.popBifurcation()
             bifurcation = Point(minimized, b.getY())

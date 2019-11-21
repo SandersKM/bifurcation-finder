@@ -1,10 +1,14 @@
-from src.flow_calculations.node import Node
-from src.flow_calculations.point import Point
 import typing
 from typing  import List
 import math
-
-class Network:
+try:
+    from src.flow_calculations.node import Node
+    from src.flow_calculations.point import Point
+except ImportError:
+    from node import Node
+    from point import Point
+    
+class Nodes:
 
     def __init__(self) -> None:
         self.sources: List[Node] = []
