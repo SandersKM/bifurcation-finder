@@ -10,13 +10,13 @@ try:
     from src.flow_calculations.nodes import Nodes
     from src.flow_calculations.node import Node
     from src.flow_calculations.network import Network
-    from src.flow_calculations.flow_minimizer import FlowMinimizer
+    from src.flow_calculations.flow import Flow
 except ImportError:
     from point import Point
     from nodes import Nodes
     from node import Node
     from network import Network
-    from flow_minimizer import FlowMinimizer
+    from flow import Flow
 
 
 class Notebook:
@@ -78,11 +78,11 @@ class Notebook:
         return Network(self.w_h.value, self.w_alpha.value, self.nodes)        
 
     def make_steps(self):
-        flow_minimizer = FlowMinimizer(self.get_network(), self.max_steps.value, self.min_diff.value)
-        flow_minimizer.get_minimum_flow()
-        self.steps = flow_minimizer.steps
-        self.theta = flow_minimizer.theta
-        self.cost = flow_minimizer.cost
+        flow = Flow(self.get_network(), self.max_steps.value, self.min_diff.value)
+        flow.get_flow()
+        self.steps = flow.steps
+        self.theta = flow.theta
+        self.cost = flow.cost
 
     def make_point_data(self):
         self.x_values = [n.getX() for n in  self.nodes.getSourcePoints() + self.nodes.getSinkPoints() + self.nodes.getSinkPoints() ]

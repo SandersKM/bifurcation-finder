@@ -13,7 +13,7 @@ except ImportError:
     from network import Network
 
 
-class FlowMinimizer:
+class Flow:
 
     def __init__(self, fl: Network, max_iterations: int = 10000, difference_cuttoff: float = .0000001):
         self.fl: Network = fl
@@ -32,7 +32,7 @@ class FlowMinimizer:
             return False
         return True
         
-    def get_minimum_flow(self):
+    def get_flow(self):
         i: int = 0
         flow_diff: float = 1
         minimized = minimize_scalar(self.fl.calculateG).x
