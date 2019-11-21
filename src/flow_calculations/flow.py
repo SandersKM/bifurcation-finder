@@ -15,43 +15,37 @@ except ImportError:
 
 class Flow:
 
-    def __init__(self, fl: Network, max_iterations: int = 10000, difference_cuttoff: float = .0000001):
-        self.fl: Network = fl
+    def __init__(self, network: Network, max_iterations: int = 10000, difference_cuttoff: float = .0000001):
+        self.network: Network = network
         self.max_iterations = max_iterations
         self.difference_cuttoff = difference_cuttoff
         self.steps = []
         self.cost = []
         self.theta = []
 
-    def should_repeat(self, i: int, flow_diff: float):
+    def should_repeat(self, i: int):
         if i > self.max_iterations:
             return False
-        #if abs(flow_diff) < self.difference_cuttoff:
-        #    return False
         if self.theta[-1] > 90 - self.difference_cuttoff:
             return False
         return True
+
+    def update_lists(self, minimized: float):
+        self.steps.append(minimized)
+        self.cost.append(self.network.calculateG(minimized))
+        self.theta.append(self.network.calculateBifurcationAngle())
         
     def get_flow(self):
         i: int = 0
-        flow_diff: float = 1
-        minimized = minimize_scalar(self.fl.calculateG).x
-        new_value = self.fl.calculateG(minimized)
-        self.theta = [self.fl.calculateBifurcationAngle()]
-        self.steps = [self.fl.oldBifurcationPoint.getX(), minimized]
-        self.cost = [new_value]
-        node_collection: Nodes = self.fl.getNodes()
-        while self.should_repeat(i, flow_diff):
+        node_collection: Nodes = self.network.getNodes()
+        while self.should_repeat(i):
             b = node_collection.popBifurcation()
+            minimized = minimize_scalar(self.network.calculateG).x
             bifurcation = Point(minimized, b.getY())
             node_collection.addBifurcation(bifurcation)
-            self.fl.updateNodes(node_collection)
+            self.network.updateNodes(node_collection)
+            self.update_lists(minimized)
             i += 1
-            minimized = minimize_scalar(self.fl.calculateG).x
-            flow_diff = minimized - self.steps[-1]
-            self.steps.append(minimized)
-            self.cost.append(self.fl.calculateG(minimized))
-            self.theta.append(self.fl.calculateBifurcationAngle())
-        return self.fl
+        return self.network
 
 
