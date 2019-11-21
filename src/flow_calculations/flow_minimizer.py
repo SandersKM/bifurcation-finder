@@ -40,12 +40,12 @@ class FlowMinimizer:
         self.theta = [self.fl.calculateBifurcationAngle()]
         self.steps = [self.fl.oldBifurcationPoint.getX(), minimized]
         self.cost = [new_value]
-        net: Nodes = self.fl.getNodes()
+        node_collection: Nodes = self.fl.getNodes()
         while self.should_repeat(i, flow_diff):
-            b = net.popBifurcation()
+            b = node_collection.popBifurcation()
             bifurcation = Point(minimized, b.getY())
-            net.addBifurcation(bifurcation)
-            self.fl.updateNetwork(net)
+            node_collection.addBifurcation(bifurcation)
+            self.fl.updateNodes(node_collection)
             i += 1
             minimized = minimize_scalar(self.fl.calculateG).x
             flow_diff = minimized - self.steps[-1]
