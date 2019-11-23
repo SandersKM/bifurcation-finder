@@ -40,7 +40,7 @@ class Node:
     
     @property
     def point(self) -> Point:
-        return self.point
+        return self._point
 
     @point.setter
     def point(self, value) -> None:
