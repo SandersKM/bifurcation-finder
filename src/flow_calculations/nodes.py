@@ -27,23 +27,23 @@ class Nodes:
     def popBifurcation(self) -> Point:
         return self.bifurcations.pop()
 
-    def getSinks(self):
+    def getSinks(self) -> List[Nodes]:
         return self.sinks
 
-    def getSources(self):
+    def getSources(self) -> List[Nodes]:
         return self.sources
 
-    def getSinkWeights(self):
-        return [node.getWeight() for node in self.sinks]
+    def getSinkWeights(self) -> List[float]:
+        return [node.weight for node in self.sinks]
 
-    def getSourceWeights(self):
-        return [node.getWeight() for node in self.sources]
+    def getSourceWeights(self) -> List[float]:
+        return [node.weight for node in self.sources]
 
-    def getSinkPoints(self):
-        return [node.getPoint() for node in self.sinks]
+    def getSinkPoints(self) -> List[Point]:
+        return [node.point for node in self.sinks]
 
-    def getSourcePoints(self):
-        return [node.getPoint() for node in self.sources]
+    def getSourcePoints(self) -> List[Point]:
+        return [node.point for node in self.sources]
 
-    def getBifurcationPoints(self):
+    def getBifurcationPoints(self) -> List[Point]:
         return self.bifurcations

@@ -12,7 +12,6 @@ except ImportError:
     from nodes import Nodes
     from network import Network
 
-
 class Flow:
 
     def __init__(self, network: Network, max_iterations: int = 10000, difference_cuttoff: float = .0000001):

@@ -12,11 +12,11 @@ class Point:
         y-coordinate of a point on a 2D plane
     Methods
     -------
-    getX()
-        Returns x-coordinate
-    getY()
-        Returns y-coordinate
-    calculateDistance(other)
+    x()
+        Returns float x-coordinate
+    y()
+        Returns float y-coordinate
+    get_distance_to(other)
         Calculates Euclidean distance between this point and the other point
     """
 
@@ -24,13 +24,26 @@ class Point:
         self.x: float = x
         self.y: float = y
 
-    def getX(self) -> float:
-        return self.x
-    
-    def getY(self) -> float:
-        return self.y
+    def __repr__(self) -> str:
+        return f"({self.x}, {self.y})"
 
-    def calculateDistance(self, other) -> float:
+    @property
+    def x(self) -> float:
+        return self._x
+
+    @x.getter
+    def x(self, value: float) -> None:
+        self._x = value
+
+    @property
+    def y(self) -> float:
+        return self._y
+
+    @y.getter
+    def y(self, value: float) -> None:
+        self._y = value
+
+    def get_distance_to(self, other: Point) -> float:
         """
         Parameters
         ----------
@@ -43,6 +56,6 @@ class Point:
             Euclidean distance between this point and the other point
         """
         
-        xDiff: float = (self.x - other.x)
-        yDiff: float = (self.y - other.y)
-        return math.sqrt(xDiff**2 + yDiff**2)
+        x_diff: float = (self.x - other.x)
+        y_diff: float = (self.y - other.y)
+        return math.sqrt(x_diff**2 + y_diff**2)

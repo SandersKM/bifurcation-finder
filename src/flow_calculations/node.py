@@ -15,21 +15,36 @@ class Node:
         (x, y) coordinate location of the node on a 2D plane
     Methods
     -------
-    getWeight()
+    weight()
         Returns weight of the node
-    getPoint()
+    point()
         Returns (x, y) coordinate of the node
+    get_distance_to()
+        Returns distance to another node
     """
 
     def __init__(self, weight: float, point: Point):
         self.weight: float = weight
         self.point: Point = point
 
-    def getWeight(self):
-        return self.weight
+    def __repr__(self):
+        return f"{self.point}: {self.weight}"
+
+    @property
+    def weight(self) -> float:
+        return self._weight
+
+    @weight.setter
+    def weight(self, value) -> None:
+        self._weight: float = value
     
-    def getPoint(self):
+    @property
+    def point(self) -> Point:
         return self.point
 
-    def getDistanceTo(self, other):
-        return self.getPoint().calculateDistance(other.getPoint())
+    @point.setter
+    def point(self, value) -> None:
+        self._point: Point = value
+
+    def get_distance_to(self, other: Node) -> float:
+        return self.point.get_distance_to(other.point)
