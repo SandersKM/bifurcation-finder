@@ -2,7 +2,7 @@ import typing
 from typing import Type
 import math
 
-class Point:
+class Point():
     """ A class used to represent an (x, y) coorinate point.
     Attributes
     ----------
@@ -21,25 +21,25 @@ class Point:
     """
 
     def __init__(self, x: float, y: float) -> None:
-        self.x: float = x
-        self.y: float = y
+        self._x: float = x
+        self._y: float = y
 
     def __repr__(self) -> str:
         return f"({self.x}, {self.y})"
 
     @property
-    def x(self) -> float:
+    def x(self):
         return self._x
 
-    @x.getter
-    def x(self, value: float) -> None:
+    @x.setter
+    def x(self, value):
         self._x = value
 
     @property
     def y(self) -> float:
         return self._y
 
-    @y.getter
+    @y.setter
     def y(self, value: float) -> None:
         self._y = value
 

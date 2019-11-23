@@ -46,5 +46,5 @@ class Node:
     def point(self, value) -> None:
         self._point: Point = value
 
-    def get_distance_to(self, other: Node) -> float:
+    def get_distance_to(self, other) -> float:
         return self.point.get_distance_to(other.point)

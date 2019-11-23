@@ -27,10 +27,10 @@ class Nodes:
     def pop_bifurcation(self) -> Point:
         return self.bifurcations.pop()
 
-    def get_sinks(self) -> List[Nodes]:
+    def get_sinks(self):
         return self.sinks
 
-    def get_sources(self) -> List[Nodes]:
+    def get_sources(self):
         return self.sources
 
     def get_sink_weights(self) -> List[float]:
