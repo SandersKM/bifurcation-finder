@@ -43,7 +43,7 @@ class Flow:
             minimized = minimize_scalar(self.network.calculate_g).x
             bifurcation = Point(minimized, b.y)
             node_collection.add_bifurcation(bifurcation)
-            self.network.nodes(node_collection)
+            self.network.nodes = node_collection
             self.update_lists(minimized)
             i += 1
         return self.network
