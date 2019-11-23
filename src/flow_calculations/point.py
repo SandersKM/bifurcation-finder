@@ -43,7 +43,7 @@ class Point:
     def y(self, value: float) -> None:
         self._y = value
 
-    def get_distance_to(self, other: Point) -> float:
+    def get_distance_to(self, other) -> float:
         """
         Parameters
         ----------

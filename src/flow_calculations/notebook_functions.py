@@ -75,10 +75,10 @@ class Notebook:
 
     def get_network(self):
         self.nodes = Nodes()
-        self.nodes.addSource(Node(1,Point(self.w_source1x.value, self.w_source1y.value)))
-        self.nodes.addSource(Node(1,Point(self.w_source2x.value, self.w_source2y.value)))
-        self.nodes.addSink(Node(2, Point(self.w_sinkx.value, self.w_sinky.value)))
-        self.nodes.addBifurcation(Point(self.w_sinkx.value, self.w_sinky.value)) 
+        self.nodes.add_source(Node(1,Point(self.w_source1x.value, self.w_source1y.value)))
+        self.nodes.add_source(Node(1,Point(self.w_source2x.value, self.w_source2y.value)))
+        self.nodes.add_sink(Node(2, Point(self.w_sinkx.value, self.w_sinky.value)))
+        self.nodes.add_bifurcation(Point(self.w_sinkx.value, self.w_sinky.value)) 
         return Network(self.w_h.value, self.w_alpha.value, self.nodes)        
 
     def make_steps(self):
@@ -90,19 +90,19 @@ class Notebook:
 
     def make_point_data(self):
         self.x_values = [
-            n.getX() for n in  self.nodes.getSourcePoints() + self.nodes.getSinkPoints()
-            + self.nodes.getSinkPoints() ]
+            n.x for n in  self.nodes.get_source_points() + self.nodes.get_sink_points()
+            + self.nodes.get_sink_points() ]
         y_values = [
-            n.getY() for n in  self.nodes.getSourcePoints() + self.nodes.getSinkPoints()
-            + self.nodes.getSinkPoints() ]
+            n.y for n in  self.nodes.get_source_points() + self.nodes.get_sink_points()
+            + self.nodes.get_sink_points() ]
         data = {"x_values": self.x_values, 'y_values': y_values}
         self.point_source =  ColumnDataSource(data=data)
 
     def make_line_data(self):
-        x0 = [n.getX() for n in self.nodes.getSourcePoints() + self.nodes.getSinkPoints()]
-        y0 = [n.getY() for n in self.nodes.getSourcePoints() + self.nodes.getSinkPoints()]
-        x1 = [self.nodes.getSinkPoints()[0].getX(), self.nodes.getSinkPoints()[0].getX(), self.nodes.getSinkPoints()[0].getX()]
-        y1 = [self.nodes.getSinkPoints()[0].getY(), self.nodes.getSinkPoints()[0].getY(), self.nodes.getSinkPoints()[0].getY()]
+        x0 = [n.x for n in self.nodes.get_source_points() + self.nodes.get_sink_points()]
+        y0 = [n.y for n in self.nodes.get_source_points() + self.nodes.get_sink_points()]
+        x1 = [self.nodes.get_sink_points()[0].x, self.nodes.get_sink_points()[0].x, self.nodes.get_sink_points()[0].x]
+        y1 = [self.nodes.get_sink_points()[0].y, self.nodes.get_sink_points()[0].y, self.nodes.get_sink_points()[0].y]
         segment_data = {"x0": x0, "y0": y0, "x1": x1, "y1": y1}
         self.segment_source =  ColumnDataSource(data=segment_data)
 

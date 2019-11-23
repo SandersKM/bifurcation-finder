@@ -15,35 +15,35 @@ class Nodes:
         self.sinks: List[Node] = []
         self.bifurcations: List[Point] = []
     
-    def addSource(self, node: Node) -> None:
+    def add_source(self, node: Node) -> None:
         self.sources.append(node)
 
-    def addSink(self, node: Node) -> None:
+    def add_sink(self, node: Node) -> None:
         self.sinks.append(node)
 
-    def addBifurcation(self, point: Point) -> None:
+    def add_bifurcation(self, point: Point) -> None:
         self.bifurcations.append(point)
 
-    def popBifurcation(self) -> Point:
+    def pop_bifurcation(self) -> Point:
         return self.bifurcations.pop()
 
-    def getSinks(self) -> List[Nodes]:
+    def get_sinks(self) -> List[Nodes]:
         return self.sinks
 
-    def getSources(self) -> List[Nodes]:
+    def get_sources(self) -> List[Nodes]:
         return self.sources
 
-    def getSinkWeights(self) -> List[float]:
+    def get_sink_weights(self) -> List[float]:
         return [node.weight for node in self.sinks]
 
-    def getSourceWeights(self) -> List[float]:
+    def get_source_weights(self) -> List[float]:
         return [node.weight for node in self.sources]
 
-    def getSinkPoints(self) -> List[Point]:
+    def get_sink_points(self) -> List[Point]:
         return [node.point for node in self.sinks]
 
-    def getSourcePoints(self) -> List[Point]:
+    def get_source_points(self) -> List[Point]:
         return [node.point for node in self.sources]
 
-    def getBifurcationPoints(self) -> List[Point]:
+    def get_bifurcation_points(self) -> List[Point]:
         return self.bifurcations
