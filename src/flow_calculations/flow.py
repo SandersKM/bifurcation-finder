@@ -29,9 +29,9 @@ class Flow:
             return False
         return True
 
-    def update_lists(self, minimized: float):
-        self.steps.append(minimized)
-        self.cost.append(self.network.calculate_g(minimized))
+    def update_lists(self, bifurcation: float):
+        self.steps.append(bifurcation.x)
+        self.cost.append(self.network.calculate_g(bifurcation.x))
         self.theta.append(self.network.calculate_bifurcation_angle())
         
     def get_flow(self):
@@ -40,11 +40,11 @@ class Flow:
         self.update_lists(node_collection.bifurcations[0].x)
         while self.should_repeat(i):
             b = node_collection.pop_bifurcation()
-            minimized = minimize_scalar(self.network.calculate_g).x
-            bifurcation = Point(minimized, b.y)
+            minimized = minimize_scalar(self.network.calculate_g)
+            bifurcation = Point(minimized.x, b.y)
             node_collection.add_bifurcation(bifurcation)
             self.network.vertices = node_collection
-            self.update_lists(minimized)
+            self.update_lists(bifurcation)
             i += 1
         return self.network
 
