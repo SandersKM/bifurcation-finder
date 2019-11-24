@@ -43,11 +43,11 @@ class Network:
         self._vertices = value
         self.bifurcation_point = self.vertices.get_bifurcation_points()[0]
 
-    def calculate_g(self, new_bifurcation_point_array: np.array) -> float:
-        new_bifurcation_point = Point(new_bifurcation_point_array[0], new_bifurcation_point_array[1]) 
-        M: float = (self.calculate_individual_cost(new_bifurcation_point) + self.calculate_carpool_cost(new_bifurcation_point.x))
-        fill: float = self.calculate_fill(new_bifurcation_point.x)
-        return fill + M**2
+    def calculate_g(self, new_bifurcation_array: np.array) -> float:
+        new_bifurcation = Point(new_bifurcation_array[0], new_bifurcation_array[1]) 
+        transportation_cost: float = self.calculate_transportation_cost(new_bifurcation)
+        fill: float = self.calculate_fill(new_bifurcation.x)
+        return fill + transportation_cost**2
 
     def calculate_fill(self, x) -> float: 
         totalArea: float = 0
@@ -56,21 +56,25 @@ class Network:
             totalArea += triangle
         return (totalArea ** 2) / self.h 
 
-    def calculate_individual_cost(self, new_bifurcation_point) -> float: 
-        total: float = 0
-        for source in self.vertices.get_sources():
-            length = new_bifurcation_point.get_distance_to(source.point)
-            alpha_adjusted_weight: float = source.weight ** self.alpha
-            total += length * alpha_adjusted_weight
-        return total 
+    def calculate_transportation_cost(self, new_bifurcation) -> float:
+        individual_cost = self.calculate_individual_cost(new_bifurcation)
+        carpool_cost = self.calculate_carpool_cost(new_bifurcation)
+        return individual_cost + carpool_cost
 
-    def calculate_carpool_cost(self, x) -> float: 
-        edge_length: float = ( self.vertices.get_sink_points()[0].x - x )
-        combined_weight: float = 0
-        for weight in self.vertices.get_source_weights():
-            combined_weight += weight
-        alpha_adjusted_weight: float = (combined_weight ** self.alpha)
-        return  alpha_adjusted_weight * edge_length
+    def calculate_individual_cost(self, new_bifurcation) -> float: 
+        cost: float = 0
+        for source in self.vertices.get_sources():
+            cost += self.calculate_node_cost(source, new_bifurcation)
+        return cost 
+
+    def calculate_carpool_cost(self, new_bifurcation) -> float: 
+        sink: Node = self.vertices.get_sinks()[0]
+        return self.calculate_node_cost(sink, new_bifurcation)
+
+    def calculate_node_cost(self, node: Node, new_bifurcation: Point) -> float:
+        length: float = new_bifurcation.get_distance_to(node.point)
+        alpha_adjusted_weight: float = (node.weight ** self.alpha)
+        return length * alpha_adjusted_weight
 
     def calculate_bifurcation_angle(self) -> float:
         source_points = self.vertices.get_source_points()
