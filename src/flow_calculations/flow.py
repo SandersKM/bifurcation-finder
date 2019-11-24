@@ -29,7 +29,7 @@ class Flow:
             return False
         return True
 
-    def update_lists(self, bifurcation: float):
+    def update_lists(self, bifurcation: Point):
         self.steps.append(bifurcation.x)
         self.cost.append(self.network.calculate_g(bifurcation.x))
         self.theta.append(self.network.calculate_bifurcation_angle())
