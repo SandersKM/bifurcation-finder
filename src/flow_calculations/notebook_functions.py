@@ -122,7 +122,8 @@ class Notebook:
     def update(self, step: int = 0):
         current_step = self.steps[step]
         self.point_source.patch({"x_values": [(len(self.x_values)-1, current_step)]})
-        self.segment_source.patch({"x1": [(slice(3), [current_step, current_step, current_step])]})
+        self.segment_source.patch({"x1": [(slice(3), [current_step[0], current_step[0], current_step[0]])]})
+        self.segment_source.patch({"y1": [(slice(3), [current_step[1], current_step[1], current_step[1]])]})
         self.output_text.clear_output()
         self.output_text.append_stdout(f"Theta: {self.theta[step]}\t Cost: {self.cost[step]}\t Location: {current_step}")
         push_notebook() 
