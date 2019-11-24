@@ -1,6 +1,7 @@
 import typing
 from typing import Type
 import math
+import numpy as np
 
 class Point():
     """ A class used to represent an (x, y) coorinate point.
@@ -42,6 +43,9 @@ class Point():
     @y.setter
     def y(self, value: float) -> None:
         self._y = value
+
+    def point_as_array(self):
+        return np.array([self.x, self.y])
 
     def get_distance_to(self, other) -> float:
         """

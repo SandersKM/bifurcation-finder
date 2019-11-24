@@ -1,5 +1,6 @@
 from typing  import *
 import math
+import numpy as np
 try:
     from src.flow_calculations.node import Node
     from src.flow_calculations.point import Point
@@ -42,9 +43,9 @@ class Network:
         self._vertices = value
         self.bifurcation_point = self.vertices.get_bifurcation_points()[0]
 
-    def calculate_g(self, new_bifurcation_point: float) -> float: 
-        M: float = (self.calculate_individual_cost(new_bifurcation_point) + self.calculate_carpool_cost(new_bifurcation_point))
-        fill: float = self.calculate_fill(new_bifurcation_point)
+    def calculate_g(self, new_bifurcation_point: np.array) -> float: 
+        M: float = (self.calculate_individual_cost(new_bifurcation_point[0]) + self.calculate_carpool_cost(new_bifurcation_point[0]))
+        fill: float = self.calculate_fill(new_bifurcation_point[0])
         return fill + M**2
 
     def calculate_fill(self, x) -> float: 

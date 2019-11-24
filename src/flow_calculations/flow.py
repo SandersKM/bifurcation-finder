@@ -1,5 +1,5 @@
 from typing import *
-from scipy.optimize import minimize_scalar
+from scipy.optimize import minimize
 import math
 import logging
 try:
@@ -15,7 +15,7 @@ except ImportError:
 
 class Flow:
 
-    def __init__(self, network: Network, max_iterations: int = 10000, difference_cuttoff: float = .0000001):
+    def __init__(self, network: Network, max_iterations: int = 10000, difference_cuttoff: float = .01):
         self.network: Network = network
         self.max_iterations = max_iterations
         self.difference_cuttoff = difference_cuttoff
@@ -32,7 +32,7 @@ class Flow:
 
     def update_lists(self, bifurcation: Point):
         self.steps.append(bifurcation)
-        self.cost.append(self.network.calculate_g(bifurcation.x))
+        self.cost.append(self.network.calculate_g(bifurcation.point_as_array()))
         self.theta.append(self.network.calculate_bifurcation_angle())
         
     def get_flow(self):
@@ -43,9 +43,10 @@ class Flow:
         logging.warning(self.theta[-1])
         while self.should_repeat(i):
             b = node_collection.pop_bifurcation()
-            minimized = minimize_scalar(self.network.calculate_g)
-            bifurcation = Point(minimized.x, b.y)
-            logging.warning(bifurcation)
+            logging.warning(f"point: {b.point_as_array()}")
+            minimized = minimize(self.network.calculate_g, b.point_as_array())
+            bifurcation = Point(minimized.x[0], minimized.x[1])
+            logging.warning(f"theta: {self.theta[-1]}")
             node_collection.add_bifurcation(bifurcation)
             self.network.vertices = node_collection
             self.update_lists(bifurcation)
