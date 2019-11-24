@@ -31,12 +31,9 @@ class Flow:
         return True
 
     def update_lists(self, bifurcation: Point):
-        try:
-            self.steps.append(bifurcation)
-            self.cost.append(self.network.calculate_g(bifurcation.x))
-            self.theta.append(self.network.calculate_bifurcation_angle())
-        except Exception as e:
-            logging.exception(bifurcation)
+        self.steps.append(bifurcation)
+        self.cost.append(self.network.calculate_g(bifurcation.x))
+        self.theta.append(self.network.calculate_bifurcation_angle())
         
     def get_flow(self):
         i: int = 0
