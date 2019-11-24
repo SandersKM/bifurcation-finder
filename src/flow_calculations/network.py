@@ -64,14 +64,14 @@ class Network:
     def calculate_individual_cost(self, new_bifurcation) -> float: 
         cost: float = 0
         for source in self.vertices.get_sources():
-            cost += self.calculate_node_cost(source, new_bifurcation)
+            cost += self.calculate_edge_cost(source, new_bifurcation)
         return cost 
 
     def calculate_carpool_cost(self, new_bifurcation) -> float: 
         sink: Node = self.vertices.get_sinks()[0]
-        return self.calculate_node_cost(sink, new_bifurcation)
+        return self.calculate_edge_cost(sink, new_bifurcation)
 
-    def calculate_node_cost(self, node: Node, new_bifurcation: Point) -> float:
+    def calculate_edge_cost(self, node: Node, new_bifurcation: Point) -> float:
         length: float = new_bifurcation.get_distance_to(node.point)
         alpha_adjusted_weight: float = (node.weight ** self.alpha)
         return length * alpha_adjusted_weight

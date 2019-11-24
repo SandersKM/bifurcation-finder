@@ -53,7 +53,7 @@ class Flow:
             i += 1
         return self.network
 
-
+"""
 def get_network():
     vertices = Vertices()
     vertices.add_source(Node(1,Point(0, 5)))
@@ -71,8 +71,9 @@ def make_steps():
     print(steps[-1])
     print(theta[-1])
     print(cost[-1])
-    
+
 def test():
     make_steps()
 
 test()
+"""
