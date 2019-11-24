@@ -7,13 +7,13 @@ import typing
 from typing import List
 try:
     from src.flow_calculations.point import Point
-    from src.flow_calculations.nodes import Nodes
+    from src.flow_calculations.vertices import Vertices
     from src.flow_calculations.node import Node
     from src.flow_calculations.network import Network
     from src.flow_calculations.flow import Flow
 except ImportError:
     from point import Point
-    from nodes import Nodes
+    from vertices import Vertices
     from node import Node
     from network import Network
     from flow import Flow
@@ -74,12 +74,12 @@ class Notebook:
         return tab
 
     def get_network(self):
-        self.nodes = Nodes()
-        self.nodes.add_source(Node(1,Point(self.w_source1x.value, self.w_source1y.value)))
-        self.nodes.add_source(Node(1,Point(self.w_source2x.value, self.w_source2y.value)))
-        self.nodes.add_sink(Node(2, Point(self.w_sinkx.value, self.w_sinky.value)))
-        self.nodes.add_bifurcation(Point(self.w_sinkx.value, self.w_sinky.value)) 
-        return Network(self.w_h.value, self.w_alpha.value, self.nodes)        
+        self.vertices = Vertices()
+        self.vertices.add_source(Node(1,Point(self.w_source1x.value, self.w_source1y.value)))
+        self.vertices.add_source(Node(1,Point(self.w_source2x.value, self.w_source2y.value)))
+        self.vertices.add_sink(Node(2, Point(self.w_sinkx.value, self.w_sinky.value)))
+        self.vertices.add_bifurcation(Point(self.w_sinkx.value, self.w_sinky.value)) 
+        return Network(self.w_h.value, self.w_alpha.value, self.vertices)        
 
     def make_steps(self):
         flow = Flow(self.get_network(), self.max_steps.value, self.min_diff.value)
@@ -90,19 +90,19 @@ class Notebook:
 
     def make_point_data(self):
         self.x_values = [
-            n.x for n in  self.nodes.get_source_points() + self.nodes.get_sink_points()
-            + self.nodes.get_sink_points() ]
+            n.x for n in  self.vertices.get_source_points() + self.vertices.get_sink_points()
+            + self.vertices.get_sink_points() ]
         y_values = [
-            n.y for n in  self.nodes.get_source_points() + self.nodes.get_sink_points()
-            + self.nodes.get_sink_points() ]
+            n.y for n in  self.vertices.get_source_points() + self.vertices.get_sink_points()
+            + self.vertices.get_sink_points() ]
         data = {"x_values": self.x_values, 'y_values': y_values}
         self.point_source =  ColumnDataSource(data=data)
 
     def make_line_data(self):
-        x0 = [n.x for n in self.nodes.get_source_points() + self.nodes.get_sink_points()]
-        y0 = [n.y for n in self.nodes.get_source_points() + self.nodes.get_sink_points()]
-        x1 = [self.nodes.get_sink_points()[0].x, self.nodes.get_sink_points()[0].x, self.nodes.get_sink_points()[0].x]
-        y1 = [self.nodes.get_sink_points()[0].y, self.nodes.get_sink_points()[0].y, self.nodes.get_sink_points()[0].y]
+        x0 = [n.x for n in self.vertices.get_source_points() + self.vertices.get_sink_points()]
+        y0 = [n.y for n in self.vertices.get_source_points() + self.vertices.get_sink_points()]
+        x1 = [self.vertices.get_sink_points()[0].x, self.vertices.get_sink_points()[0].x, self.vertices.get_sink_points()[0].x]
+        y1 = [self.vertices.get_sink_points()[0].y, self.vertices.get_sink_points()[0].y, self.vertices.get_sink_points()[0].y]
         segment_data = {"x0": x0, "y0": y0, "x1": x1, "y1": y1}
         self.segment_source =  ColumnDataSource(data=segment_data)
 

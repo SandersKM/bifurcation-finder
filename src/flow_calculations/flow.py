@@ -4,12 +4,12 @@ import math
 try:
     from src.flow_calculations.node import Node
     from src.flow_calculations.point import Point
-    from src.flow_calculations.nodes import Nodes
+    from src.flow_calculations.vertices import Vertices
     from src.flow_calculations.network import Network
 except ImportError:
     from node import Node
     from point import Point
-    from nodes import Nodes
+    from vertices import Vertices
     from network import Network
 
 class Flow:
@@ -36,14 +36,14 @@ class Flow:
         
     def get_flow(self):
         i: int = 0
-        node_collection: Nodes = self.network.nodes
+        node_collection: Vertices = self.network.vertices
         self.update_lists(node_collection.bifurcations[0].x)
         while self.should_repeat(i):
             b = node_collection.pop_bifurcation()
             minimized = minimize_scalar(self.network.calculate_g).x
             bifurcation = Point(minimized, b.y)
             node_collection.add_bifurcation(bifurcation)
-            self.network.nodes = node_collection
+            self.network.vertices = node_collection
             self.update_lists(minimized)
             i += 1
         return self.network
