@@ -37,16 +37,16 @@ class Flow:
         
     def get_flow(self):
         i: int = 0
-        logging.warning(i)
+        #logging.warning(i)
         node_collection: Vertices = self.network.vertices
         self.update_lists(node_collection.bifurcations[0])
-        logging.warning(self.theta[-1])
+        #logging.warning(self.theta[-1])
         while self.should_repeat(i):
             b = node_collection.pop_bifurcation()
-            logging.warning(f"point: {b.point_as_array()}")
+            #logging.warning(f"point: {b.point_as_array()}")
             minimized = minimize(self.network.calculate_g, b.point_as_array())
             bifurcation = Point(minimized.x[0], minimized.x[1])
-            logging.warning(f"theta: {self.theta[-1]}")
+            #logging.warning(f"theta: {self.theta[-1]}")
             node_collection.add_bifurcation(bifurcation)
             self.network.vertices = node_collection
             self.update_lists(bifurcation)
