@@ -46,15 +46,20 @@ class Network:
     def calculate_g(self, new_bifurcation_array: np.array) -> float:
         new_bifurcation = Point(new_bifurcation_array[0], new_bifurcation_array[1]) 
         transportation_cost: float = self.calculate_transportation_cost(new_bifurcation)
-        fill: float = self.calculate_fill(new_bifurcation.x)
-        return fill + transportation_cost**2
+        fill: float = self.calculate_fill(new_bifurcation)
+        return (transportation_cost**2) + ((fill ** 2) / self.h)
 
-    def calculate_fill(self, x) -> float: 
+    # Using the Shoelace Formula
+    def calculate_triangle_area(self, a: Point, b: Point, c: Point) -> float:
+        return abs((1/2) * (a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y)))
+
+    def calculate_fill(self, new_bifurcation) -> float: 
         totalArea: float = 0
         for node in self.vertices.get_sources():
-            triangle: float = ((self.bifurcation_point.x - x) * (node.weight ** self.alpha) * node.point.y) / 2
-            totalArea += triangle
-        return (totalArea ** 2) / self.h 
+            triangle: float = self.calculate_triangle_area(self.bifurcation_point, new_bifurcation, node.point)
+            alpha_adjusted_weight = node.weight ** self.alpha
+            totalArea += triangle * alpha_adjusted_weight
+        return totalArea
 
     def calculate_transportation_cost(self, new_bifurcation) -> float:
         individual_cost = self.calculate_individual_cost(new_bifurcation)
