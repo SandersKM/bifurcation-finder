@@ -54,11 +54,14 @@ class Network:
         return abs((1/2) * (a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y)))
 
     def calculate_fill(self, new_bifurcation) -> float: 
+        sink: Node = self.vertices.get_sinks()[0]
         totalArea: float = 0
         for node in self.vertices.get_sources():
-            triangle: float = self.calculate_triangle_area(self.bifurcation_point, new_bifurcation, node.point)
+            old_area: float = self.calculate_triangle_area(self.bifurcation_point, sink.point, node.point)
+            new_area: float = self.calculate_triangle_area(new_bifurcation, sink.point, node.point)
+            area_diff: float = abs(old_area - new_area)
             alpha_adjusted_weight = node.weight ** self.alpha
-            totalArea += triangle * alpha_adjusted_weight
+            totalArea += area_diff * alpha_adjusted_weight
         return totalArea
 
     def calculate_transportation_cost(self, new_bifurcation) -> float:
