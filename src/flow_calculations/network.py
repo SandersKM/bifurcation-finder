@@ -43,26 +43,31 @@ class Network:
         self._vertices = value
         self.bifurcation_point = self.vertices.get_bifurcation_points()[0]
 
-    def calculate_g(self, new_bifurcation_array: np.array) -> float:
-        new_bifurcation = Point(new_bifurcation_array[0], new_bifurcation_array[1]) 
-        transportation_cost: float = self.calculate_transportation_cost(new_bifurcation)
+    def calculate_g(self, new_bifurcation_arr: np.array) -> float:
+        new_bifurcation = Point(new_bifurcation_arr[0], new_bifurcation_arr[1]) 
+        cost: float = self.calculate_transportation_cost(new_bifurcation)
         fill: float = self.calculate_fill(new_bifurcation)
-        return (transportation_cost**2) + ((fill ** 2) / self.h)
+        return (cost**2) + ((fill ** 2) / self.h)
 
     # Using the Shoelace Formula
     def calculate_triangle_area(self, a: Point, b: Point, c: Point) -> float:
-        return abs((1/2) * (a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y)))
+        if (a == b or b == c or a == c):
+            return 0
+        return abs((1 / 2) * (
+            a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y)))
 
     def calculate_fill(self, new_bifurcation) -> float: 
         sink: Node = self.vertices.get_sinks()[0]
-        totalArea: float = 0
+        fill: float = 0
         for node in self.vertices.get_sources():
-            old_area: float = self.calculate_triangle_area(self.bifurcation_point, sink.point, node.point)
-            new_area: float = self.calculate_triangle_area(new_bifurcation, sink.point, node.point)
+            old_area: float = self.calculate_triangle_area(
+                self.bifurcation_point, sink.point, node.point)
+            new_area: float = self.calculate_triangle_area(
+                new_bifurcation, sink.point, node.point)
             area_diff: float = abs(old_area - new_area)
             alpha_adjusted_weight = node.weight ** self.alpha
-            totalArea += area_diff * alpha_adjusted_weight
-        return totalArea
+            fill += area_diff * alpha_adjusted_weight
+        return fill
 
     def calculate_transportation_cost(self, new_bifurcation) -> float:
         individual_cost = self.calculate_individual_cost(new_bifurcation)
