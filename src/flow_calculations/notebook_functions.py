@@ -92,7 +92,7 @@ class Notebook:
         self.x_values = [
             n.x for n in self.vertices.get_source_points() + self.vertices.get_sink_points()
             + self.vertices.get_sink_points() ]
-        y_values = [
+        self.y_values = [
             n.y for n in self.vertices.get_source_points() + self.vertices.get_sink_points()
             + self.vertices.get_sink_points() ]
         data = {"x_values": self.x_values, 'y_values': y_values}
