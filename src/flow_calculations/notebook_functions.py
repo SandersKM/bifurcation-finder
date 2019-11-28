@@ -90,10 +90,10 @@ class Notebook:
 
     def make_point_data(self):
         self.x_values = [
-            n.x for n in  self.vertices.get_source_points() + self.vertices.get_sink_points()
+            n.x for n in self.vertices.get_source_points() + self.vertices.get_sink_points()
             + self.vertices.get_sink_points() ]
         y_values = [
-            n.y for n in  self.vertices.get_source_points() + self.vertices.get_sink_points()
+            n.y for n in self.vertices.get_source_points() + self.vertices.get_sink_points()
             + self.vertices.get_sink_points() ]
         data = {"x_values": self.x_values, 'y_values': y_values}
         self.point_source =  ColumnDataSource(data=data)
@@ -121,7 +121,8 @@ class Notebook:
 
     def update(self, step: int = 0):
         current_step = self.steps[step]
-        self.point_source.patch({"x_values": [(len(self.x_values)-1, current_step)]})
+        self.point_source.patch({"x_values": [(len(self.x_values)-1, current_step.x)]})
+        self.point_source.patch({"y_values": [(len(self.y_values)-1, current_step.y)]})
         self.segment_source.patch({"x1": [(slice(3), [current_step.x, current_step.x, current_step.x])]})
         self.segment_source.patch({"y1": [(slice(3), [current_step.y, current_step.y, current_step.y])]})
         self.output_text.clear_output()

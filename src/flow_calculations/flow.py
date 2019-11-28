@@ -42,7 +42,7 @@ class Flow:
         self.update_lists(node_collection.bifurcations[0])
         while self.should_repeat(i):
             b = node_collection.pop_bifurcation()
-            minimized = minimize(self.network.calculate_g, b.point_as_array(), method = 'Nelder-Mead',)
+            minimized = minimize(self.network.calculate_g, b.point_as_array(), method = 'Nelder-Mead')
             #logging.warning(minimized)
             bifurcation = Point(minimized.x[0], minimized.x[1])
             node_collection.add_bifurcation(bifurcation)
