@@ -17,6 +17,7 @@ except ImportError:
 
 def get_network():
     vertices = Vertices()
+    vertices.add_source(Node(1,Point(5,1)))
     vertices.add_source(Node(1,Point(1,3)))
     vertices.add_sink(Node(2, Point(0,0)))
     vertices.add_bifurcation(Point(0, 0)) 
