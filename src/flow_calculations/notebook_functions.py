@@ -57,7 +57,7 @@ class Notebook:
         self.w_sinkx = self.get_bounded_float_text_widget(4.0, Notebook.MAX_POINT_VALUE)
         self.w_sinky = self.get_bounded_float_text_widget(3.0, Notebook.MAX_POINT_VALUE)
         tab_children.append(self.get_accordion([self.w_sinkx, self.w_sinky], point_labels))
-        self.w_h = self.get_bounded_float_text_widget(.001, .5)
+        self.w_h = self.get_bounded_float_text_widget(.2, .5)
         self.w_alpha = self.get_bounded_float_text_widget(.5, 1)
         self.max_steps = self.get_bounded_float_text_widget(100000, 10000000)
         self.min_diff = self.get_bounded_float_text_widget(.02, 1)
@@ -107,13 +107,20 @@ class Notebook:
         self.segment_source =  ColumnDataSource(data=segment_data)
 
     def get_figure(self):
-        self.make_steps()
         self.make_line_data()
         self.make_point_data()
         fig = figure()
         fig.circle(x='x_values', y='y_values', source=self.point_source)
         fig.segment(x0 = "x0", y0="y0", x1="x1", y1="y1", color="navy", line_width=3, source=self.segment_source)
+        p.xaxis.ticker = SingleIntervalTicker(interval=1)
+        p.yaxis.ticker = SingleIntervalTicker(interval=1)
         return fig
+
+    def get_optimal_bifurcation_point(self):
+        self.make_steps()
+        out = widgets.Output(layout={'border': '1px solid black'})
+        out.append_stdout(f'Location: {self.steps[-1]} \t Cost: {self.cost[-1]} \t Theta: {self.theta[-1]}')
+        return out
 
     def get_output(self):
         self.output_text = widgets.Output(layout={'border': '1px solid black'})
