@@ -1,6 +1,6 @@
 from ipywidgets import interact, widgets
 from IPython.display import display, Javascript
-from bokeh.models import ColumnDataSource
+from bokeh.models import ColumnDataSource, SingleIntervalTicker
 from bokeh.plotting import figure
 from bokeh.io import push_notebook
 import typing
@@ -112,8 +112,8 @@ class Notebook:
         fig = figure()
         fig.circle(x='x_values', y='y_values', source=self.point_source)
         fig.segment(x0 = "x0", y0="y0", x1="x1", y1="y1", color="navy", line_width=3, source=self.segment_source)
-        p.xaxis.ticker = SingleIntervalTicker(interval=1)
-        p.yaxis.ticker = SingleIntervalTicker(interval=1)
+        fig.xaxis.ticker = SingleIntervalTicker(interval=1)
+        fig.yaxis.ticker = SingleIntervalTicker(interval=1)
         return fig
 
     def get_optimal_bifurcation_point(self):
