@@ -19,6 +19,7 @@ class Flow:
         self.network: Network = network
         self.max_iterations = max_iterations
         self.difference_cutoff = difference_cutoff
+        self.optimal_angle: float = network.calculate_optimal_angle()
         self.steps = []
         self.cost = []
         self.theta = []
@@ -26,7 +27,7 @@ class Flow:
     def should_repeat(self, i: int):
         if i > self.max_iterations:
             return False
-        if self.theta[-1] > 90 - self.difference_cutoff:
+        if self.theta[-1] > self.optimal_angle - self.difference_cutoff:
             return False
         return True
 
