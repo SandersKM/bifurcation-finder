@@ -116,6 +116,7 @@ class Notebook:
         fig.segment(x0 = "x0", y0="y0", x1="x1", y1="y1", color="navy", line_width=3, source=self.segment_source)
         fig.xaxis.ticker = SingleIntervalTicker(interval=1)
         fig.yaxis.ticker = SingleIntervalTicker(interval=1)
+        delattr(self, "vertices")
         return fig
 
     def get_optimal_bifurcation_point(self):
