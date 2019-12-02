@@ -107,6 +107,8 @@ class Notebook:
         self.segment_source =  ColumnDataSource(data=segment_data)
 
     def get_figure(self):
+        if self.vertices is None:
+            self.get_optimal_bifurcation_point()
         self.make_line_data()
         self.make_point_data()
         fig = figure()
