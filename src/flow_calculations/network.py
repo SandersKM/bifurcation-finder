@@ -103,7 +103,7 @@ class Network:
     def calculate_optimal_angle(self):
         m: List[float] = self.vertices.get_source_weights()
         k0: float = (m[0] / (m[1] + m[0])) ** (2 * self.alpha)
-        k1: float = m[1] / (m[1] + m[0]) ** (2 * self.alpha)
+        k1: float = (m[1] / (m[1] + m[0])) ** (2 * self.alpha)
         cos_optimal: float = ( 1 - k1 - k0) / (2 * k1 * k0)
         angle: float = math.acos(cos_optimal)
         return math.degrees(angle)
