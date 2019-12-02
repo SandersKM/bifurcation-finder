@@ -81,9 +81,9 @@ class Notebook:
         self.vertices.add_bifurcation(Point(self.w_sinkx.value, self.w_sinky.value)) 
         return Network(self.w_h.value, self.w_alpha.value, self.vertices)        
 
-    def make_steps(self):
+    def make_steps(self, verbose=False):
         flow = Flow(self.get_network(), self.max_steps.value, self.min_diff.value)
-        flow.get_flow()
+        flow.get_flow(verbose)
         self.steps = flow.steps
         self.theta = flow.theta
         self.cost = flow.cost
@@ -119,8 +119,8 @@ class Notebook:
         delattr(self, "vertices")
         return fig
 
-    def get_optimal_bifurcation_point(self):
-        self.make_steps()
+    def get_optimal_bifurcation_point(self, verbose=False):
+        self.make_steps(verbose)
         out = widgets.Output(layout={'border': '1px solid black'})
         out.append_stdout(f'Location: {self.steps[-1]} \t Cost: {self.cost[-1]} \t Theta: {self.theta[-1]}')
         return out

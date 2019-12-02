@@ -37,14 +37,15 @@ class Flow:
         self.theta.append(self.network.calculate_bifurcation_angle())
         #logging.warning(f"{self.steps[-1]}\t{self.cost[-1]}\t{self.theta[-1]}")
         
-    def get_flow(self):
+    def get_flow(self, verbose=False):
         i: int = 0
         node_collection: Vertices = self.network.vertices
         self.update_lists(node_collection.bifurcations[0])
         while self.should_repeat(i):
             b = node_collection.pop_bifurcation()
             minimized = minimize(self.network.calculate_g, b.point_as_array(), method = 'Nelder-Mead')
-            #logging.warning(minimized)
+            if verbose:
+                logging.warning(minimized)
             bifurcation = Point(minimized.x[0], minimized.x[1])
             node_collection.add_bifurcation(bifurcation)
             self.network.vertices = node_collection
