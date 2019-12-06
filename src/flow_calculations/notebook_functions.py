@@ -47,7 +47,7 @@ class Notebook:
 
     def get_tab_children(self):
         tab_children = []
-        point_labels = ["X", "Y"]
+        point_labels = ["X", "Y", "Weight"]
         self.source_1_x = self.get_bounded_float_text_widget(0.0, Notebook.MAX_POINT_VALUE)
         self.source_1_y= self.get_bounded_float_text_widget(1.0, Notebook.MAX_POINT_VALUE)
         self.source_1_weight = widgets.BoundedFloatText(value = 1.0, min = 0.1, step = 0.1)
@@ -58,8 +58,7 @@ class Notebook:
         tab_children.append(self.get_accordion([self.source_2_x, self.source_2_y, self.source_2_weight], point_labels))
         self.sink_x = self.get_bounded_float_text_widget(4.0, Notebook.MAX_POINT_VALUE)
         self.sink_y = self.get_bounded_float_text_widget(3.0, Notebook.MAX_POINT_VALUE)
-        self.sink_weight = widgets.BoundedFloatText(value = 1.0, min = 0.1, step = 0.1)
-        tab_children.append(self.get_accordion([self.sink_x, self.sink_y, self.sink_weight], point_labels))
+        tab_children.append(self.get_accordion([self.sink_x, self.sink_y], point_labels))
         self.h = self.get_bounded_float_text_widget(.2, .5)
         self.alpha = self.get_bounded_float_text_widget(.5, 1)
         self.max_steps = self.get_bounded_float_text_widget(100000, 10000000)
@@ -78,9 +77,10 @@ class Notebook:
 
     def get_network(self):
         self.vertices = Vertices()
-        self.vertices.add_source(Node(1,Point(self.source_1_x.value, self.source_1_y.value)))
-        self.vertices.add_source(Node(1,Point(self.source_2_x.value, self.source_2_y.value)))
-        self.vertices.add_sink(Node(2, Point(self.sink_x.value, self.sink_y.value)))
+        self.vertices.add_source(Node(self.source_1_weight.value, Point(self.source_1_x.value, self.source_1_y.value)))
+        self.vertices.add_source(Node(self.source_2_weight.value, Point(self.source_2_x.value, self.source_2_y.value)))
+        self.vertices.add_sink(Node(
+            (self.source_1_weight.value + self.source_2_weight.value), Point(self.sink_x.value, self.sink_y.value)))
         self.vertices.add_bifurcation(Point(self.sink_x.value, self.sink_y.value)) 
         return Network(self.h.value, self.alpha.value, self.vertices)        
 
