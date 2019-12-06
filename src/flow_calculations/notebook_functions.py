@@ -48,24 +48,24 @@ class Notebook:
     def get_tab_children(self):
         tab_children = []
         point_labels = ["X", "Y"]
-        self.w_source1x = self.get_bounded_float_text_widget(0.0, Notebook.MAX_POINT_VALUE)
-        self.w_source1y= self.get_bounded_float_text_widget(1.0, Notebook.MAX_POINT_VALUE)
-        self.w_source1weight = widgets.BoundedFloatText(value = 1.0, min = 0.1, step = 0.1)
-        tab_children.append(self.get_accordion([self.w_source1x, self.w_source1y], point_labels))
-        self.w_source2x = self.get_bounded_float_text_widget(0.0, Notebook.MAX_POINT_VALUE)
-        self.w_source2y= self.get_bounded_float_text_widget(5.0, Notebook.MAX_POINT_VALUE)
-        self.w_source2weight = widgets.BoundedFloatText(value = 1.0, min = 0.1, step = 0.1)
-        tab_children.append(self.get_accordion([self.w_source2x, self.w_source2y], point_labels))
-        self.w_sinkx = self.get_bounded_float_text_widget(4.0, Notebook.MAX_POINT_VALUE)
-        self.w_sinky = self.get_bounded_float_text_widget(3.0, Notebook.MAX_POINT_VALUE)
-        self.w_sinkweight = widgets.BoundedFloatText(value = 1.0, min = 0.1, step = 0.1)
-        tab_children.append(self.get_accordion([self.w_sinkx, self.w_sinky], point_labels))
-        self.w_h = self.get_bounded_float_text_widget(.2, .5)
-        self.w_alpha = self.get_bounded_float_text_widget(.5, 1)
+        self.source_1_x = self.get_bounded_float_text_widget(0.0, Notebook.MAX_POINT_VALUE)
+        self.source_1_y= self.get_bounded_float_text_widget(1.0, Notebook.MAX_POINT_VALUE)
+        self.source_1_weight = widgets.BoundedFloatText(value = 1.0, min = 0.1, step = 0.1)
+        tab_children.append(self.get_accordion([self.source_1_x, self.source_1_y, self.source_1_weight], point_labels))
+        self.source_2_x = self.get_bounded_float_text_widget(0.0, Notebook.MAX_POINT_VALUE)
+        self.source_2_y= self.get_bounded_float_text_widget(5.0, Notebook.MAX_POINT_VALUE)
+        self.source_2_weight = widgets.BoundedFloatText(value = 1.0, min = 0.1, step = 0.1)
+        tab_children.append(self.get_accordion([self.source_2_x, self.source_2_y, self.source_2_weight], point_labels))
+        self.sink_x = self.get_bounded_float_text_widget(4.0, Notebook.MAX_POINT_VALUE)
+        self.sink_y = self.get_bounded_float_text_widget(3.0, Notebook.MAX_POINT_VALUE)
+        self.sink_weight = widgets.BoundedFloatText(value = 1.0, min = 0.1, step = 0.1)
+        tab_children.append(self.get_accordion([self.sink_x, self.sinky, self.sink_weight], point_labels))
+        self.h = self.get_bounded_float_text_widget(.2, .5)
+        self.alpha = self.get_bounded_float_text_widget(.5, 1)
         self.max_steps = self.get_bounded_float_text_widget(100000, 10000000)
         self.min_diff = self.get_bounded_float_text_widget(.02, 1)
         tab_children.append(self.get_accordion(
-            [self.w_h, self.w_alpha, self.max_steps, self.min_diff], 
+            [self, self.alpha, self.max_steps, self.min_diff], 
             ["h", "alpha", "maximum steps", "stop distance"]))
         return tab_children
 
@@ -78,11 +78,11 @@ class Notebook:
 
     def get_network(self):
         self.vertices = Vertices()
-        self.vertices.add_source(Node(1,Point(self.w_source1x.value, self.w_source1y.value)))
-        self.vertices.add_source(Node(1,Point(self.w_source2x.value, self.w_source2y.value)))
-        self.vertices.add_sink(Node(2, Point(self.w_sinkx.value, self.w_sinky.value)))
-        self.vertices.add_bifurcation(Point(self.w_sinkx.value, self.w_sinky.value)) 
-        return Network(self.w_h.value, self.w_alpha.value, self.vertices)        
+        self.vertices.add_source(Node(1,Point(self.source_1_x.value, self.source_1_y.value)))
+        self.vertices.add_source(Node(1,Point(self.source_2_x.value, self.source_2_y.value)))
+        self.vertices.add_sink(Node(2, Point(self.sink_x.value, self.sinky.value)))
+        self.vertices.add_bifurcation(Point(self.sink_x.value, self.sinky.value)) 
+        return Network(self.value, self.alpha.value, self.vertices)        
 
     def make_steps(self, verbose=False):
         flow = Flow(self.get_network(), self.max_steps.value, self.min_diff.value)
