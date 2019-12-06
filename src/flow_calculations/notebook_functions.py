@@ -82,7 +82,7 @@ class Notebook:
         self.vertices.add_source(Node(1,Point(self.source_2_x.value, self.source_2_y.value)))
         self.vertices.add_sink(Node(2, Point(self.sink_x.value, self.sink_y.value)))
         self.vertices.add_bifurcation(Point(self.sink_x.value, self.sink_y.value)) 
-        return Network(self.value, self.alpha.value, self.vertices)        
+        return Network(self.h.value, self.alpha.value, self.vertices)        
 
     def make_steps(self, verbose=False):
         flow = Flow(self.get_network(), self.max_steps.value, self.min_diff.value)
