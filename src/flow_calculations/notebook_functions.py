@@ -80,8 +80,8 @@ class Notebook:
         self.vertices = Vertices()
         self.vertices.add_source(Node(1,Point(self.source_1_x.value, self.source_1_y.value)))
         self.vertices.add_source(Node(1,Point(self.source_2_x.value, self.source_2_y.value)))
-        self.vertices.add_sink(Node(2, Point(self.sink_x.value, self.sinky.value)))
-        self.vertices.add_bifurcation(Point(self.sink_x.value, self.sinky.value)) 
+        self.vertices.add_sink(Node(2, Point(self.sink_x.value, self.sink_y.value)))
+        self.vertices.add_bifurcation(Point(self.sink_x.value, self.sink_y.value)) 
         return Network(self.value, self.alpha.value, self.vertices)        
 
     def make_steps(self, verbose=False):
