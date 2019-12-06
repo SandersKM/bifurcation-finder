@@ -59,7 +59,7 @@ class Notebook:
         self.sink_x = self.get_bounded_float_text_widget(4.0, Notebook.MAX_POINT_VALUE)
         self.sink_y = self.get_bounded_float_text_widget(3.0, Notebook.MAX_POINT_VALUE)
         self.sink_weight = widgets.BoundedFloatText(value = 1.0, min = 0.1, step = 0.1)
-        tab_children.append(self.get_accordion([self.sink_x, self.sinky, self.sink_weight], point_labels))
+        tab_children.append(self.get_accordion([self.sink_x, self.sink_y, self.sink_weight], point_labels))
         self.h = self.get_bounded_float_text_widget(.2, .5)
         self.alpha = self.get_bounded_float_text_widget(.5, 1)
         self.max_steps = self.get_bounded_float_text_widget(100000, 10000000)
