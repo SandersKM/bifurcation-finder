@@ -25,11 +25,11 @@ class Flow:
         self.theta = []
 
     def should_repeat(self, i: int):
-        if i > self.max_iterations:
-            return False
-        # go back to the cost criteria rather than the angle criteria
-        if self.theta[-1] > self.optimal_angle - self.difference_cutoff:
-            return False
+        if i > 0:
+            if i > self.max_iterations:
+                return False
+            if self.cost[-2] - self.cost[-1] > self.difference_cutoff:
+                return False
         return True
 
     def update_lists(self, bifurcation: Point):
