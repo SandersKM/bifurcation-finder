@@ -15,7 +15,7 @@ except ImportError:
 
 class Flow:
 
-    def __init__(self, network: Network, max_iterations: int = 10000, difference_cutoff: float = .01):
+    def __init__(self, network: Network, max_iterations: int = 10000, difference_cutoff: float = .000001):
         self.network: Network = network
         self.max_iterations = max_iterations
         self.difference_cutoff = difference_cutoff
@@ -28,7 +28,7 @@ class Flow:
         if i > 0:
             if i > self.max_iterations:
                 return False
-            if self.cost[-2] - self.cost[-1] > self.difference_cutoff:
+            if self.cost[-2] - self.cost[-1] < self.difference_cutoff:
                 return False
         return True
 
