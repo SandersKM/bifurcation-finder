@@ -27,6 +27,7 @@ class Flow:
     def should_repeat(self, i: int):
         if i > self.max_iterations:
             return False
+        # go back to the cost criteria rather than the angle criteria
         if self.theta[-1] > self.optimal_angle - self.difference_cutoff:
             return False
         return True
@@ -41,6 +42,7 @@ class Flow:
         i: int = 0
         node_collection: Vertices = self.network.vertices
         self.update_lists(node_collection.bifurcations[0])
+        # checks for L shape criteria - based on cost?
         while self.should_repeat(i):
             b = node_collection.pop_bifurcation()
             minimized = minimize(self.network.calculate_g, b.point_as_array(), method = 'Nelder-Mead')

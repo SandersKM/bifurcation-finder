@@ -21,10 +21,11 @@ def get_network():
     vertices.add_source(Node(1,Point(1,3)))
     vertices.add_sink(Node(2, Point(0,0)))
     vertices.add_bifurcation(Point(0, 0)) 
-    return Network(0.1, 0.5, vertices)        
+    return Network(0.1, 0.45, vertices)        
 
 def make_steps():
     flow = Flow(get_network())
+    print(flow.network.calculate_optimal_angle())
     flow.get_flow()
     steps = flow.steps
     theta = flow.theta

@@ -104,7 +104,7 @@ class Network:
         m: List[float] = self.vertices.get_source_weights()
         k0: float = (m[0] / (m[1] + m[0])) 
         k1: float = (m[1] / (m[1] + m[0]))
-        numerator: float = 1 - (k1 ** (2 * self.alpha)) - k0 ** (2 * self.alpha)
+        numerator: float = 1 - (k1 ** (2 * self.alpha)) - (k0 ** (2 * self.alpha))
         denominator: float =  2 * (k1 ** self.alpha) * (k0 ** self.alpha)
         cos_optimal: float = numerator / denominator
         angle: float = math.acos(cos_optimal)
