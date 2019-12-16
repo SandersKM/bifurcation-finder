@@ -2,11 +2,11 @@ from typing  import *
 import math
 import numpy as np
 try:
-    from src.flow_calculations.node import Node
+    from src.flow_calculations.node import Node, NodeType
     from src.flow_calculations.point import Point
     from src.flow_calculations.vertices import Vertices
 except ImportError:
-    from node import Node
+    from node import Node, NodeType
     from point import Point
     from vertices import Vertices
 

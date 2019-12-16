@@ -3,13 +3,13 @@ from scipy.optimize import minimize
 import math
 import logging
 try:
-    from src.flow_calculations.node import Node
+    from src.flow_calculations.node import Node, NodeType
     from src.flow_calculations.point import Point
     from src.flow_calculations.vertices import Vertices
     from src.flow_calculations.network import Network
     from src.flow_calculations.network import Flow
 except ImportError:
-    from node import Node
+    from node import Node, NodeType
     from point import Point
     from vertices import Vertices
     from network import Network
@@ -17,9 +17,9 @@ except ImportError:
 
 def get_network():
     vertices = Vertices()
-    vertices.add_source(Node(1,Point(5,1)))
-    vertices.add_source(Node(1,Point(1,3)))
-    vertices.add_sink(Node(2, Point(0,0)))
+    vertices.add_source(Node(1,Point(5,1), NodeType.SOURCE))
+    vertices.add_source(Node(1,Point(1,3), NodeType.SOURCE))
+    vertices.add_sink(Node(2, Point(0,0), NodeType.SINK))
     vertices.add_bifurcation(Point(0, 0)) 
     return Network(0.1, 0.45, vertices)        
 

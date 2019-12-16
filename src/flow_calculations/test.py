@@ -3,13 +3,13 @@ from typing import *
 import math
 import logging
 try:
-    from src.flow_calculations.node import Node
+    from src.flow_calculations.node import Node, NodeType
     from src.flow_calculations.point import Point
     from src.flow_calculations.vertices import Vertices
     from src.flow_calculations.network import Network
     from src.flow_calculations.network import Flow
 except ImportError:
-    from node import Node
+    from node import Node, NodeType
     from point import Point
     from vertices import Vertices
     from network import Network
@@ -32,22 +32,24 @@ class UnitTest(unittest.TestCase):
     def test_node(self):
         weight = 5
         point1 = Point(2, -3)
-        node1 = Node(weight, point1)
+        node_type = NodeType.SOURCE
+        node1 = Node(weight, point1, node_type)
         self.assertEqual(node1.weight, weight)
         self.assertEqual(node1.point, point1)
+        self.assertEqual(node1.node_type, NodeType.SOURCE)
 
     def test_node_distance(self):
         point1 = Point(2, -3)
         point2 = Point(5, 1)
-        node1 = Node(1, point1)
-        node2 = Node(1, point2)
+        node1 = Node(1, point1, NodeType.SOURCE)
+        node2 = Node(1, point2, NodeType.SOURCE)
         self.assertEqual(node1.get_distance_to(node2), 5)
 
     def test_network(self):
         vertices = Vertices()
-        vertices.add_source(Node(1,Point(5,1)))
-        vertices.add_source(Node(1,Point(1,3)))
-        vertices.add_sink(Node(2, Point(0,0)))
+        vertices.add_source(Node(1,Point(5,1), NodeType.SOURCE))
+        vertices.add_source(Node(1,Point(1,3), NodeType.SOURCE))
+        vertices.add_sink(Node(2, Point(0,0), NodeType.SINK))
         vertices.add_bifurcation(Point(0, 0)) 
         network = Network(0.1, 0.5, vertices)     
         self.assertEqual(network.alpha, 0.5)
@@ -61,9 +63,9 @@ class UnitTest(unittest.TestCase):
 
     def test_flow_a(self):
         vertices = Vertices()
-        vertices.add_source(Node(1,Point(5,1)))
-        vertices.add_source(Node(1,Point(1,3)))
-        vertices.add_sink(Node(2, Point(0,0)))
+        vertices.add_source(Node(1,Point(5,1), NodeType.SOURCE))
+        vertices.add_source(Node(1,Point(1,3), NodeType.SOURCE))
+        vertices.add_sink(Node(2, Point(0,0), NodeType.SINK))
         vertices.add_bifurcation(Point(0, 0)) 
         network = Network(0.1, 0.5, vertices)
         flow = Flow(network)

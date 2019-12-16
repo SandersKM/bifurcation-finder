@@ -8,13 +8,13 @@ from typing import List
 try:
     from src.flow_calculations.point import Point
     from src.flow_calculations.vertices import Vertices
-    from src.flow_calculations.node import Node
+    from src.flow_calculations.node import Node, NodeType
     from src.flow_calculations.network import Network
     from src.flow_calculations.flow import Flow
 except ImportError:
     from point import Point
     from vertices import Vertices
-    from node import Node
+    from node import Node, NodeType
     from network import Network
     from flow import Flow
 

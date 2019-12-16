@@ -3,12 +3,12 @@ from scipy.optimize import minimize
 import math
 import logging
 try:
-    from src.flow_calculations.node import Node
+    from src.flow_calculations.node import Node, NodeType
     from src.flow_calculations.point import Point
     from src.flow_calculations.vertices import Vertices
     from src.flow_calculations.network import Network
 except ImportError:
-    from node import Node
+    from node import Node, NodeType
     from point import Point
     from vertices import Vertices
     from network import Network

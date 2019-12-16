@@ -2,10 +2,10 @@ import typing
 from typing  import List
 import math
 try:
-    from src.flow_calculations.node import Node
+    from src.flow_calculations.node import Node, NodeType
     from src.flow_calculations.point import Point
 except ImportError:
-    from node import Node
+    from node import Node, NodeType
     from point import Point
     
 class Vertices:
