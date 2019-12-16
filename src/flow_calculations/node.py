@@ -9,7 +9,7 @@ except ImportError:
 class NodeType(Enum):
     SOURCE = 1
     SINK = 2
-    BIFURCATION = 2
+    BIFURCATION = 3
 
 class Node:
     """ A class used to represent a transportation network node.
@@ -37,7 +37,7 @@ class Node:
         self.node_type: NodeType = node_type
 
     def __repr__(self):
-        return f"{self.point}: {self.weight}"
+        return f"<{self.node_type.name}, {self.point}, {self.weight}>"
 
     @property
     def weight(self) -> float:

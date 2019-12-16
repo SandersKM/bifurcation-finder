@@ -57,7 +57,7 @@ class Network:
             a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y)))
 
     def calculate_fill(self, new_bifurcation) -> float: 
-        sink: Node = self.graph.get_sinks()[0]
+        sink: Node = self.graph.get_sink()
         fill: float = 0
         for node in self.graph.get_sources():
             old_area: float = self.calculate_triangle_area(
@@ -81,7 +81,7 @@ class Network:
         return cost 
 
     def calculate_carpool_cost(self, new_bifurcation) -> float: 
-        sink: Node = self.graph.get_sinks()[0]
+        sink: Node = self.graph.get_sink()
         return self.calculate_edge_cost(sink, new_bifurcation)
 
     def calculate_edge_cost(self, node: Node, new_bifurcation: Point) -> float:

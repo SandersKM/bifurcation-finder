@@ -32,25 +32,31 @@ class Flow:
                 return False
         return True
 
-    def update_lists(self, bifurcation: Point):
-        self.steps.append(bifurcation)
-        self.cost.append(self.network.calculate_g(bifurcation.point_as_array()))
+    def update_lists(self, bifurcation: Node):
+        self.steps.append(bifurcation.point)
+        self.cost.append(self.network.calculate_g(bifurcation.point.point_as_array()))
         self.theta.append(self.network.calculate_bifurcation_angle())
         #logging.warning(f"{self.steps[-1]}\t{self.cost[-1]}\t{self.theta[-1]}")
         
     def get_flow(self, verbose=False):
         i: int = 0
-        node_collection: Graph = self.network.graph
-        self.update_lists(node_collection.bifurcations[0])
+        graph: Graph = self.network.graph
+        bifurcation = graph.get_bifurcations()[0]
+        self.update_lists(bifurcation)
+        print(graph)
         # checks for L shape criteria - based on cost?
         while self.should_repeat(i):
-            b = node_collection.pop_bifurcation()
-            minimized = minimize(self.network.calculate_g, b.point_as_array(), method = 'Nelder-Mead')
+            graph.remove_node(bifurcation)
+            minimized = minimize(self.network.calculate_g, bifurcation.point.point_as_array(), method = 'Nelder-Mead')
             if verbose:
                 logging.warning(minimized)
-            bifurcation = Point(minimized.x[0], minimized.x[1])
-            node_collection.add_bifurcation(bifurcation)
-            self.network.graph = node_collection
+            bifurcation = Node(0, Point(minimized.x[0], minimized.x[1]), NodeType.BIFURCATION)
+            graph.add_node(bifurcation)
+            for source in graph.get_sources():
+                graph.add_edge(source, bifurcation)
+            graph.add_edge(bifurcation, graph.get_sink())
+            self.network.graph = graph
+            print(graph)
             self.update_lists(bifurcation)
             i += 1
         return self.network
