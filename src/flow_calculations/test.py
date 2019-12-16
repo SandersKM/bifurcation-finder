@@ -15,7 +15,7 @@ except ImportError:
     from network import Network
     from flow import Flow
 
-class MyTest(unittest.TestCase):
+class UnitTest(unittest.TestCase):
 
     def test_point(self):
         x = 4.4
@@ -43,6 +43,37 @@ class MyTest(unittest.TestCase):
         node2 = Node(1, point2)
         self.assertEqual(node1.get_distance_to(node2), 5)
 
+    def test_network(self):
+        vertices = Vertices()
+        vertices.add_source(Node(1,Point(5,1)))
+        vertices.add_source(Node(1,Point(1,3)))
+        vertices.add_sink(Node(2, Point(0,0)))
+        vertices.add_bifurcation(Point(0, 0)) 
+        network = Network(0.1, 0.5, vertices)     
+        self.assertEqual(network.alpha, 0.5)
+        self.assertEqual(network.h, 0.1)
+        self.assertEqual(len(network.vertices.sinks), 1)
+        self.assertEqual(len(network.vertices.sources), 2)
+        self.assertEqual(len(network.vertices.bifurcations), 1)
+        self.assertEqual(network.calculate_optimal_angle(), 90)
+        network_2 = Network(0.1, 0.45, vertices) 
+        self.assertEqual(network_2.calculate_optimal_angle(), 93.83980058897298)  
+
+    def test_flow_a(self):
+        vertices = Vertices()
+        vertices.add_source(Node(1,Point(5,1)))
+        vertices.add_source(Node(1,Point(1,3)))
+        vertices.add_sink(Node(2, Point(0,0)))
+        vertices.add_bifurcation(Point(0, 0)) 
+        network = Network(0.1, 0.5, vertices)
+        flow = Flow(network)
+        flow.get_flow()
+        steps = flow.steps
+        theta = flow.theta
+        cost = flow.cost
+        self.assertLessEqual(len(steps), flow.max_iterations)
+        self.assertGreaterEqual(theta[-1], 90 - 0.2)
+        self.assertLessEqual(cost[-1], cost[-2] + flow.difference_cutoff)
 
 if __name__ == '__main__':
     unittest.main()
