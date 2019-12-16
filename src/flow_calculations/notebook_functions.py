@@ -7,13 +7,13 @@ import typing
 from typing import List
 try:
     from src.flow_calculations.point import Point
-    from src.flow_calculations.vertices import Vertices
+    from src.flow_calculations.graph import Graph
     from src.flow_calculations.node import Node, NodeType
     from src.flow_calculations.network import Network
     from src.flow_calculations.flow import Flow
 except ImportError:
     from point import Point
-    from vertices import Vertices
+    from graph import Graph
     from node import Node, NodeType
     from network import Network
     from flow import Flow
@@ -76,13 +76,13 @@ class Notebook:
         return tab
 
     def get_network(self):
-        self.vertices = Vertices()
-        self.vertices.add_source(Node(self.source_1_weight.value, Point(self.source_1_x.value, self.source_1_y.value)))
-        self.vertices.add_source(Node(self.source_2_weight.value, Point(self.source_2_x.value, self.source_2_y.value)))
-        self.vertices.add_sink(Node(
+        self.graphs = Graph()
+        self.graphs.add_source(Node(self.source_1_weight.value, Point(self.source_1_x.value, self.source_1_y.value)))
+        self.graphs.add_source(Node(self.source_2_weight.value, Point(self.source_2_x.value, self.source_2_y.value)))
+        self.graphs.add_sink(Node(
             (self.source_1_weight.value + self.source_2_weight.value), Point(self.sink_x.value, self.sink_y.value)))
-        self.vertices.add_bifurcation(Point(self.sink_x.value, self.sink_y.value)) 
-        return Network(self.h.value, self.alpha.value, self.vertices)        
+        self.graphs.add_bifurcation(Point(self.sink_x.value, self.sink_y.value)) 
+        return Network(self.h.value, self.alpha.value, self.graphs)        
 
     def make_steps(self, verbose=False):
         flow = Flow(self.get_network(), self.max_steps.value, self.min_diff.value)
@@ -93,24 +93,24 @@ class Notebook:
 
     def make_point_data(self):
         self.x_values = [
-            n.x for n in self.vertices.get_source_points() + self.vertices.get_sink_points()
-            + self.vertices.get_sink_points() ]
+            n.x for n in self.graphs.get_source_points() + self.graphs.get_sink_points()
+            + self.graphs.get_sink_points() ]
         self.y_values = [
-            n.y for n in self.vertices.get_source_points() + self.vertices.get_sink_points()
-            + self.vertices.get_sink_points() ]
+            n.y for n in self.graphs.get_source_points() + self.graphs.get_sink_points()
+            + self.graphs.get_sink_points() ]
         data = {"x_values": self.x_values, 'y_values': self.y_values}
         self.point_source =  ColumnDataSource(data=data)
 
     def make_line_data(self):
-        x0 = [n.x for n in self.vertices.get_source_points() + self.vertices.get_sink_points()]
-        y0 = [n.y for n in self.vertices.get_source_points() + self.vertices.get_sink_points()]
-        x1 = [self.vertices.get_sink_points()[0].x, self.vertices.get_sink_points()[0].x, self.vertices.get_sink_points()[0].x]
-        y1 = [self.vertices.get_sink_points()[0].y, self.vertices.get_sink_points()[0].y, self.vertices.get_sink_points()[0].y]
+        x0 = [n.x for n in self.graphs.get_source_points() + self.graphs.get_sink_points()]
+        y0 = [n.y for n in self.graphs.get_source_points() + self.graphs.get_sink_points()]
+        x1 = [self.graphs.get_sink_points()[0].x, self.graphs.get_sink_points()[0].x, self.graphs.get_sink_points()[0].x]
+        y1 = [self.graphs.get_sink_points()[0].y, self.graphs.get_sink_points()[0].y, self.graphs.get_sink_points()[0].y]
         segment_data = {"x0": x0, "y0": y0, "x1": x1, "y1": y1}
         self.segment_source =  ColumnDataSource(data=segment_data)
 
     def get_figure(self):
-        if not hasattr(self, "vertices"):
+        if not hasattr(self, "graphs"):
             self.get_optimal_bifurcation_point()
         self.make_line_data()
         self.make_point_data()
@@ -119,7 +119,7 @@ class Notebook:
         fig.segment(x0 = "x0", y0="y0", x1="x1", y1="y1", color="navy", line_width=3, source=self.segment_source)
         fig.xaxis.ticker = SingleIntervalTicker(interval=1)
         fig.yaxis.ticker = SingleIntervalTicker(interval=1)
-        delattr(self, "vertices")
+        delattr(self, "graphs")
         return fig
 
     def get_optimal_bifurcation_point(self, verbose=False):

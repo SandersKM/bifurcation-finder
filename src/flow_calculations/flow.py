@@ -5,12 +5,12 @@ import logging
 try:
     from src.flow_calculations.node import Node, NodeType
     from src.flow_calculations.point import Point
-    from src.flow_calculations.vertices import Vertices
+    from src.flow_calculations.graph import Graph
     from src.flow_calculations.network import Network
 except ImportError:
     from node import Node, NodeType
     from point import Point
-    from vertices import Vertices
+    from graph import Graph
     from network import Network
 
 class Flow:
@@ -40,7 +40,7 @@ class Flow:
         
     def get_flow(self, verbose=False):
         i: int = 0
-        node_collection: Vertices = self.network.vertices
+        node_collection: Graph = self.network.graph
         self.update_lists(node_collection.bifurcations[0])
         # checks for L shape criteria - based on cost?
         while self.should_repeat(i):
@@ -50,7 +50,7 @@ class Flow:
                 logging.warning(minimized)
             bifurcation = Point(minimized.x[0], minimized.x[1])
             node_collection.add_bifurcation(bifurcation)
-            self.network.vertices = node_collection
+            self.network.graph = node_collection
             self.update_lists(bifurcation)
             i += 1
         return self.network

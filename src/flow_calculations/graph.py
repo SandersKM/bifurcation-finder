@@ -8,7 +8,7 @@ except ImportError:
     from node import Node, NodeType
     from point import Point
     
-class Vertices:
+class Graph:
 
     def __init__(self) -> None:
         self.sources: List[Node] = []

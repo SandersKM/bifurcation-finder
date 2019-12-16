@@ -4,19 +4,19 @@ import numpy as np
 try:
     from src.flow_calculations.node import Node, NodeType
     from src.flow_calculations.point import Point
-    from src.flow_calculations.vertices import Vertices
+    from src.flow_calculations.graph import Graph
 except ImportError:
     from node import Node, NodeType
     from point import Point
-    from vertices import Vertices
+    from graph import Graph
 
 class Network:
 
-    def __init__(self, h: float, alpha: float, vertices: Vertices):
+    def __init__(self, h: float, alpha: float, graph: Graph):
         self.h: float = h
         self.alpha: float = alpha
-        self.vertices: Vertices = vertices
-        self.bifurcation_point: Point = vertices.get_bifurcation_points()[0]
+        self.graph: Graph = graph
+        self.bifurcation_point: Point = graph.get_bifurcation_points()[0]
 
     @property
     def h(self):
@@ -35,13 +35,13 @@ class Network:
         self._alpha = value 
 
     @property
-    def vertices(self) -> Vertices:
-        return self._vertices
+    def graph(self) -> Graph:
+        return self._graph
 
-    @vertices.setter
-    def vertices(self, value):
-        self._vertices = value
-        self.bifurcation_point = self.vertices.get_bifurcation_points()[0]
+    @graph.setter
+    def graph(self, value):
+        self._graph = value
+        self.bifurcation_point = self.graph.get_bifurcation_points()[0]
 
     def calculate_g(self, new_bifurcation_arr: np.array) -> float:
         new_bifurcation = Point(new_bifurcation_arr[0], new_bifurcation_arr[1]) 
@@ -57,9 +57,9 @@ class Network:
             a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y)))
 
     def calculate_fill(self, new_bifurcation) -> float: 
-        sink: Node = self.vertices.get_sinks()[0]
+        sink: Node = self.graph.get_sinks()[0]
         fill: float = 0
-        for node in self.vertices.get_sources():
+        for node in self.graph.get_sources():
             old_area: float = self.calculate_triangle_area(
                 self.bifurcation_point, sink.point, node.point)
             new_area: float = self.calculate_triangle_area(
@@ -76,12 +76,12 @@ class Network:
 
     def calculate_individual_cost(self, new_bifurcation) -> float: 
         cost: float = 0
-        for source in self.vertices.get_sources():
+        for source in self.graph.get_sources():
             cost += self.calculate_edge_cost(source, new_bifurcation)
         return cost 
 
     def calculate_carpool_cost(self, new_bifurcation) -> float: 
-        sink: Node = self.vertices.get_sinks()[0]
+        sink: Node = self.graph.get_sinks()[0]
         return self.calculate_edge_cost(sink, new_bifurcation)
 
     def calculate_edge_cost(self, node: Node, new_bifurcation: Point) -> float:
@@ -90,7 +90,7 @@ class Network:
         return length * alpha_adjusted_weight
 
     def calculate_bifurcation_angle(self) -> float:
-        source_points = self.vertices.get_source_points()
+        source_points = self.graph.get_source_points()
         length_bif_s0 = source_points[0].get_distance_to(self.bifurcation_point)
         length_bif_s1 = source_points[1].get_distance_to(self.bifurcation_point)
         length_s0_s1 = source_points[0].get_distance_to(source_points[1])
@@ -101,7 +101,7 @@ class Network:
         return math.degrees(angle)
 
     def calculate_optimal_angle(self):
-        m: List[float] = self.vertices.get_source_weights()
+        m: List[float] = self.graph.get_source_weights()
         k0: float = (m[0] / (m[1] + m[0])) 
         k1: float = (m[1] / (m[1] + m[0]))
         numerator: float = 1 - (k1 ** (2 * self.alpha)) - (k0 ** (2 * self.alpha))
