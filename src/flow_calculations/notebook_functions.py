@@ -77,11 +77,17 @@ class Notebook:
 
     def get_network(self):
         self.graphs = Graph()
-        self.graphs.add_source(Node(self.source_1_weight.value, Point(self.source_1_x.value, self.source_1_y.value)))
-        self.graphs.add_source(Node(self.source_2_weight.value, Point(self.source_2_x.value, self.source_2_y.value)))
-        self.graphs.add_sink(Node(
-            (self.source_1_weight.value + self.source_2_weight.value), Point(self.sink_x.value, self.sink_y.value)))
-        self.graphs.add_bifurcation(Point(self.sink_x.value, self.sink_y.value)) 
+        source1 = Node(self.source_1_weight.value, Point(self.source_1_x.value, self.source_1_y.value), NodeType.SOURCE)
+        source2 = Node(self.source_2_weight.value, Point(self.source_2_x.value, self.source_2_y.value), NodeType.SOURCE)
+        sink = Node((self.source_1_weight.value + self.source_2_weight.value), Point(self.sink_x.value, self.sink_y.value), NodeType.SINK)
+        bifurcation = Node(0, Point(self.sink_x.value, self.sink_y.value), NodeType.BIFURCATION)
+        self.graphs.add_node(source1)
+        self.graphs.add_node(source2)
+        self.graphs.add_node(sink)
+        self.graphs.add_node(bifurcation)
+        self.graphs.add_edge(source1, bifurcation)
+        self.graphs.add_edge(source2, bifurcation)
+        self.graphs.add_edge(bifurcation, sink)
         return Network(self.h.value, self.alpha.value, self.graphs)        
 
     def make_steps(self, verbose=False):
