@@ -42,6 +42,10 @@ class Graph:
             elif node in self.edge_map[key]:
                del self.edge_map[key][node]
 
+    def remove_bifurcations(self) -> None:
+        for node in self.get_bifurcations().copy():
+            self.remove_node(node)
+
     def get_sink(self):
         for node in self.edge_map:
             if node.node_type == NodeType.SINK:
