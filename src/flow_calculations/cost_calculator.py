@@ -45,9 +45,9 @@ class CostCalculator:
         self.new.add_edge(new_bifurcation, self.new.get_sink())
 
     def calculate_g(self, new_bifurcation_arr: np.array) -> float:
-        new_bifurcation = Point(new_bifurcation_arr[0], new_bifurcation_arr[1]) 
-        cost: float = self.calculate_transportation_cost(new_bifurcation)
-        fill: float = self.calculate_fill(new_bifurcation)
+        self.add_new_graph(new_bifurcation_arr)
+        cost: float = self.calculate_transportation_cost()
+        fill: float = self.calculate_fill()
         #print(f"new_bifurcation: {new_bifurcation}, cost: {cost}, fill: {fill}")
         return (cost**2) + ((fill ** 2) / self.h)
 
@@ -58,7 +58,7 @@ class CostCalculator:
         return abs((1 / 2) * (
             a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y)))
 
-    def calculate_fill(self, new_bifurcation) -> float: 
+    def calculate_fill(self) -> float: 
         sink: Node = self.old.get_sink()
         fill: float = 0
         for node in self.old.get_sources():
