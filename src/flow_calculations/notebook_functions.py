@@ -108,9 +108,9 @@ class Notebook:
         self.point_source =  ColumnDataSource(data=data)
 
     def make_line_data(self):
-        sink = [self.graph.get_sink_point()]
-        x0 = [n.x for n in self.graph.get_source_points() + sink]
-        y0 = [n.y for n in self.graph.get_source_points() + sink]
+        sink = self.graph.get_sink_point()
+        x0 = [n.x for n in self.graph.get_source_points() + [sink]]
+        y0 = [n.y for n in self.graph.get_source_points() + [sink]]
         x1 = [sink.x, sink.x, sink.x]
         y1 = [sink.y, sink.y, sink.y]
         segment_data = {"x0": x0, "y0": y0, "x1": x1, "y1": y1}
