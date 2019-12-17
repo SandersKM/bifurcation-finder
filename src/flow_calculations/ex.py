@@ -1,6 +1,7 @@
 from typing import *
 from scipy.optimize import minimize
 import math
+import numpy as np
 import logging
 try:
     from src.flow_calculations.node import Node, NodeType
@@ -17,10 +18,10 @@ except ImportError:
 
 def get_network():
     graph = Graph()
-    source1 = Node(1,Point(5,1), NodeType.SOURCE)
-    source2 = Node(1,Point(1,3), NodeType.SOURCE)
-    sink = Node(0, Point(0,0), NodeType.SINK)
-    bifurcation = Node(0, Point(0,0), NodeType.BIFURCATION) 
+    source1 = Node(1,Point(0,1), NodeType.SOURCE)
+    source2 = Node(1,Point(0,5), NodeType.SOURCE)
+    sink = Node(2, Point(4,3), NodeType.SINK)
+    bifurcation = Node(0, Point(4,3), NodeType.BIFURCATION) 
     graph.add_node(source1)
     graph.add_node(source2)
     graph.add_node(sink)
@@ -28,7 +29,9 @@ def get_network():
     graph.add_edge(source1, bifurcation)
     graph.add_edge(source2, bifurcation)
     graph.add_edge(bifurcation, sink)
-    return Network(0.1, 0.45, graph)        
+    network = Network(0.000001, 0.5, graph)   
+    network.calculate_g(np.array([3.840210415833968, 3.000012521887091]))  
+    return network   
 
 def make_steps():
     flow = Flow(get_network())

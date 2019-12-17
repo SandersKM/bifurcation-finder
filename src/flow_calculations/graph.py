@@ -27,7 +27,8 @@ class Graph:
 
     def add_edge(self, start: Node, end: Node) -> None:
         self.edge_map[start][end] = start.weight
-        end.weight += start.weight
+        if end.node_type == NodeType.BIFURCATION:
+            end.weight += start.weight
 
     def delete_edge(self, start: Node, end: Node) -> None:
         if start in self.edge_map:

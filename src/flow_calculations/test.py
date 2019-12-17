@@ -58,7 +58,7 @@ class UnitTest(unittest.TestCase):
         self.assertEqual(len(network.graph.sources), 2)
         self.assertEqual(len(network.graph.bifurcations), 1)
         self.assertEqual(network.calculate_optimal_angle(), 90)
-        network_2 = Network(0.1, 0.45, graph) 
+        network_2 = Network(0.000001, 0.45, graph) 
         self.assertEqual(network_2.calculate_optimal_angle(), 93.83980058897298)  
 
     def test_flow_a(self):
@@ -67,7 +67,7 @@ class UnitTest(unittest.TestCase):
         graph.add_source(Node(1,Point(1,3), NodeType.SOURCE))
         graph.add_sink(Node(2, Point(0,0), NodeType.SINK))
         graph.add_bifurcation(Point(0, 0)) 
-        network = Network(0.1, 0.5, graph)
+        network = Network(0.000001, 0.5, graph)
         flow = Flow(network)
         flow.get_flow()
         steps = flow.steps
