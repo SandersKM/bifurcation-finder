@@ -99,7 +99,7 @@ class Notebook:
 
     def make_point_data(self):
         self.x_values = [
-            n.x for n in self.graph.get_source_points() + self.graph.get_sink_point()
+            n.x for n in self.graph.get_source_points() + [self.graph.get_sink_point()]
             + [self.graph.get_sink_point()] ]
         self.y_values = [
             n.y for n in self.graph.get_source_points() + [self.graph.get_sink_point()]
