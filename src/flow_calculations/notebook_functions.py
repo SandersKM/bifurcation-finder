@@ -100,15 +100,15 @@ class Notebook:
     def make_point_data(self):
         self.x_values = [
             n.x for n in self.graph.get_source_points() + self.graph.get_sink_point()
-            + self.graph.get_sink_point() ]
+            + [self.graph.get_sink_point()] ]
         self.y_values = [
-            n.y for n in self.graph.get_source_points() + self.graph.get_sink_point()
-            + self.graph.get_sink_point() ]
+            n.y for n in self.graph.get_source_points() + [self.graph.get_sink_point()]
+            + [self.graph.get_sink_point()] ]
         data = {"x_values": self.x_values, 'y_values': self.y_values}
         self.point_source =  ColumnDataSource(data=data)
 
     def make_line_data(self):
-        sink = self.graph.get_sink_point()
+        sink = [self.graph.get_sink_point()]
         x0 = [n.x for n in self.graph.get_source_points() + sink]
         y0 = [n.y for n in self.graph.get_source_points() + sink]
         x1 = [sink.x, sink.x, sink.x]
