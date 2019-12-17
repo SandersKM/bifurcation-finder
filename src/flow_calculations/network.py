@@ -47,7 +47,7 @@ class Network:
         new_bifurcation = Point(new_bifurcation_arr[0], new_bifurcation_arr[1]) 
         cost: float = self.calculate_transportation_cost(new_bifurcation)
         fill: float = self.calculate_fill(new_bifurcation)
-        print(f"new_bifurcation: {new_bifurcation}, cost: {cost}, fill: {fill}")
+        #print(f"new_bifurcation: {new_bifurcation}, cost: {cost}, fill: {fill}")
         return (cost**2) + ((fill ** 2) / self.h)
 
     # Using the Shoelace Formula

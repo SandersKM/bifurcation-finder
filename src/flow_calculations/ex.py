@@ -29,7 +29,7 @@ def get_network():
     graph.add_edge(source1, bifurcation)
     graph.add_edge(source2, bifurcation)
     graph.add_edge(bifurcation, sink)
-    network = Network(0.000001, 0.5, graph)   
+    network = Network(.2, 0.5, graph)   
     network.calculate_g(np.array([3.840210415833968, 3.000012521887091]))  
     return network   
 

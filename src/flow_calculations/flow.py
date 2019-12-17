@@ -27,10 +27,10 @@ class Flow:
     def should_repeat(self, i: int):
         if i > 0:
             if i > self.max_iterations:
-                print("max iterations exceeded")
+                #print("max iterations exceeded")
                 return False
             if abs(self.cost[-2] - self.cost[-1]) < self.difference_cutoff:
-                print(f"cuttoff diff: {self.cost[-2]}")
+                #print(f"cuttoff diff: {self.cost[-2]}")
                 return False
         return True
 
@@ -45,11 +45,12 @@ class Flow:
         graph: Graph = self.network.graph
         bifurcation = graph.get_bifurcations()[0]
         self.update_lists(bifurcation)
-        print(graph)
+        #print(graph)
         # checks for L shape criteria - based on cost?
         while self.should_repeat(i):
             graph.remove_node(bifurcation)
-            minimized = minimize(self.network.calculate_g, bifurcation.point.point_as_array(), method = 'Nelder-Mead', options={'disp': True})
+            #minimized = minimize(self.network.calculate_g, bifurcation.point.point_as_array(), method = 'Nelder-Mead', options={'disp': True})
+            minimized = minimize(self.network.calculate_g, bifurcation.point.point_as_array(), method = 'Nelder-Mead')
             if verbose:
                 logging.warning(minimized)
             bifurcation = Node(0, Point(minimized.x[0], minimized.x[1]), NodeType.BIFURCATION)
@@ -58,7 +59,7 @@ class Flow:
                 graph.add_edge(source, bifurcation)
             graph.add_edge(bifurcation, graph.get_sink())
             self.network.graph = graph
-            print(graph)
+            #print(graph)
             self.update_lists(bifurcation)
             i += 1
         return self.network
