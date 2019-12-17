@@ -76,19 +76,19 @@ class Notebook:
         return tab
 
     def get_network(self):
-        self.graphs = Graph()
+        self.graph = Graph()
         source1 = Node(self.source_1_weight.value, Point(self.source_1_x.value, self.source_1_y.value), NodeType.SOURCE)
         source2 = Node(self.source_2_weight.value, Point(self.source_2_x.value, self.source_2_y.value), NodeType.SOURCE)
         sink = Node((self.source_1_weight.value + self.source_2_weight.value), Point(self.sink_x.value, self.sink_y.value), NodeType.SINK)
         bifurcation = Node(0, Point(self.sink_x.value, self.sink_y.value), NodeType.BIFURCATION)
-        self.graphs.add_node(source1)
-        self.graphs.add_node(source2)
-        self.graphs.add_node(sink)
-        self.graphs.add_node(bifurcation)
-        self.graphs.add_edge(source1, bifurcation)
-        self.graphs.add_edge(source2, bifurcation)
-        self.graphs.add_edge(bifurcation, sink)
-        return Network(self.h.value, self.alpha.value, self.graphs)        
+        self.graph.add_node(source1)
+        self.graph.add_node(source2)
+        self.graph.add_node(sink)
+        self.graph.add_node(bifurcation)
+        self.graph.add_edge(source1, bifurcation)
+        self.graph.add_edge(source2, bifurcation)
+        self.graph.add_edge(bifurcation, sink)
+        return Network(self.h.value, self.alpha.value, self.graph)        
 
     def make_steps(self, verbose=False):
         flow = Flow(self.get_network(), self.max_steps.value, self.min_diff.value)
@@ -99,24 +99,25 @@ class Notebook:
 
     def make_point_data(self):
         self.x_values = [
-            n.x for n in self.graphs.get_source_points() + self.graphs.get_sink_points()
-            + self.graphs.get_sink_points() ]
+            n.x for n in self.graph.get_source_points() + self.graph.get_sink_point()
+            + self.graph.get_sink_point() ]
         self.y_values = [
-            n.y for n in self.graphs.get_source_points() + self.graphs.get_sink_points()
-            + self.graphs.get_sink_points() ]
+            n.y for n in self.graph.get_source_points() + self.graph.get_sink_point()
+            + self.graph.get_sink_point() ]
         data = {"x_values": self.x_values, 'y_values': self.y_values}
         self.point_source =  ColumnDataSource(data=data)
 
     def make_line_data(self):
-        x0 = [n.x for n in self.graphs.get_source_points() + self.graphs.get_sink_points()]
-        y0 = [n.y for n in self.graphs.get_source_points() + self.graphs.get_sink_points()]
-        x1 = [self.graphs.get_sink_points()[0].x, self.graphs.get_sink_points()[0].x, self.graphs.get_sink_points()[0].x]
-        y1 = [self.graphs.get_sink_points()[0].y, self.graphs.get_sink_points()[0].y, self.graphs.get_sink_points()[0].y]
+        sink = self.graph.get_sink_point()
+        x0 = [n.x for n in self.graph.get_source_points() + sink]
+        y0 = [n.y for n in self.graph.get_source_points() + sink]
+        x1 = [sink.x, sink.x, sink.x]
+        y1 = [sink.y, sink.y, sink.y]
         segment_data = {"x0": x0, "y0": y0, "x1": x1, "y1": y1}
         self.segment_source =  ColumnDataSource(data=segment_data)
 
     def get_figure(self):
-        if not hasattr(self, "graphs"):
+        if not hasattr(self, "graph"):
             self.get_optimal_bifurcation_point()
         self.make_line_data()
         self.make_point_data()
@@ -125,7 +126,7 @@ class Notebook:
         fig.segment(x0 = "x0", y0="y0", x1="x1", y1="y1", color="navy", line_width=3, source=self.segment_source)
         fig.xaxis.ticker = SingleIntervalTicker(interval=1)
         fig.yaxis.ticker = SingleIntervalTicker(interval=1)
-        delattr(self, "graphs")
+        delattr(self, "graph")
         return fig
 
     def get_optimal_bifurcation_point(self, verbose=False):
