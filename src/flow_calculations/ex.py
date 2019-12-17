@@ -17,11 +17,11 @@ except ImportError:
 
 def get_network():
     vertices = Vertices()
-    vertices.add_source(Node(1,Point(5,1)))
-    vertices.add_source(Node(1,Point(1,3)))
-    vertices.add_sink(Node(2, Point(0,0)))
-    vertices.add_bifurcation(Point(0, 0)) 
-    return Network(0.1, 0.45, vertices)        
+    vertices.add_source(Node(1,Point(0,1)))
+    vertices.add_source(Node(1,Point(0,5)))
+    vertices.add_sink(Node(2, Point(4,3)))
+    vertices.add_bifurcation(Point(4,3)) 
+    return Network(0.1, 0.5, vertices)        
 
 def make_steps():
     flow = Flow(get_network())
