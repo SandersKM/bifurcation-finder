@@ -81,7 +81,7 @@ class Notebook:
         self.graphs.add_source(Node(self.source_2_weight.value, Point(self.source_2_x.value, self.source_2_y.value)))
         self.graphs.add_sink(Node(
             (self.source_1_weight.value + self.source_2_weight.value), Point(self.sink_x.value, self.sink_y.value)))
-        self.graphs.add_bifurcation(Point(self.sink_x.value, self.sink_y.value)) 
+        #self.graphs.add_bifurcation(Point(self.sink_x.value, self.sink_y.value)) 
         return Network(self.h.value, self.alpha.value, self.graphs)        
 
     def make_steps(self, verbose=False):

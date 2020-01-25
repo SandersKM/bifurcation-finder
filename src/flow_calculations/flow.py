@@ -43,10 +43,9 @@ class Flow:
     def get_flow(self, verbose=False):
         i: int = 0
         graph: Graph = self.network.graph
-        bifurcation = graph.get_bifurcations()[0]
+        bifurcation = Node(0, graph.get_sink().point, NodeType.BIFURCATION)
+        graph.add_node(bifurcation)
         self.update_lists(bifurcation)
-        #print(graph)
-        # checks for L shape criteria - based on cost?
         while self.should_repeat(i):
             graph.remove_node(bifurcation)
             #minimized = minimize(self.network.calculate_g, bifurcation.point.point_as_array(), method = 'Nelder-Mead', options={'disp': True})
