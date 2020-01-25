@@ -41,7 +41,7 @@ class Network:
     @graph.setter
     def graph(self, value):
         self._graph = value
-        self.bifurcation_point = self.graph.get_bifurcation_points()[0]
+        self.bifurcation_point = self.graph.get_bifurcation_points()[-1]
 
     def calculate_g(self, new_bifurcation_arr: np.array) -> float:
         new_bifurcation = Point(new_bifurcation_arr[0], new_bifurcation_arr[1]) 

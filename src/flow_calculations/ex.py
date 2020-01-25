@@ -46,5 +46,6 @@ def make_steps():
 
 def test():
     make_steps()
+    #point = Point(0.0, 0.0)
 
 test()
