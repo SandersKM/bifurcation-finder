@@ -16,7 +16,7 @@ class Network:
         self.h: float = h
         self.alpha: float = alpha
         self.graph: Graph = graph
-        self.bifurcation_point: Point = graph.get_bifurcation_points()[0]
+        self.bifurcation: Node = graph.get_bifurcations()[-1]
 
     @property
     def h(self):
@@ -41,7 +41,7 @@ class Network:
     @graph.setter
     def graph(self, value):
         self._graph = value
-        self.bifurcation_point = self.graph.get_bifurcation_points()[-1]
+        self.bifurcation: Node = self.graph.get_bifurcations()[-1]
 
     def calculate_g(self, new_bifurcation_arr: np.array) -> float:
         new_bifurcation = Point(new_bifurcation_arr[0], new_bifurcation_arr[1]) 
@@ -58,15 +58,11 @@ class Network:
             a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y)))
 
     def calculate_fill(self, new_bifurcation) -> float: 
-        sink: Node = self.graph.get_sink()
+        outgoing_edges = self.graph.get_nodes_pointing_to(self.bifurcation)
         fill: float = 0
-        for node in self.graph.get_sources():
-            old_area: float = self.calculate_triangle_area(
-                self.bifurcation_point, sink.point, node.point)
-            new_area: float = self.calculate_triangle_area(
-                new_bifurcation, sink.point, node.point)
-            area_diff: float = abs(old_area - new_area)
-            alpha_adjusted_weight = node.weight ** self.alpha
+        for edge in outgoing_edges:
+            area_diff = self.calculate_triangle_area(self.bifurcation.point, new_bifurcation, edge.point)
+            alpha_adjusted_weight = edge.weight ** self.alpha
             fill += area_diff * alpha_adjusted_weight
         return fill
 
@@ -92,8 +88,8 @@ class Network:
 
     def calculate_bifurcation_angle(self) -> float:
         source_points = self.graph.get_source_points()
-        length_bif_s0 = source_points[0].get_distance_to(self.bifurcation_point)
-        length_bif_s1 = source_points[1].get_distance_to(self.bifurcation_point)
+        length_bif_s0 = source_points[0].get_distance_to(self.bifurcation.point)
+        length_bif_s1 = source_points[1].get_distance_to(self.bifurcation.point)
         length_s0_s1 = source_points[0].get_distance_to(source_points[1])
         numerator = length_bif_s0**2 + length_bif_s1**2 - length_s0_s1**2
         denominator = 2 * length_bif_s0 * length_bif_s1

@@ -27,13 +27,21 @@ class Graph:
 
     def add_edge(self, start: Node, end: Node) -> None:
         self.edge_map[start][end] = start.weight
-        if end.node_type == NodeType.BIFURCATION:
-            end.weight += start.weight
+        #if end.node_type == NodeType.BIFURCATION:
+        #    end.weight += start.weight
 
     def delete_edge(self, start: Node, end: Node) -> None:
         if start in self.edge_map:
             if end in self.edge_map[start]:
                 del self.edge_map[start][end]
+
+    def get_nodes_pointing_to(self, node: Node) -> List[Node]:
+        nodes_to_return: List[Node] = []
+        for n in self.edge_map:
+            if self.edge_map[n] == node:
+                nodes_to_return.append(n)
+        return nodes_to_return
+                
 
     def remove_node(self, node: Node) -> None:
         for key in self.edge_map.copy():

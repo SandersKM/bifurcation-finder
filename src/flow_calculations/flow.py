@@ -64,3 +64,6 @@ class Flow:
             i += 1
         return self.network
 
+    def almostEqual(self, x, y, EPSILON=1e-5):
+        return abs(x - y) < EPSILON
+
