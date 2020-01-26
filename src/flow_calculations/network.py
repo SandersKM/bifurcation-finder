@@ -50,12 +50,23 @@ class Network:
         #print(f"new_bifurcation: {new_bifurcation}, cost: {cost}, fill: {fill}")
         return (cost**2) + ((fill ** 2) / self.h)
 
+    # TODO: Function to determine which 3 nodes the bifurcation point is in
+
+    # TODO: Function that adds bifurcation point to the right place in the graph
+
     # Using the Shoelace Formula
     def calculate_triangle_area(self, a: Point, b: Point, c: Point) -> float:
         if (a == b or b == c or a == c):
             return 0
         return abs((1 / 2) * (
             a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y)))
+
+    def point_is_in_triangle(self, point: Point, a: Point, b: Point, c: Point) -> bool:
+        triangle_area: float = self.calculate_triangle_area(a, b, c)
+        a_b_point_area: float = self.calculate_triangle_area(a, b, point)
+        a_c_point_area: float = self.calculate_triangle_area(a, c, point)
+        b_c_point_area: float = self.calculate_triangle_area(b, c, point)
+        return triangle_area == a_b_point_area + a_c_point_area + b_c_point_area
 
     def calculate_fill(self, new_bifurcation) -> float: 
         outgoing_edges = self.graph.get_nodes_pointing_to(self.bifurcation)

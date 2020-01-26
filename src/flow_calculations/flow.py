@@ -40,6 +40,9 @@ class Flow:
         self.theta.append(self.network.calculate_bifurcation_angle())
         #logging.warning(f"{self.steps[-1]}\t{self.cost[-1]}\t{self.theta[-1]}")
         
+
+    # The edges should be determined by which direction the point moves
+    # is point in triangle function    
     def get_flow(self, verbose=False):
         i: int = 0
         graph: Graph = self.network.graph
