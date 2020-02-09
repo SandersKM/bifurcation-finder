@@ -5,34 +5,19 @@ try:
     from src.flow_calculations.node import Node, NodeType
     from src.flow_calculations.point import Point
     from src.flow_calculations.graph import Graph
+    from src.flow_calculations.parameters import Parameters
 except ImportError:
     from node import Node, NodeType
     from point import Point
     from graph import Graph
+    from parameters import Parameters
 
-class Network:
+class Subgraph:
 
-    def __init__(self, h: float, alpha: float, graph: Graph):
-        self.h: float = h
-        self.alpha: float = alpha
+    def __init__(self, parameters: Parameters, graph: Graph):
+        self.params: Parameters = parameters
         self.graph: Graph = graph
-        self.bifurcation_point: Point = graph.get_bifurcation_points()[0]
-
-    @property
-    def h(self):
-        return self._h
-    
-    @h.setter
-    def h(self, value):
-        self._h = value
-
-    @property
-    def alpha(self):
-        return self._alpha
-
-    @alpha.setter
-    def alpha(self, value):
-        self._alpha = value 
+        self.bifurcation_point: Point = graph.get_bifurcation_points()[-1]
 
     @property
     def graph(self) -> Graph:
@@ -41,14 +26,14 @@ class Network:
     @graph.setter
     def graph(self, value):
         self._graph = value
-        self.bifurcation_point = self.graph.get_bifurcation_points()[0]
+        self.bifurcation_point = self.graph.get_bifurcation_points()[-1]
 
     def calculate_g(self, new_bifurcation_arr: np.array) -> float:
         new_bifurcation = Point(new_bifurcation_arr[0], new_bifurcation_arr[1]) 
         cost: float = self.calculate_transportation_cost(new_bifurcation)
         fill: float = self.calculate_fill(new_bifurcation)
         #print(f"new_bifurcation: {new_bifurcation}, cost: {cost}, fill: {fill}")
-        return (cost**2) + ((fill ** 2) / self.h)
+        return (cost**2) + ((fill ** 2) / self.params.h)
 
     # Using the Shoelace Formula
     def calculate_triangle_area(self, a: Point, b: Point, c: Point) -> float:
@@ -66,7 +51,7 @@ class Network:
             new_area: float = self.calculate_triangle_area(
                 new_bifurcation, sink.point, node.point)
             area_diff: float = abs(old_area - new_area)
-            alpha_adjusted_weight = node.weight ** self.alpha
+            alpha_adjusted_weight = node.weight ** self.params.alpha
             fill += area_diff * alpha_adjusted_weight
         return fill
 
@@ -87,7 +72,7 @@ class Network:
 
     def calculate_edge_cost(self, node: Node, new_bifurcation: Point) -> float:
         length: float = new_bifurcation.get_distance_to(node.point)
-        alpha_adjusted_weight: float = (node.weight ** self.alpha)
+        alpha_adjusted_weight: float = (node.weight ** self.params.alpha)
         return length * alpha_adjusted_weight
 
     def calculate_bifurcation_angle(self) -> float:
@@ -105,8 +90,8 @@ class Network:
         m: List[float] = self.graph.get_source_weights()
         k0: float = (m[0] / (m[1] + m[0])) 
         k1: float = (m[1] / (m[1] + m[0]))
-        numerator: float = 1 - (k1 ** (2 * self.alpha)) - (k0 ** (2 * self.alpha))
-        denominator: float =  2 * (k1 ** self.alpha) * (k0 ** self.alpha)
+        numerator: float = 1 - (k1 ** (2 * self.params.alpha)) - (k0 ** (2 * self.params.alpha))
+        denominator: float =  2 * (k1 ** self.params.alpha) * (k0 ** self.params.alpha)
         cos_optimal: float = numerator / denominator
         angle: float = math.acos(cos_optimal)
         return math.degrees(angle)

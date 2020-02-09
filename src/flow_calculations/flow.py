@@ -6,20 +6,20 @@ try:
     from src.flow_calculations.node import Node, NodeType
     from src.flow_calculations.point import Point
     from src.flow_calculations.graph import Graph
-    from src.flow_calculations.network import Network
+    from src.flow_calculations.subgraph import Subgraph
 except ImportError:
     from node import Node, NodeType
     from point import Point
     from graph import Graph
-    from network import Network
+    from subgraph import Subgraph
 
 class Flow:
 
-    def __init__(self, network: Network, max_iterations: int = 10000, difference_cutoff: float = .000001):
-        self.network: Network = network
+    def __init__(self, subgraph: Subgraph, max_iterations: int = 10000, difference_cutoff: float = .000001):
+        self.subgraph: Subgraph = subgraph
         self.max_iterations = max_iterations
         self.difference_cutoff = difference_cutoff
-        self.optimal_angle: float = network.calculate_optimal_angle()
+        self.optimal_angle: float = subgraph.calculate_optimal_angle()
         self.steps = []
         self.cost = []
         self.theta = []
@@ -36,21 +36,21 @@ class Flow:
 
     def update_lists(self, bifurcation: Node):
         self.steps.append(bifurcation.point)
-        self.cost.append(self.network.calculate_g(bifurcation.point.point_as_array()))
-        self.theta.append(self.network.calculate_bifurcation_angle())
+        self.cost.append(self.subgraph.calculate_g(bifurcation.point.point_as_array()))
+        self.theta.append(self.subgraph.calculate_bifurcation_angle())
         #logging.warning(f"{self.steps[-1]}\t{self.cost[-1]}\t{self.theta[-1]}")
         
     def get_flow(self, verbose=False):
         i: int = 0
-        graph: Graph = self.network.graph
+        graph: Graph = self.subgraph.graph
         bifurcation = graph.get_bifurcations()[0]
         self.update_lists(bifurcation)
         #print(graph)
         # checks for L shape criteria - based on cost?
         while self.should_repeat(i):
             graph.remove_node(bifurcation)
-            #minimized = minimize(self.network.calculate_g, bifurcation.point.point_as_array(), method = 'Nelder-Mead', options={'disp': True})
-            minimized = minimize(self.network.calculate_g, bifurcation.point.point_as_array(), method = 'Nelder-Mead')
+            #minimized = minimize(self.subgraph.calculate_g, bifurcation.point.point_as_array(), method = 'Nelder-Mead', options={'disp': True})
+            minimized = minimize(self.subgraph.calculate_g, bifurcation.point.point_as_array(), method = 'Nelder-Mead')
             if verbose:
                 logging.warning(minimized)
             bifurcation = Node(0, Point(minimized.x[0], minimized.x[1]), NodeType.BIFURCATION)
@@ -58,9 +58,9 @@ class Flow:
             for source in graph.get_sources():
                 graph.add_edge(source, bifurcation)
             graph.add_edge(bifurcation, graph.get_sink())
-            self.network.graph = graph
+            self.subgraph.graph = graph
             #print(graph)
             self.update_lists(bifurcation)
             i += 1
-        return self.network
+        return self.subgraph
 

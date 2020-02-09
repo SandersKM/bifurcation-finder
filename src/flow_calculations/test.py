@@ -6,13 +6,13 @@ try:
     from src.flow_calculations.node import Node, NodeType
     from src.flow_calculations.point import Point
     from src.flow_calculations.graph import Graph
-    from src.flow_calculations.network import Network
-    from src.flow_calculations.network import Flow
+    from src.flow_calculations.subgraph import Subgraph
+    from src.flow_calculations.subgraph import Flow
 except ImportError:
     from node import Node, NodeType
     from point import Point
     from graph import Graph
-    from network import Network
+    from subgraph import Subgraph
     from flow import Flow
 
 class UnitTest(unittest.TestCase):
@@ -45,21 +45,21 @@ class UnitTest(unittest.TestCase):
         node2 = Node(1, point2, NodeType.SOURCE)
         self.assertEqual(node1.get_distance_to(node2), 5)
 
-    def test_network(self):
+    def test_subgraph(self):
         graph = Graph()
         graph.add_source(Node(1,Point(5,1), NodeType.SOURCE))
         graph.add_source(Node(1,Point(1,3), NodeType.SOURCE))
         graph.add_sink(Node(2, Point(0,0), NodeType.SINK))
         graph.add_bifurcation(Point(0, 0)) 
-        network = Network(0.1, 0.5, graph)     
-        self.assertEqual(network.alpha, 0.5)
-        self.assertEqual(network.h, 0.1)
-        self.assertEqual(len(network.graph.sinks), 1)
-        self.assertEqual(len(network.graph.sources), 2)
-        self.assertEqual(len(network.graph.bifurcations), 1)
-        self.assertEqual(network.calculate_optimal_angle(), 90)
-        network_2 = Network(0.000001, 0.45, graph) 
-        self.assertEqual(network_2.calculate_optimal_angle(), 93.83980058897298)  
+        subgraph = Subgraph(0.1, 0.5, graph)     
+        self.assertEqual(subgraph.alpha, 0.5)
+        self.assertEqual(subgraph.h, 0.1)
+        self.assertEqual(len(subgraph.graph.sinks), 1)
+        self.assertEqual(len(subgraph.graph.sources), 2)
+        self.assertEqual(len(subgraph.graph.bifurcations), 1)
+        self.assertEqual(subgraph.calculate_optimal_angle(), 90)
+        subgraph_2 = Subgraph(0.000001, 0.45, graph) 
+        self.assertEqual(subgraph_2.calculate_optimal_angle(), 93.83980058897298)  
 
     def test_flow_a(self):
         graph = Graph()
@@ -67,8 +67,8 @@ class UnitTest(unittest.TestCase):
         graph.add_source(Node(1,Point(1,3), NodeType.SOURCE))
         graph.add_sink(Node(2, Point(0,0), NodeType.SINK))
         graph.add_bifurcation(Point(0, 0)) 
-        network = Network(0.000001, 0.5, graph)
-        flow = Flow(network)
+        subgraph = Subgraph(0.000001, 0.5, graph)
+        flow = Flow(subgraph)
         flow.get_flow()
         steps = flow.steps
         theta = flow.theta

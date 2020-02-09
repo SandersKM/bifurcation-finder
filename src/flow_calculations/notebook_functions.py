@@ -9,13 +9,13 @@ try:
     from src.flow_calculations.point import Point
     from src.flow_calculations.graph import Graph
     from src.flow_calculations.node import Node, NodeType
-    from src.flow_calculations.network import Network
+    from src.flow_calculations.subgraph import Subgraph
     from src.flow_calculations.flow import Flow
 except ImportError:
     from point import Point
     from graph import Graph
     from node import Node, NodeType
-    from network import Network
+    from subgraph import Subgraph
     from flow import Flow
 
 class Notebook:
@@ -75,7 +75,7 @@ class Notebook:
             tab.set_title(i, tab_titles[i])
         return tab
 
-    def get_network(self):
+    def get_subgraph(self):
         self.graph = Graph()
         source1 = Node(self.source_1_weight.value, Point(self.source_1_x.value, self.source_1_y.value), NodeType.SOURCE)
         source2 = Node(self.source_2_weight.value, Point(self.source_2_x.value, self.source_2_y.value), NodeType.SOURCE)
@@ -88,10 +88,10 @@ class Notebook:
         self.graph.add_edge(source1, bifurcation)
         self.graph.add_edge(source2, bifurcation)
         self.graph.add_edge(bifurcation, sink)
-        return Network(self.h.value, self.alpha.value, self.graph)        
+        return Subgraph(self.h.value, self.alpha.value, self.graph)        
 
     def make_steps(self, verbose=False):
-        flow = Flow(self.get_network(), self.max_steps.value, self.min_diff.value)
+        flow = Flow(self.get_subgraph(), self.max_steps.value, self.min_diff.value)
         flow.get_flow(verbose)
         self.steps = flow.steps
         self.theta = flow.theta
