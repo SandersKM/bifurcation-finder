@@ -86,15 +86,26 @@ class Subgraph:
         angle = math.acos(cos_bif)
         return math.degrees(angle)
 
-    def calculate_optimal_angle(self):
-        m: List[float] = self.graph.get_source_weights()
-        k0: float = (m[0] / (m[1] + m[0])) 
-        k1: float = (m[1] / (m[1] + m[0]))
-        numerator: float = 1 - (k1 ** (2 * self.params.alpha)) - (k0 ** (2 * self.params.alpha))
-        denominator: float =  2 * (k1 ** self.params.alpha) * (k0 ** self.params.alpha)
+    def calculate_optimal_theta(self, k_first: float, k_second: float) -> float:
+        numerator: float = (k_first ** (2 * self.params.alpha)) + 1 - (k_second ** (2 * self.params.alpha))
+        denominator: float =  2 * (k_first ** self.params.alpha)
         cos_optimal: float = numerator / denominator
         angle: float = math.acos(cos_optimal)
         return math.degrees(angle)
+
+    def calculate_optimal_theta1(self) -> float:
+        m: List[float] = self.graph.get_source_weights()
+        k0: float = (m[0] / (m[1] + m[0])) 
+        k1: float = (m[1] / (m[1] + m[0]))
+        return self.calculate_optimal_theta(k0, k1)
+
+    def calculate_optimal_theta2(self) -> float:
+        m: List[float] = self.graph.get_source_weights()
+        k0: float = (m[0] / (m[1] + m[0])) 
+        k1: float = (m[1] / (m[1] + m[0]))
+        return self.calculate_optimal_theta(k1, k0)
+
+    
 
     
 
