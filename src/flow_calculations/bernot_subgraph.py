@@ -6,26 +6,35 @@ try:
     from src.flow_calculations.point import Point
     from src.flow_calculations.graph import Graph
     from src.flow_calculations.parameters import Parameters
+    from src.flow_calculations.circle import Circle
 except ImportError:
     from node import Node, NodeType
     from point import Point
     from graph import Graph
     from parameters import Parameters
+    from circle import Circle
 
 class Bernot_Subgraph:
 
-    def __init__(self, parameters: Parameters, source1: Node, source2: Node, bifurcation: Point):
+    def __init__(self, parameters: Parameters, source1: Node, source2: Node, sink: Node):
         self.params: Parameters = parameters
-        self.source1 = source1
-        self.source2 = source2
-        self.bifurcation_point: Point = bifurcation
+        self.source1: Node = source1 # assuming that source 1 is the "left source" 
+        self.source2: Node = source2 # assuming that source 2 is the "right source" - rotate counterclockwise towards s1
+        self.sink: Node = sink
 
-    # Using the Shoelace Formula
-    def calculate_triangle_area(self, a: Point, b: Point, c: Point) -> float:
-        if (a == b or b == c or a == c):
-            return 0
-        return abs((1 / 2) * (
-            a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y)))
+    def get_pivot_point(self):
+        return self.source2.rotate(self.get_source_circle_intersection(), 2 * self.calculate_optimal_theta2())
+
+    def get_source_circle_intersection(self):
+        radius: float = self.get_circle_radius()
+        circle1: Circle = Circle(self.source1.point.x, self.source1.point.y, radius)
+        circle2: Circle = Circle(self.source2.point.x, self.source2.point.y, radius)
+        intersect_result = circle1.circle_intersect(circle2)
+        intersect1 = intersect_result[0]
+        intersect2 = intersect_result[1]
+        if (self.sink.point.get_distance_to(intersect1) < self.sink.get_distance_to(intersect2)):
+            return intersect1
+        return intersect2
 
     def get_circle_radius(self):
         numerator: float = abs(self.source1.point.get_distance_to(self.source2))

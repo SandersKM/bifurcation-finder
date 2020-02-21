@@ -2,6 +2,13 @@ import typing
 from typing import Type
 import math
 import numpy as np
+from enum import Enum
+
+class Orientation(Enum):
+    CLOCKWISE = 1           # right turn
+    COUNTERCLOCKWISE = 2    # left turn
+    COLINEAR = 3            # left turn
+
 
 class Point():
     """ A class used to represent an (x, y) coorinate point.
@@ -63,3 +70,38 @@ class Point():
         x_diff: float = (self.x - other.x)
         y_diff: float = (self.y - other.y)
         return math.sqrt(x_diff**2 + y_diff**2)
+
+    # http://www.dcs.gla.ac.uk/~pat/52233/slides/Geometry1x1.pdf
+    def orientation(self, joining_vertex, ending_vertex): 
+        slope_starting_to_joining: float = (joining_vertex.y - self.y) / (joining_vertex.x - self.x)
+        slope_joining_to_ending: float = (ending_vertex.y - joining_vertex.y) / (ending_vertex.x - joining_vertex.x)
+        if slope_starting_to_joining > slope_joining_to_ending:
+            return Orientation.CLOCKWISE
+        elif slope_starting_to_joining < slope_joining_to_ending:
+            return Orientation.COUNTERCLOCKWISE
+        return Orientation.COLINEAR
+
+    # https://stackoverflow.com/questions/34372480/rotate-point-about-another-point-in-degrees-python
+    def rotate(self, origin, angle: float):
+        """
+        Rotate a point counterclockwise by a given angle around a given origin.
+
+        The angle should be given in radians.
+        """
+        qx = origin.x + math.cos(angle) * (self.x - origin.x) - math.sin(angle) * (self.y - origin.y)
+        qy = origin.y + math.sin(angle) * (self.x - origin.x) + math.cos(angle) * (self.y - origin.y)
+        return Point(qx, qy)
+
+# Driver code 
+p1 = Point(0, 0) 
+p2 = Point(4, 4) 
+p3 = Point(1, 2) 
+  
+o = p1.orientation(p2, p3) 
+  
+if (o == 3): 
+    print("Linear") 
+elif (o == 1): 
+    print("Clockwise") 
+else: 
+    print("CounterClockwise") 

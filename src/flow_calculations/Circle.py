@@ -82,3 +82,9 @@ class Circle(object):
             if theta2 > theta1:
                 I1, I2 = I2, I1
             return (I1, I2, CASE)
+
+# Main program:
+C1 = Circle(0, 0, 10)
+C2 = Circle(10, 0, 10)
+
+print(C1.circle_intersect(C2))
