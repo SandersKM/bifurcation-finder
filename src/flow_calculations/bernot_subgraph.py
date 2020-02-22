@@ -22,10 +22,12 @@ class Bernot_Subgraph:
         self.source2: Node = source2 
         #self.get_clockwise_ordering()
         self.sink: Node = sink 
-        self.pivot_point = self.get_pivot_point()
+        self.pivot_node = self.get_pivot_node()
 
-    def get_pivot_point(self):
-        return self.source2.point.rotate(self.get_source_circle_intersection(), 2 * self.calculate_optimal_theta2())
+    def get_pivot_node(self):
+        location = self.source2.point.rotate(self.get_source_circle_intersection(), 2 * self.calculate_optimal_theta2())
+        weight = self.source1.weight + self.source2.weight
+        return Node(weight, location, NodeType.SOURCE)
 
     def get_source_circle_intersection(self):
         radius: float = self.get_circle_radius()

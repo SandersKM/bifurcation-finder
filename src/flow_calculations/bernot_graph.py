@@ -52,7 +52,9 @@ class Bernot_Graph:
         while len(self.sources) > 1:
             print(self.sources)
             subgraph = self.get_next_subgraph()
-            self.sources.append(subgraph.pivot_point)
+            self.sources.remove(subgraph.source1)
+            self.sources.remove(subgraph.source2)
+            self.sources.append(subgraph.pivot_node)
 
     
 source1 = Node(1, Point(7, 5), NodeType.SOURCE)
@@ -62,4 +64,4 @@ sources = [source1, source2, source3]
 sink = Node(2, Point(3, 2), NodeType.SINK)
 params = Parameters(.01, .5)
 bernot = Bernot_Graph(params, [source1, source2, source3], sink)
-print(bernot.sources)  
+bernot.create_subgraphs()
