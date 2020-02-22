@@ -20,21 +20,10 @@ class Bernot_Subgraph:
 
     def __init__(self, parameters: Parameters, source1: Node, source2: Node, sink: Node):
         self.params: Parameters = parameters
-        self.source1: Node = source1 
+        self.source1: Node = source1 # source1 should be the first in clockwise ordering
         self.source2: Node = source2 
-        self.get_clockwise_ordering()
-        self.sink: Node = sink
-
-    # source1 should be the first in clockwise ordering
-    def get_clockwise_ordering(self):
-        atan2_source1 = math.atan2(source1.point.x - sink.point.x, source1.point.y - sink.point.y)
-        atan2_source2 = math.atan2(source2.point.x - sink.point.x, source2.point.y - sink.point.y)
-        print(atan2_source1, atan2_source2)
-        if atan2_source1 > atan2_source2:
-            sources = (source2, source1)
-            print(sources)
-            self.source1 = sources[0]
-            self.source2 = sources[1]    
+        #self.get_clockwise_ordering()
+        self.sink: Node = sink 
 
     def get_pivot_point(self):
         return self.source2.point.rotate(self.get_source_circle_intersection(), 2 * self.calculate_optimal_theta2())
@@ -91,8 +80,13 @@ bernot = Bernot_Subgraph(params, source1, source2, sink)
 print(bernot.source1, bernot.source2)
 
 '''
-    def get_clockwise_ordering(self):
-        coords = [source1, source2]
-        center = tuple(map(operator.truediv, reduce(lambda x, y: map(operator.add, x, y), coords), [len(coords)] * 2))
-        sorted(coords, key=lambda coord: (-135 - math.degrees(math.atan2(*tuple(map(operator.sub, coord, center))[::-1]))) % 360)
+def get_clockwise_ordering(self):
+        atan2_source1 = math.atan2(source1.point.x - sink.point.x, source1.point.y - sink.point.y)
+        atan2_source2 = math.atan2(source2.point.x - sink.point.x, source2.point.y - sink.point.y)
+        print(atan2_source1, atan2_source2)
+        if atan2_source1 > atan2_source2:
+            sources = (source2, source1)
+            print(sources)
+            self.source1 = sources[0]
+            self.source2 = sources[1]   
 '''
