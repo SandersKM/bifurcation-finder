@@ -6,13 +6,11 @@ import operator
 try:
     from src.flow_calculations.node import Node, NodeType
     from src.flow_calculations.point import Point
-    from src.flow_calculations.graph import Graph
     from src.flow_calculations.parameters import Parameters
     from src.flow_calculations.circle import Circle
 except ImportError:
     from node import Node, NodeType
     from point import Point
-    from graph import Graph
     from parameters import Parameters
     from circle import Circle
 
@@ -24,6 +22,7 @@ class Bernot_Subgraph:
         self.source2: Node = source2 
         #self.get_clockwise_ordering()
         self.sink: Node = sink 
+        self.pivot_point = self.get_pivot_point()
 
     def get_pivot_point(self):
         return self.source2.point.rotate(self.get_source_circle_intersection(), 2 * self.calculate_optimal_theta2())
@@ -72,12 +71,7 @@ class Bernot_Subgraph:
     def get_k2(self):
         return  (self.source2.weight / (self.source1.weight + self.source2.weight)) 
     
-source1 = Node(1, Point(7, 5), NodeType.SOURCE)
-source2 = Node(1, Point(5, 5), NodeType.SOURCE)
-sink = Node(2, Point(3, 2), NodeType.SINK)
-params = Parameters(.01, .5)
-bernot = Bernot_Subgraph(params, source1, source2, sink)
-print(bernot.source1, bernot.source2)
+
 
 '''
 def get_clockwise_ordering(self):
