@@ -66,7 +66,6 @@ class Point():
         float
             Euclidean distance between this point and the other point
         """
-        
         x_diff: float = (self.x - other.x)
         y_diff: float = (self.y - other.y)
         return math.sqrt(x_diff**2 + y_diff**2)
@@ -88,11 +87,13 @@ class Point():
 
         The angle should be given in radians.
         """
+        angle = math.radians(angle)
         qx = origin.x + math.cos(angle) * (self.x - origin.x) - math.sin(angle) * (self.y - origin.y)
         qy = origin.y + math.sin(angle) * (self.x - origin.x) + math.cos(angle) * (self.y - origin.y)
         return Point(qx, qy)
 
 # Driver code 
+"""
 p1 = Point(0, 0) 
 p2 = Point(4, 4) 
 p3 = Point(1, 2) 
@@ -105,3 +106,4 @@ elif (o == 1):
     print("Clockwise") 
 else: 
     print("CounterClockwise") 
+"""

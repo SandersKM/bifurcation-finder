@@ -29,6 +29,10 @@ points to the centre of the first circle, from +180 degrees to -180 degrees.
 
 """
 import math
+try:
+    from src.flow_calculations.point import Point
+except ImportError:
+    from point import Point
 
 PRECISION = 5  # Decimal point precision
 
@@ -71,20 +75,20 @@ class Circle(object):
             halfchordlength = math.sqrt(R1**2 - chorddistance**2)
             chordmidpointx = X1 + (chorddistance*Dx)/D
             chordmidpointy = Y1 + (chorddistance*Dy)/D
-            I1 = (round(chordmidpointx + (halfchordlength*Dy)/D, PRECISION),
+            I1 = Point(round(chordmidpointx + (halfchordlength*Dy)/D, PRECISION),
                   round(chordmidpointy - (halfchordlength*Dx)/D, PRECISION))
-            theta1 = round(math.degrees(math.atan2(I1[1]-Y1, I1[0]-X1)),
+            theta1 = round(math.degrees(math.atan2(I1.y-Y1, I1.x-X1)),
                            PRECISION)
-            I2 = (round(chordmidpointx - (halfchordlength*Dy)/D, PRECISION),
+            I2 = Point(round(chordmidpointx - (halfchordlength*Dy)/D, PRECISION),
                   round(chordmidpointy + (halfchordlength*Dx)/D, PRECISION))
-            theta2 = round(math.degrees(math.atan2(I2[1]-Y1, I2[0]-X1)),
+            theta2 = round(math.degrees(math.atan2(I2.y-Y1, I2.x-X1)),
                            PRECISION)
             if theta2 > theta1:
                 I1, I2 = I2, I1
             return (I1, I2, CASE)
 
 # Main program:
-C1 = Circle(0, 0, 10)
-C2 = Circle(10, 0, 10)
+#C1 = Circle(0, 0, 10)
+#C2 = Circle(10, 0, 10)
 
-print(C1.circle_intersect(C2))
+#print(C1.circle_intersect(C2))
