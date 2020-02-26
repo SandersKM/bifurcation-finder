@@ -39,6 +39,9 @@ class Node:
     def __repr__(self):
         return f"<{self.node_type.name}, {self.point}, {self.weight}>"
 
+    def __eq__(self, other):
+        return self.point == other.point and self.weight == other.weight
+
     @property
     def weight(self) -> float:
         return self._weight

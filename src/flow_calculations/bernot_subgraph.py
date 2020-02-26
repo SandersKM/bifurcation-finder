@@ -22,17 +22,21 @@ class Bernot_Subgraph:
         self.source2: Node = source2 
         #self.get_clockwise_ordering()
         self.sink: Node = sink 
+        self.radius = self.get_circle_radius()
+        self.center: Point = self.get_center()
         self.pivot_node = self.get_pivot_node()
 
     def get_pivot_node(self):
-        location = self.source2.point.rotate(self.get_source_circle_intersection(), 2 * self.calculate_optimal_theta2())
+        print("intersection: ", self.get_center())
+        print("rotation:", 2 * self.calculate_optimal_theta2())
+        location = self.source2.point.rotate(self.center, 2 * self.calculate_optimal_theta2())
+        print("location: ", location)
         weight = self.source1.weight + self.source2.weight
         return Node(weight, location, NodeType.SOURCE)
 
-    def get_source_circle_intersection(self):
-        radius: float = self.get_circle_radius()
-        circle1: Circle = Circle(self.source1.point.x, self.source1.point.y, radius)
-        circle2: Circle = Circle(self.source2.point.x, self.source2.point.y, radius)
+    def get_center(self):
+        circle1: Circle = Circle(self.source1.point.x, self.source1.point.y, self.radius)
+        circle2: Circle = Circle(self.source2.point.x, self.source2.point.y, self.radius)
         intersect_result = circle1.circle_intersect(circle2)
         intersect1 = intersect_result[0]
         intersect2 = intersect_result[1]
@@ -43,6 +47,7 @@ class Bernot_Subgraph:
     def get_circle_radius(self):
         numerator: float = abs(self.source1.point.get_distance_to(self.source2.point))
         denominator: float = 2 * math.sin(self.calculate_optimal_theta_combined())
+        print("radius:", numerator / denominator)
         return numerator / denominator
     
     def calculate_optimal_theta_combined(self):

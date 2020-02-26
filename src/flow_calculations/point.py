@@ -35,6 +35,9 @@ class Point():
     def __repr__(self) -> str:
         return f"({self.x}, {self.y})"
 
+    def __eq__(self, other):
+        return self._x == other.x and self._y == other._y
+
     @property
     def x(self):
         return self._x
@@ -91,6 +94,19 @@ class Point():
         qx = origin.x + math.cos(angle) * (self.x - origin.x) - math.sin(angle) * (self.y - origin.y)
         qy = origin.y + math.sin(angle) * (self.x - origin.x) + math.cos(angle) * (self.y - origin.y)
         return Point(qx, qy)
+
+    def is_in_triangle(self, a, b, c) -> bool:
+        triangle_area: float = self.calculate_triangle_area(a, b, c)
+        a_b_point_area: float = self.calculate_triangle_area(a, b, self)
+        a_c_point_area: float = self.calculate_triangle_area(a, c, self)
+        b_c_point_area: float = self.calculate_triangle_area(b, c, self)
+        return triangle_area == a_b_point_area + a_c_point_area + b_c_point_area
+
+    def calculate_triangle_area(self, a, b, c) -> float:
+        if (a == b or b == c or a == c):
+            return 0
+        return abs((1 / 2) * (
+            a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y)))
 
 # Driver code 
 """
