@@ -12,6 +12,8 @@ try:
     from src.flow_calculations.network import Network
     from src.flow_calculations.flow import Flow
 except ImportError:
+    import sys
+    sys.path.insert(0,'./flow_calculations/')
     from point import Point
     from graph import Graph
     from node import Node, NodeType
