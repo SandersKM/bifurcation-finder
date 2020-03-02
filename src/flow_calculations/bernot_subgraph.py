@@ -1,18 +1,16 @@
 from typing  import *
+from sympy import *
+from sympy.geometry import *
 from functools import reduce
 import math
 import numpy as np   
 import operator
 try:
     from src.flow_calculations.node import Node, NodeType
-    from src.flow_calculations.point import Point
     from src.flow_calculations.parameters import Parameters
-    from src.flow_calculations.circle import Circle
 except ImportError:
     from node import Node, NodeType
-    from point import Point
     from parameters import Parameters
-    from circle import Circle
 
 class Bernot_Subgraph:
 
@@ -25,29 +23,64 @@ class Bernot_Subgraph:
         self.radius = self.get_circle_radius()
         self.center: Point = self.get_center()
         self.pivot_node = self.get_pivot_node()
+        self.bifurcation = None
+
+    def is_v_degeneracy(self, circle: Circle, endpoint: Point):
+        return circle.encloses_point(endpoint)
+
+    def get_closer_point(self, point1: Point, point2: Point, target: Point):
+        if point1.distance(target) < point2.distance(target):
+            return point1
+        return point2
+
+    def is_l_degeneracy(self, endpoint: Point, potential_bifurcation: Point, closest_source_to_sink: Point):
+        if self.get_closer_point(potential_bifurcation, closest_source_to_sink, endpoint) == potential_bifurcation:
+            return false
+        return true
+
+    def get_bifurcation_point(self, endpoint: Point):
+        weight = self.source2.weight + self.source1.weight
+        circ = Circle(self.center, self.radius)
+        if self.is_v_degeneracy(circ, endpoint):
+            #print("WHAT", endpoint)
+            self.bifurcation = Node(weight, endpoint, NodeType.BIFURCATION)
+        else:
+            seg = Line(self.pivot_node.point, endpoint)
+            intersect = circ.intersection(seg)
+            if len(intersect) == 1:
+                probable_bifurcation_point = intersect[0]
+            else:
+                probable_bifurcation_point = self.get_closer_point(intersect[0], intersect[1], self.sink.point)
+            closest_source_to_sink = self.get_closer_point(self.source1.point, self.source2.point, self.sink.point)
+            if (self.is_l_degeneracy(endpoint, probable_bifurcation_point, closest_source_to_sink)):
+                self.bifurcation = Node(weight, closest_source_to_sink, NodeType.BIFURCATION)
+            else:
+                self.bifurcation = Node(weight, probable_bifurcation_point, NodeType.BIFURCATION)
 
     def get_pivot_node(self):
-        print("intersection: ", self.get_center())
-        print("rotation:", 2 * self.calculate_optimal_theta2())
-        location = self.source2.point.rotate(self.center, 2 * self.calculate_optimal_theta2())
-        print("location: ", location)
+        #print("intersection: ", self.get_center())
+        #print("rotation:", 2 * self.calculate_optimal_theta2())
+        degree_radians = math.radians(2 * self.calculate_optimal_theta2())
+        location = self.source2.point.rotate(degree_radians, self.center)
+        #print("location: ", location)
         weight = self.source1.weight + self.source2.weight
         return Node(weight, location, NodeType.SOURCE)
 
     def get_center(self):
-        circle1: Circle = Circle(self.source1.point.x, self.source1.point.y, self.radius)
-        circle2: Circle = Circle(self.source2.point.x, self.source2.point.y, self.radius)
-        intersect_result = circle1.circle_intersect(circle2)
-        intersect1 = intersect_result[0]
-        intersect2 = intersect_result[1]
-        if (self.sink.point.get_distance_to(intersect1) < self.sink.point.get_distance_to(intersect2)):
+        circle1: Circle = Circle(Point(self.source1.point.x, self.source1.point.y), self.radius)
+        circle2: Circle = Circle(Point(self.source2.point.x, self.source2.point.y), self.radius)
+        intersect_result = circle1.intersection(circle2)
+        intersect1: Point = intersect_result[0]
+        intersect2: Point = intersect_result[1]
+        sink_point: Point = Point(self.sink.point.x, self.sink.point.y)
+        if (sink_point.distance(intersect1) < sink_point.distance(intersect2)):
             return intersect1
         return intersect2
 
     def get_circle_radius(self):
-        numerator: float = abs(self.source1.point.get_distance_to(self.source2.point))
+        numerator: float = abs(self.source1.point.distance(self.source2.point))
         denominator: float = 2 * math.sin(self.calculate_optimal_theta_combined())
-        print("radius:", numerator / denominator)
+        #print("radius:", numerator / denominator)
         return numerator / denominator
     
     def calculate_optimal_theta_combined(self):

@@ -67,4 +67,4 @@ class Node:
         self._node_type: NodeType = value
 
     def get_distance_to(self, other) -> float:
-        return self.point.get_distance_to(other.point)
+        return self.point.distance(other.point)
