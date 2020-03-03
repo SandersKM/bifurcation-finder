@@ -20,7 +20,7 @@ except ImportError:
     from network import Network
     from flow import Flow
 
-class Notebook:
+class FlowNotebook:
     MAX_POINT_VALUE = 10
     MIN_WIDGET_VALUE = 0
     STEP_WIDGET_VALUE = 0.1
@@ -30,8 +30,8 @@ class Notebook:
 
     def get_bounded_float_text_widget(self, value: float, maximum: float):
         return widgets.BoundedFloatText(
-            value = value, min = Notebook.MIN_WIDGET_VALUE, max = maximum, 
-            step = Notebook.STEP_WIDGET_VALUE, description = '', disabled = False)
+            value = value, min = FlowNotebook.MIN_WIDGET_VALUE, max = maximum, 
+            step = FlowNotebook.STEP_WIDGET_VALUE, description = '', disabled = False)
 
     # https://github.com/minrk/ipython_extensions/blob/master/extensions/disable_autoscroll.py
     def get_string_to_set_autoscroll_to_false(self) -> str:
