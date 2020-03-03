@@ -50,16 +50,16 @@ class FlowNotebook:
     def get_tab_children(self):
         tab_children = []
         point_labels = ["X", "Y", "Weight"]
-        self.source_1_x = self.get_bounded_float_text_widget(0.0, Notebook.MAX_POINT_VALUE)
-        self.source_1_y= self.get_bounded_float_text_widget(1.0, Notebook.MAX_POINT_VALUE)
+        self.source_1_x = self.get_bounded_float_text_widget(0.0, FlowNotebook.MAX_POINT_VALUE)
+        self.source_1_y= self.get_bounded_float_text_widget(1.0, FlowNotebook.MAX_POINT_VALUE)
         self.source_1_weight = widgets.BoundedFloatText(value = 1.0, min = 0.1, step = 0.1)
         tab_children.append(self.get_accordion([self.source_1_x, self.source_1_y, self.source_1_weight], point_labels))
-        self.source_2_x = self.get_bounded_float_text_widget(0.0, Notebook.MAX_POINT_VALUE)
-        self.source_2_y= self.get_bounded_float_text_widget(5.0, Notebook.MAX_POINT_VALUE)
+        self.source_2_x = self.get_bounded_float_text_widget(0.0, FlowNotebook.MAX_POINT_VALUE)
+        self.source_2_y= self.get_bounded_float_text_widget(5.0, FlowNotebook.MAX_POINT_VALUE)
         self.source_2_weight = widgets.BoundedFloatText(value = 1.0, min = 0.1, step = 0.1)
         tab_children.append(self.get_accordion([self.source_2_x, self.source_2_y, self.source_2_weight], point_labels))
-        self.sink_x = self.get_bounded_float_text_widget(4.0, Notebook.MAX_POINT_VALUE)
-        self.sink_y = self.get_bounded_float_text_widget(3.0, Notebook.MAX_POINT_VALUE)
+        self.sink_x = self.get_bounded_float_text_widget(4.0, FlowNotebook.MAX_POINT_VALUE)
+        self.sink_y = self.get_bounded_float_text_widget(3.0, FlowNotebook.MAX_POINT_VALUE)
         tab_children.append(self.get_accordion([self.sink_x, self.sink_y], point_labels))
         self.h = self.get_bounded_float_text_widget(.2, .5)
         self.alpha = self.get_bounded_float_text_widget(.5, 1)
