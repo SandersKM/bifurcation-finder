@@ -73,7 +73,7 @@ class BernotNotebook:
             weight = row.children[2].value
             x = row.children[0].value
             y = row.children[1].value
-            self.source_list.append(Node(weight, Point(x, y)), NodeType.SOURCE)
+            self.source_list.append(Node(weight, Point(x, y), NodeType.SOURCE))
 
     def get_sink(self):
         x = self.sink_input.children[0].value
@@ -85,5 +85,41 @@ class BernotNotebook:
 
     def get_parameters(self):
         self.alpha = self.parameters_input.children[0].value
+
+    def make_bernot_graph(self):
+        self.graph = Bernot_Graph(self.source_list, self.sink, self.alpha)
+        
+    def make_point_data(self):
+        self.x_values = [self.graph.sink.point.x]
+        self.y_values = [self.graph.sink.point.y]
+        for key in self.graph.subgraph_map:
+            subgraph: Bernot_Subgraph = self.graph.subgraph_map[key]
+            nodes = [subgraph.source1, subgraph.source2, subgraph.pivot_node, subgraph.bifurcation]
+            self.x_values.extend([n.point.x for n in nodes])
+            self.y_values.extend([n.point.y for n in nodes])
+        data = {"x_values": self.x_values, 'y_values': self.y_values}
+        self.point_source =  ColumnDataSource(data=data)
+
+    def make_line_data(self):
+        sink = self.graph.get_sink_point()
+        x0 = [n.x for n in self.graph.get_source_points() + [sink]]
+        y0 = [n.y for n in self.graph.get_source_points() + [sink]]
+        x1 = [sink.x, sink.x, sink.x]
+        y1 = [sink.y, sink.y, sink.y]
+        segment_data = {"x0": x0, "y0": y0, "x1": x1, "y1": y1}
+        self.segment_source =  ColumnDataSource(data=segment_data)
+
+    def get_figure(self):
+        if not hasattr(self, "graph"):
+            self.make_bernot_graph()
+        self.make_point_data()
+        fig = figure()
+        fig.circle(x='x_values', y='y_values', source=self.point_source)
+        fig.xaxis.ticker = SingleIntervalTicker(interval=1)
+        fig.yaxis.ticker = SingleIntervalTicker(interval=1)
+        delattr(self, "graph")
+        return fig
+
+
 
     
