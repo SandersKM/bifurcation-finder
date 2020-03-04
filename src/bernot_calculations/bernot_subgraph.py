@@ -39,7 +39,6 @@ class Bernot_Subgraph:
         weight = self.source2.weight + self.source1.weight
         circ = Circle(self.center, self.radius)
         if self.is_v_degeneracy(circ, endpoint):
-            #print("WHAT", endpoint)
             self.bifurcation = Node(weight, endpoint, NodeType.BIFURCATION)
         else:
             seg = Line(self.pivot_node.point, endpoint)
@@ -61,7 +60,7 @@ class Bernot_Subgraph:
         location = self.source2.point.rotate(degree_radians, self.center)
         #print("location: ", location)
         weight = self.source1.weight + self.source2.weight
-        return Node(weight, location, NodeType.SOURCE)
+        return Node(weight, location, NodeType.PIVOT)
 
     def get_center(self):
         circle1: Circle = Circle(Point(self.source1.point.x, self.source1.point.y), self.radius)

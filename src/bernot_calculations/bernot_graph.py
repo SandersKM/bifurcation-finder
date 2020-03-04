@@ -20,9 +20,11 @@ class Bernot_Graph:
         self._sink: Node = sink
         self._alpha: float = alpha
         self.get_clockwise_ordering()
-        self._subgraphs = self.get_subgraphs()
+        self._subgraph_map = {}
+        self.top_pivot = None
         self.edge_map = {}
-        self.get_bifurcations()
+        self.make_pivot_nodes()
+        self.get_bifurcations(self.subgraph_map[str(self.top_pivot)], self.sink)
         self.print_final_graph()
 
     @property
@@ -35,7 +37,11 @@ class Bernot_Graph:
 
     @property
     def alpha(self):
-        return self._alpha  
+        return self._alpha      
+
+    @property
+    def subgraph_map(self):
+        return self._subgraph_map  
 
     def get_arctan(self, node):
         return math.atan2(node.point.x - self.sink.point.x, node.point.y - self.sink.point.y)
@@ -53,44 +59,38 @@ class Bernot_Graph:
             return Bernot_Subgraph(source_list[-2], source_list[-1], self.sink, self.alpha)
         return Bernot_Subgraph(source_list[-1], source_list[0], self.sink, self.alpha)
     
-    def get_subgraphs(self):
-        subgraphs = []
+    def make_pivot_nodes(self):
         sources_copy = self.sources.copy()
         while len(sources_copy) > 1:
             subgraph = self.get_next_subgraph(sources_copy)
-            subgraphs.append(subgraph)
             #print(sources_copy, subgraph.source1, subgraph.source1 == sources_copy[1])
             sources_copy.remove(subgraph.source1)
             sources_copy.remove(subgraph.source2)
             sources_copy.append(subgraph.pivot_node)
-        return subgraphs
+            self._subgraph_map[str(subgraph.pivot_node)] = subgraph
+        self.top_pivot = sources_copy[0]
     
-    def get_bifurcations(self):
-        # lol I need to make this better so that pivot points are labeled somehow
-        # like a dictionary?
-        end_nodes = [self.sink]
-
-        for i in range(len(self._subgraphs)):
-            subgraph: Bernot_Subgraph = self._subgraphs[-i]
-            endpoint = sorted(end_nodes, key=lambda node: node.get_distance_to(subgraph.pivot_node))[0]
-            #if len(Triangle(subgraph.sink.point, subgraph.source2.point, subgraph.source1.point).intersection(subgraph.pivot_node.point)) > 0:
-            
-            subgraph.get_bifurcation_point(endpoint.point)
-            end_nodes.append(subgraph.bifurcation)
+    def get_bifurcations(self, subgraph: Bernot_Subgraph, endnode: Node):
+        subgraph.get_bifurcation_point(endnode.point)
+        endnode = subgraph.bifurcation
+        if subgraph.source1.node_type == NodeType.PIVOT:
+            self.get_bifurcations(self.subgraph_map[str(subgraph.source1)], endnode)
+        if subgraph.source2.node_type == NodeType.PIVOT:
+            self.get_bifurcations(self.subgraph_map[str(subgraph.source2)], endnode)
         
-        # if there are things left in sources copy, add them as edges straight to the sink
 
     def print_final_graph(self):
-        for s in self._subgraphs:
+        for key in self._subgraph_map:
+            s = self.subgraph_map[key]
             print("Subgraph with Sources: ", s.source1, s.source2)
             print("Pivot Point:", s.pivot_node.point.x.round(3), s.pivot_node.point.y.round(3))
             print("Bifurcation:", s.bifurcation.point.x.round(3), s.bifurcation.point.y.round(3))
             print("\n")
 
     
-#source1 = Node(1, Point(7, 5), NodeType.SOURCE)
-#source2 = Node(1, Point(5, 5), NodeType.SOURCE)
-#source3 = Node(1, Point(0, 5), NodeType.SOURCE)
-#sources = [source1, source2, source3]
-#sink = Node(2, Point(3, 2), NodeType.SINK)
-#bernot = Bernot_Graph( [source1, source2, source3], sink, 0.5)
+source1 = Node(1, Point(7, 5), NodeType.SOURCE)
+source2 = Node(1, Point(5, 5), NodeType.SOURCE)
+source3 = Node(1, Point(0, 5), NodeType.SOURCE)
+sources = [source1, source2, source3]
+sink = Node(2, Point(3, 2), NodeType.SINK)
+bernot = Bernot_Graph( [source1, source2, source3], sink, 0.5)

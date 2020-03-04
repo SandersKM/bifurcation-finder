@@ -7,6 +7,7 @@ class NodeType(Enum):
     SOURCE = 1
     SINK = 2
     BIFURCATION = 3
+    PIVOT = 4
 
 class Node:
     """ A class used to represent a transportation network node.
