@@ -88,9 +88,9 @@ class Bernot_Graph:
             print("\n")
 
     
-source1 = Node(1, Point(7, 5), NodeType.SOURCE)
-source2 = Node(1, Point(5, 5), NodeType.SOURCE)
-source3 = Node(1, Point(0, 5), NodeType.SOURCE)
-sources = [source1, source2, source3]
-sink = Node(2, Point(3, 2), NodeType.SINK)
-bernot = Bernot_Graph( [source1, source2, source3], sink, 0.5)
+#source1 = Node(1, Point(7, 5), NodeType.SOURCE)
+#source2 = Node(1, Point(5, 5), NodeType.SOURCE)
+#source3 = Node(1, Point(0, 5), NodeType.SOURCE)
+#sources = [source1, source2, source3]
+#sink = Node(2, Point(3, 2), NodeType.SINK)
+#bernot = Bernot_Graph( [source1, source2, source3], sink, 0.5)
