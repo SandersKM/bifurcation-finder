@@ -14,6 +14,7 @@ except ImportError:
     from bernot_subgraph import Bernot_Subgraph
 
 class Bernot_Graph:
+    SIG_FIGS = 3
 
     def __init__(self, sources: [Node], sink: Node, alpha: float) -> None:
         self._sources: [Node] = sources
@@ -60,17 +61,29 @@ class Bernot_Graph:
             return Bernot_Subgraph(source_list[-2], source_list[-1], self.sink, self.alpha)
         return Bernot_Subgraph(source_list[-1], source_list[0], self.sink, self.alpha)
 
+    def round_point(self, point: Point):
+        return Point( self.round(point.x) , self.round(point.y))
+
+    def round_node(self, node: Node):
+        return Node(node.weight, self.round_point(node.point), node.node_type)
+
+    def round(self, n: float):
+        return n.round(Bernot_Graph.SIG_FIGS)
+
     def make_pivot_visualization_steps(self, subgraph: Bernot_Subgraph, sources: List[Node]):
-        sources_full = sources.copy().extend([subgraph.source1, subgraph.source2])
-        self.visualization_steps.append(("get circles", {"points": sources_full, \
-            "circles": [(subgraph.source1, subgraph.radius), (subgraph.source2, subgraph.radius)]}))
-        self.visualization_steps.append(("get intersection circle", {"points": sources_full, \
-            "circles": [(subgraph.source1, subgraph.radius), (subgraph.source2, subgraph.radius), (subgraph.center, subgraph.radius)]}))
-        sources_full.append(subgraph.pivot_node)
-        self.visualization_steps.append(("get pivot", {"points": sources_full, \
-            "circles": [(subgraph.center, subgraph.radius)]}))
-        sources.append(subgraph.pivot_node)
-        self.visualization_steps.append(("collapse points", {"points": sources}))
+        sources_full = [self.round_node(node) for node in sources]
+        sources_full.extend([self.round_node(subgraph.source1), self.round_node(subgraph.source2)])
+        circles = [(self.round_point(subgraph.source1.point), self.round(subgraph.radius)), \
+            (self.round_point(subgraph.source2.point), self.round(subgraph.radius))]
+        self.visualization_steps.append(("get circles", {"points": sources_full, "circles": circles}))
+        center_circle = (self.round_point(subgraph.center), self.round(subgraph.radius))
+        circles.append(center_circle)
+        self.visualization_steps.append(("get intersection circle", {"points": sources_full, "circles": circles}))
+        sources_full.append(self.round_node(subgraph.pivot_node))
+        self.visualization_steps.append(("get pivot", {"points": sources_full, "circles": [center_circle]}))
+        sources_full.remove(self.round_node(subgraph.source1))
+        sources_full.remove(self.round_node(subgraph.source2))
+        self.visualization_steps.append(("collapse points", {"points": sources_full}))
     
     def make_pivot_nodes(self):
         sources_copy = self.sources.copy()
@@ -107,3 +120,4 @@ source3 = Node(1, Point(0, 5), NodeType.SOURCE)
 sources = [source1, source2, source3]
 sink = Node(3, Point(3, 2), NodeType.SINK)
 bernot = Bernot_Graph( [source1, source2, source3], sink, 0.5)
+print(bernot.visualization_steps)
