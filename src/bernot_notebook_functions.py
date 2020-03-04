@@ -87,6 +87,9 @@ class BernotNotebook:
         self.alpha = self.parameters_input.children[0].value
 
     def make_bernot_graph(self):
+        self.get_source_list()
+        self.get_sink()
+        self.get_parameters()
         self.graph = Bernot_Graph(self.source_list, self.sink, self.alpha)
         
     def make_point_data(self):
@@ -121,5 +124,8 @@ class BernotNotebook:
         return fig
 
 
+    def get_output(self):
+        self.output_text = widgets.Output(layout={'border': '1px solid black'})
+        return self.output_text
 
     

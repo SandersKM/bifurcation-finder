@@ -25,7 +25,7 @@ class Bernot_Graph:
         self.edge_map = {}
         self.make_pivot_nodes()
         self.get_bifurcations(self.subgraph_map[str(self.top_pivot)], self.sink)
-        #self.print_final_graph()
+        self.print_final_graph()
 
     @property
     def sources(self):
@@ -91,5 +91,5 @@ source1 = Node(1, Point(7, 5), NodeType.SOURCE)
 source2 = Node(1, Point(5, 5), NodeType.SOURCE)
 source3 = Node(1, Point(0, 5), NodeType.SOURCE)
 sources = [source1, source2, source3]
-sink = Node(2, Point(3, 2), NodeType.SINK)
+sink = Node(3, Point(3, 2), NodeType.SINK)
 bernot = Bernot_Graph( [source1, source2, source3], sink, 0.5)
