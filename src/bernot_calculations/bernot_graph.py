@@ -23,6 +23,7 @@ class Bernot_Graph:
         self._subgraph_map = {}
         self.top_pivot = None
         self.edge_map = {}
+        self.visualization_steps = []
         self.make_pivot_nodes()
         self.get_bifurcations(self.subgraph_map[str(self.top_pivot)], self.sink)
         self.print_final_graph()
@@ -58,6 +59,18 @@ class Bernot_Graph:
         elif left_closeness < right_closeness and left_closeness < across_closeness:
             return Bernot_Subgraph(source_list[-2], source_list[-1], self.sink, self.alpha)
         return Bernot_Subgraph(source_list[-1], source_list[0], self.sink, self.alpha)
+
+    def make_pivot_visualization_steps(self, subgraph: Bernot_Subgraph, sources: List[Node]):
+        sources_full = sources.copy().extend([subgraph.source1, subgraph.source2])
+        self.visualization_steps.append(("get circles", {"points": sources_full, \
+            "circles": [(subgraph.source1, subgraph.radius), (subgraph.source2, subgraph.radius)]}))
+        self.visualization_steps.append(("get intersection circle", {"points": sources_full, \
+            "circles": [(subgraph.source1, subgraph.radius), (subgraph.source2, subgraph.radius), (subgraph.center, subgraph.radius)]}))
+        sources_full.append(subgraph.pivot_node)
+        self.visualization_steps.append(("get pivot", {"points": sources_full, \
+            "circles": [(subgraph.center, subgraph.radius)]}))
+        sources.append(subgraph.pivot_node)
+        self.visualization_steps.append(("collapse points", {"points": sources}))
     
     def make_pivot_nodes(self):
         sources_copy = self.sources.copy()
@@ -66,6 +79,7 @@ class Bernot_Graph:
             #print(sources_copy, subgraph.source1, subgraph.source1 == sources_copy[1])
             sources_copy.remove(subgraph.source1)
             sources_copy.remove(subgraph.source2)
+            self.make_pivot_visualization_steps(subgraph, sources)
             sources_copy.append(subgraph.pivot_node)
             self._subgraph_map[str(subgraph.pivot_node)] = subgraph
         self.top_pivot = sources_copy[0]
