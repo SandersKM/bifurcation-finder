@@ -46,20 +46,25 @@ class Bernot_Graph:
         return self._subgraph_map  
 
     def get_arctan(self, node):
-        return math.atan2(node.point.x - self.sink.point.x, node.point.y - self.sink.point.y)
+        return math.atan2(node.point.x - self.sink.point.x, \
+            node.point.y - self.sink.point.y)
 
     def get_clockwise_ordering(self):
-        self._sources = sorted(self.sources, key=lambda node: self.get_arctan(node))
+        self._sources = sorted(self.sources, \
+            key=lambda node: self.get_arctan(node))
+
+    def subgraph_with_sources(self, source1: Node, source2:Node):
+        return Bernot_Subgraph(source1, source2, self.sink, self.alpha)
 
     def get_next_subgraph(self, source_list):
         right_closeness = abs(source_list[0].get_distance_to(source_list[1]))
         left_closeness = abs(source_list[-1].get_distance_to(source_list[-2]))
         across_closeness = abs(source_list[-1].get_distance_to(source_list[0]))
         if right_closeness < left_closeness and right_closeness < across_closeness:
-            return Bernot_Subgraph(source_list[0], source_list[2], self.sink, self.alpha)
+            return self.subgraph_with_sources(source_list[0], source_list[2])
         elif left_closeness < right_closeness and left_closeness < across_closeness:
-            return Bernot_Subgraph(source_list[-2], source_list[-1], self.sink, self.alpha)
-        return Bernot_Subgraph(source_list[-1], source_list[0], self.sink, self.alpha)
+            return self.subgraph_with_sources(source_list[-2], source_list[-1])
+        return self.subgraph_with_sources(source_list[-1], source_list[0])
 
     def round_point(self, point: Point):
         return Point( self.round(point.x) , self.round(point.y))
@@ -89,7 +94,6 @@ class Bernot_Graph:
         sources_copy = self.sources.copy()
         while len(sources_copy) > 1:
             subgraph = self.get_next_subgraph(sources_copy)
-            #print(sources_copy, subgraph.source1, subgraph.source1 == sources_copy[1])
             sources_copy.remove(subgraph.source1)
             sources_copy.remove(subgraph.source2)
             self.make_pivot_visualization_steps(subgraph, sources)

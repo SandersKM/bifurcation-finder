@@ -30,53 +30,41 @@ class Bernot_Subgraph:
             return point1
         return point2
 
-    def is_l_degeneracy(self, endpoint: Point, potential_bifurcation: Point, closest_source_to_sink: Point):
-        if self.get_closer_point(potential_bifurcation, closest_source_to_sink, endpoint) == potential_bifurcation:
-            return false
-        return true
+    def get_probable_bifurcation(self, circle: Circle, endpoint: Point):
+        seg = Line(self.pivot_node.point, endpoint)
+        intersect = circle.intersection(seg)
+        if len(intersect) == 1:
+            return intersect[0]
+        return self.get_closer_point(intersect[0], intersect[1], endpoint)
 
     def get_bifurcation_point(self, endpoint: Point):
         weight = self.source2.weight + self.source1.weight
-        circ = Circle(self.center, self.radius)
-        if self.is_v_degeneracy(circ, endpoint):
+        circle = Circle(self.center, self.radius)
+        if self.is_v_degeneracy(circle, endpoint):
             self.bifurcation = Node(weight, endpoint, NodeType.BIFURCATION)
         else:
-            seg = Line(self.pivot_node.point, endpoint)
-            intersect = circ.intersection(seg)
-            if len(intersect) == 1:
-                probable_bifurcation_point = intersect[0]
-            else:
-                probable_bifurcation_point = self.get_closer_point(intersect[0], intersect[1], self.sink.point)
-            closest_source_to_sink = self.get_closer_point(self.source1.point, self.source2.point, self.sink.point)
-            if (self.is_l_degeneracy(endpoint, probable_bifurcation_point, closest_source_to_sink)):
-                self.bifurcation = Node(weight, closest_source_to_sink, NodeType.BIFURCATION)
-            else:
-                self.bifurcation = Node(weight, probable_bifurcation_point, NodeType.BIFURCATION)
+            potential_bifurcation = self.get_probable_bifurcation(circle, endpoint)
+            closest_to_endpoint = self.get_closer_point(
+                self.source1.point, self.source2.point, endpoint)
+            bifurcation_point = self.get_closer_point(
+                potential_bifurcation, closest_to_endpoint, endpoint)
+            self.bifurcation = Node(weight, bifurcation_point, NodeType.BIFURCATION)
 
     def get_pivot_node(self):
-        #print("intersection: ", self.get_center())
-        #print("rotation:", 2 * self.calculate_optimal_theta2())
         degree_radians = math.radians(2 * self.calculate_optimal_theta2())
         location = self.source2.point.rotate(degree_radians, self.center)
-        #print("location: ", location)
         weight = self.source1.weight + self.source2.weight
         return Node(weight, location, NodeType.PIVOT)
 
     def get_center(self):
-        circle1: Circle = Circle(Point(self.source1.point.x, self.source1.point.y), self.radius)
-        circle2: Circle = Circle(Point(self.source2.point.x, self.source2.point.y), self.radius)
-        intersect_result = circle1.intersection(circle2)
-        intersect1: Point = intersect_result[0]
-        intersect2: Point = intersect_result[1]
-        sink_point: Point = Point(self.sink.point.x, self.sink.point.y)
-        if (sink_point.distance(intersect1) < sink_point.distance(intersect2)):
-            return intersect1
-        return intersect2
+        circle1: Circle = Circle(self.source1.point, self.radius)
+        circle2: Circle = Circle(self.source2.point, self.radius)
+        intersects = circle1.intersection(circle2)
+        return self.get_closer_point(intersects[0], intersects[1], self.sink.point)
 
     def get_circle_radius(self):
-        numerator: float = abs(self.source1.point.distance(self.source2.point))
+        numerator: float = abs(self.source1.get_distance_to(self.source2))
         denominator: float = 2 * math.sin(self.calculate_optimal_theta_combined())
-        #print("radius:", numerator / denominator)
         return numerator / denominator
     
     def calculate_optimal_theta_combined(self):
@@ -89,7 +77,8 @@ class Bernot_Subgraph:
         return math.degrees(angle)
 
     def calculate_optimal_theta(self, k_first: float, k_second: float) -> float:
-        numerator: float = (k_first ** (2 * self.alpha)) + 1 - (k_second ** (2 * self.alpha))
+        numerator: float = (k_first ** (2 * self.alpha)) + \
+            1 - (k_second ** (2 * self.alpha))
         denominator: float =  2 * (k_first ** self.alpha)
         cos_optimal: float = numerator / denominator
         angle: float = math.acos(cos_optimal)
