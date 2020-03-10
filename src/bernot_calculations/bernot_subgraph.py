@@ -51,7 +51,9 @@ class Bernot_Subgraph:
             self.bifurcation = Node(weight, bifurcation_point, NodeType.BIFURCATION)
 
     def get_pivot_node(self):
-        degree_radians = math.radians(2 * self.calculate_optimal_theta2())
+        degree_radians = 2 * self.calculate_optimal_theta2()
+        print("Degree radians", degree_radians)
+        print("Source2", self.source2.point.x.round(3))
         location = self.source2.point.rotate(degree_radians, self.center)
         weight = self.source1.weight + self.source2.weight
         return Node(weight, location, NodeType.PIVOT)
@@ -60,13 +62,17 @@ class Bernot_Subgraph:
         circle1: Circle = Circle(self.source1.point, self.radius)
         circle2: Circle = Circle(self.source2.point, self.radius)
         intersects = circle1.intersection(circle2)
+        if (len(intersects) == 1):
+            return intersects[0]
         return self.get_closer_point(intersects[0], intersects[1], self.sink.point)
 
     def get_circle_radius(self):
         numerator: float = abs(self.source1.get_distance_to(self.source2))
         denominator: float = 2 * math.sin(self.calculate_optimal_theta_combined())
+        print("radius calcs,", numerator, denominator)
         return numerator / denominator
     
+    # Returns angle in radians
     def calculate_optimal_theta_combined(self):
         k1: float = self.get_k1()
         k2: float = self.get_k2()
@@ -74,15 +80,17 @@ class Bernot_Subgraph:
         denominator: float =  2 * (k2 ** self.alpha) * (k1 ** self.alpha)
         cos_optimal: float = numerator / denominator
         angle: float = math.acos(cos_optimal)
-        return math.degrees(angle)
+        print(math.degrees(angle))
+        return angle
 
+    # Returns angle in radians
     def calculate_optimal_theta(self, k_first: float, k_second: float) -> float:
         numerator: float = (k_first ** (2 * self.alpha)) + \
             1 - (k_second ** (2 * self.alpha))
         denominator: float =  2 * (k_first ** self.alpha)
         cos_optimal: float = numerator / denominator
         angle: float = math.acos(cos_optimal)
-        return math.degrees(angle)
+        return angle
 
     def calculate_optimal_theta1(self) -> float:
         return self.calculate_optimal_theta(self.get_k1(), self.get_k2())

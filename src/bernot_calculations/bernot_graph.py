@@ -17,10 +17,9 @@ class Bernot_Graph:
     SIG_FIGS = 3
 
     def __init__(self, sources: [Node], sink: Node, alpha: float) -> None:
-        self._sources: [Node] = sources
         self._sink: Node = sink
+        self._sources: [Node] = self.get_clockwise_ordering(sources)
         self._alpha: float = alpha
-        self.get_clockwise_ordering()
         self._subgraph_map = {}
         self.top_pivot = None
         self.edge_map = {}
@@ -45,25 +44,31 @@ class Bernot_Graph:
     def subgraph_map(self):
         return self._subgraph_map  
 
+
     def get_arctan(self, node):
+       # print(node, math.atan2(node.point.x - self.sink.point.x, \
+        #    node.point.y - self.sink.point.y))
         return math.atan2(node.point.x - self.sink.point.x, \
             node.point.y - self.sink.point.y)
 
-    def get_clockwise_ordering(self):
-        self._sources = sorted(self.sources, \
-            key=lambda node: self.get_arctan(node))
+
+    def get_clockwise_ordering(self, nodes):
+        return sorted(nodes, key=lambda node: self.get_arctan(node))
 
     def subgraph_with_sources(self, source1: Node, source2:Node):
         return Bernot_Subgraph(source1, source2, self.sink, self.alpha)
 
     def get_next_subgraph(self, source_list):
+        if (len(source_list) == 2):
+            return self.subgraph_with_sources(source_list[0], source_list[1])
         right_closeness = abs(source_list[0].get_distance_to(source_list[1]))
         left_closeness = abs(source_list[-1].get_distance_to(source_list[-2]))
         across_closeness = abs(source_list[-1].get_distance_to(source_list[0]))
         if right_closeness < left_closeness and right_closeness < across_closeness:
-            return self.subgraph_with_sources(source_list[0], source_list[2])
+            return self.subgraph_with_sources(source_list[0], source_list[1])
         elif left_closeness < right_closeness and left_closeness < across_closeness:
             return self.subgraph_with_sources(source_list[-2], source_list[-1])
+        print("Got to this")
         return self.subgraph_with_sources(source_list[-1], source_list[0])
 
     def round_point(self, point: Point):
@@ -98,6 +103,7 @@ class Bernot_Graph:
             sources_copy.remove(subgraph.source2)
             self.make_pivot_visualization_steps(subgraph, sources)
             sources_copy.append(subgraph.pivot_node)
+            sources_copy = self.get_clockwise_ordering(sources_copy)
             self._subgraph_map[str(subgraph.pivot_node)] = subgraph
         self.top_pivot = sources_copy[0]
     
@@ -113,15 +119,31 @@ class Bernot_Graph:
         for key in self._subgraph_map:
             s = self.subgraph_map[key]
             print("Subgraph with Sources: ", s.source1, s.source2)
+            print("Circle: center:(", s.center.x.round(3), s.center.y.round(3), ") radius: ", s.radius.round(3))
             print("Pivot Point:", s.pivot_node.point.x.round(3), s.pivot_node.point.y.round(3))
             print("Bifurcation:", s.bifurcation.point.x.round(3), s.bifurcation.point.y.round(3))
             print("\n")
 
-    
+'''
+
+
+source1 = Node(5, Point(1,5), NodeType.SOURCE)
+source2 = Node(2, Point(3,4), NodeType.SOURCE)
+sources = [source1, source2]
+sink = Node(7, Point(0,0), NodeType.SINK)
+bernot = Bernot_Graph( [source1, source2], sink, 0.5)
+
+source1 = Node(5, Point(1,4), NodeType.SOURCE)
+source2 = Node(2, Point(5,1), NodeType.SOURCE)
+sources = [source1, source2]
+sink = Node(7, Point(0,0), NodeType.SINK)
+bernot = Bernot_Graph( [source1, source2], sink, 0.5)
+'''
+
+
 source1 = Node(1, Point(7, 5), NodeType.SOURCE)
 source2 = Node(1, Point(5, 5), NodeType.SOURCE)
 source3 = Node(1, Point(0, 5), NodeType.SOURCE)
 sources = [source1, source2, source3]
 sink = Node(3, Point(3, 2), NodeType.SINK)
 bernot = Bernot_Graph( [source1, source2, source3], sink, 0.5)
-print(bernot.visualization_steps)
