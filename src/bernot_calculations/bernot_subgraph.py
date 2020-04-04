@@ -52,8 +52,6 @@ class Bernot_Subgraph:
 
     def get_pivot_node(self):
         degree_radians = 2 * self.calculate_optimal_theta2()
-        print("Degree radians", degree_radians)
-        print("Source2", self.source2.point.x.round(3))
         location = self.source2.point.rotate(degree_radians, self.center)
         weight = self.source1.weight + self.source2.weight
         return Node(weight, location, NodeType.PIVOT)
@@ -80,7 +78,6 @@ class Bernot_Subgraph:
         denominator: float =  2 * (k2 ** self.alpha) * (k1 ** self.alpha)
         cos_optimal: float = numerator / denominator
         angle: float = math.acos(cos_optimal)
-        print(math.degrees(angle))
         return angle
 
     # Returns angle in radians

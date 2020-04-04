@@ -46,8 +46,6 @@ class Bernot_Graph:
 
 
     def get_arctan(self, node):
-       # print(node, math.atan2(node.point.x - self.sink.point.x, \
-        #    node.point.y - self.sink.point.y))
         return math.atan2(node.point.x - self.sink.point.x, \
             node.point.y - self.sink.point.y)
 
@@ -68,7 +66,6 @@ class Bernot_Graph:
             return self.subgraph_with_sources(source_list[0], source_list[1])
         elif left_closeness < right_closeness and left_closeness < across_closeness:
             return self.subgraph_with_sources(source_list[-2], source_list[-1])
-        print("Got to this")
         return self.subgraph_with_sources(source_list[-1], source_list[0])
 
     def round_point(self, point: Point):
@@ -96,16 +93,17 @@ class Bernot_Graph:
         self.visualization_steps.append(("collapse points", {"points": sources_full}))
     
     def make_pivot_nodes(self):
-        sources_copy = self.sources.copy()
-        while len(sources_copy) > 1:
-            subgraph = self.get_next_subgraph(sources_copy)
-            sources_copy.remove(subgraph.source1)
-            sources_copy.remove(subgraph.source2)
+        startnodes = self.sources.copy()
+        while len(startnodes) > 1:
+            subgraph = self.get_next_subgraph(startnodes)
+            startnodes.remove(subgraph.source1)
+            startnodes.remove(subgraph.source2)
             self.make_pivot_visualization_steps(subgraph, sources)
-            sources_copy.append(subgraph.pivot_node)
-            sources_copy = self.get_clockwise_ordering(sources_copy)
+            startnodes.append(subgraph.pivot_node)
+            startnodes = self.get_clockwise_ordering(startnodes)
             self._subgraph_map[str(subgraph.pivot_node)] = subgraph
-        self.top_pivot = sources_copy[0]
+        self.top_pivot = startnodes[0]
+        print("top pivot", self.top_pivot)
     
     def get_bifurcations(self, subgraph: Bernot_Subgraph, endnode: Node):
         subgraph.get_bifurcation_point(endnode.point)
@@ -141,9 +139,9 @@ bernot = Bernot_Graph( [source1, source2], sink, 0.5)
 '''
 
 
-source1 = Node(1, Point(7, 5), NodeType.SOURCE)
-source2 = Node(1, Point(5, 5), NodeType.SOURCE)
-source3 = Node(1, Point(0, 5), NodeType.SOURCE)
+source1 = Node(1, Point(0, 4), NodeType.SOURCE)
+source2 = Node(1, Point(2,4), NodeType.SOURCE)
+source3 = Node(1, Point(4, 3), NodeType.SOURCE)
 sources = [source1, source2, source3]
-sink = Node(3, Point(3, 2), NodeType.SINK)
+sink = Node(3, Point(3, 0), NodeType.SINK)
 bernot = Bernot_Graph( [source1, source2, source3], sink, 0.5)

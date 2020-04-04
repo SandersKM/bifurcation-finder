@@ -50,10 +50,12 @@ class Flow:
         while self.should_repeat(i):
             graph.remove_node(bifurcation)
             #minimized = minimize(self.network.calculate_g, bifurcation.point.point_as_array(), method = 'Nelder-Mead', options={'disp': True})
-            minimized = minimize(self.network.calculate_g, bifurcation.point.point_as_array(), method = 'Nelder-Mead')
+            minimized = minimize(self.network.calculate_g, \
+                bifurcation.point.point_as_array(), method = 'Nelder-Mead')
             if verbose:
                 logging.warning(minimized)
-            bifurcation = Node(0, Point(minimized.x[0], minimized.x[1]), NodeType.BIFURCATION)
+            bifurcation = Node(0, Point(minimized.x[0], minimized.x[1]),\
+                 NodeType.BIFURCATION)
             graph.add_node(bifurcation)
             for source in graph.get_sources():
                 graph.add_edge(source, bifurcation)
