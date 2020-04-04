@@ -25,10 +25,10 @@ class BernotNotebook:
     def __init__(self):
         pass
 
-    def get_bounded_float_text_widget(self, value: float, maximum: float):
+    def get_bounded_float_text_widget(self, value: float, maximum: float, dicription_text: str = ""):
         return widgets.BoundedFloatText(
             value = value, min = BernotNotebook.MIN_WIDGET_VALUE, max = maximum, 
-            step = BernotNotebook.STEP_WIDGET_VALUE, description = '', disabled = False)
+            step = BernotNotebook.STEP_WIDGET_VALUE, description = discription_text, disabled = False)
 
     # https://github.com/minrk/ipython_extensions/blob/master/extensions/disable_autoscroll.py
     def get_string_to_set_autoscroll_to_false(self) -> str:
@@ -37,7 +37,6 @@ class BernotNotebook:
             return false;
         }
         """
-        
 
     def get_source_number_slider(self):
         self.source_number = widgets.IntSlider(min=2, max=10, description="# Sources")
@@ -46,17 +45,17 @@ class BernotNotebook:
     def make_sources_tab(self):
         v = []
         for i in range(self.source_number.value):
-            row_inputs = [widgets.IntText(description="X"), widgets.IntText(description="Y"), widgets.BoundedIntText(description="Weight", min=1)]
+            row_inputs = [widgets.FloatText(description="X", value=i), widgets.FloatText(description="Y", value=3), widgets.BoundedFloatText(description="Weight", min=.001, value=1)]
             v.append(widgets.HBox(row_inputs) )
         self.source_inputs = widgets.VBox(v)
         return self.source_inputs
         
     def make_sink_tab(self):
-        self.sink_input = widgets.HBox([widgets.FloatText(description="X"), widgets.FloatText(description="Y")])
+        self.sink_input = widgets.HBox([widgets.FloatText(description="X", value = 0), widgets.FloatText(description="Y", value = 0)])
         return self.sink_input
 
     def make_parameters_tab(self):
-        self.parameters_input = widgets.HBox([widgets.FloatText(description="alpha")])
+        self.parameters_input = widgets.HBox([widgets.BoundedFloatText(description="alpha", value=0, max = .99, min = .001)])
         return self.parameters_input
 
     def make_tabs(self):
