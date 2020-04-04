@@ -90,7 +90,7 @@ class BernotNotebook:
         error_message = ""
         for i in range(len(self.source_list) - 1):
             if self.source_list[i] in self.source_list[i + 1:]:
-                error_message += "Error: duplicate source " + str(self.source_list[i])) + "\n"
+                error_message += "Error: duplicate source " + str(self.source_list[i]) + "\n"
                 valid = False
         if (self.sink in self.source_list):
             error_message +="Error: sink is also a source\n"
