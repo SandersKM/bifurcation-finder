@@ -52,11 +52,11 @@ class BernotNotebook:
         return self.source_inputs
         
     def make_sink_tab(self):
-        self.sink_input = widgets.HBox([widgets.IntText(description="X"), widgets.IntText(description="Y")])
+        self.sink_input = widgets.HBox([widgets.FloatText(description="X"), widgets.FloatText(description="Y")])
         return self.sink_input
 
     def make_parameters_tab(self):
-        self.parameters_input = widgets.HBox([widgets.IntText(description="alpha")])
+        self.parameters_input = widgets.HBox([widgets.FloatText(description="alpha")])
         return self.parameters_input
 
     def make_tabs(self):
@@ -91,13 +91,10 @@ class BernotNotebook:
         for i in range(len(self.source_list) - 1):
             if self.source_list[i] in self.source_list[i + 1:]:
                 error_message += "Error: duplicate source " + str(self.source_list[i]) + "\n"
-                valid = False
-        if (self.sink in self.source_list):
-            error_message +="Error: sink is also a source\n"
-            valid = False
+            if self.sink.point == self.source_list[i].point:
+                error_message +="Error: sink is also a source\n"
         if self.alpha <= 0 or self.alpha >= 1:
             error_message +="Error: invalid alpha\n"
-            valid = False
         return error_message
 
     def make_bernot_graph(self):
