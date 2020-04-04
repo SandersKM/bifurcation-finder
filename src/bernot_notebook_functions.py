@@ -87,25 +87,29 @@ class BernotNotebook:
         self.alpha = self.parameters_input.children[0].value
 
     def check_valid_input(self):
-        valid = True
+        error_message = ""
         for i in range(len(self.source_list) - 1):
             if self.source_list[i] in self.source_list[i + 1:]:
-                widgets.Text("Error: duplicate source " + str(self.source_list[i]))
+                error_message += "Error: duplicate source " + str(self.source_list[i])) + "\n"
                 valid = False
         if (self.sink in self.source_list):
-            widgets.Text("Error: sink is also a source")
+            error_message +="Error: sink is also a source\n"
             valid = False
         if self.alpha <= 0 or self.alpha >= 1:
-            widgets.Text("Error: invalid alpha")
+            error_message +="Error: invalid alpha\n"
             valid = False
-        return valid
+        return error_message
 
     def make_bernot_graph(self):
         self.get_source_list()
         self.get_sink()
         self.get_parameters()
-        if self.check_valid_input():
-            self.graph = Bernot_Graph(self.source_list, self.sink, self.alpha)
+        error_message = self.check_valid_input()
+        if len(error_message) > 0:
+            out = widgets.Output(layout={'border': '1px solid black'})
+            out.append_stdout(error_message)
+            return out
+        self.graph = Bernot_Graph(self.source_list, self.sink, self.alpha)
         
     def make_point_data(self):
         self.x_values = [self.graph.sink.point.x]
