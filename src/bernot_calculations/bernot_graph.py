@@ -23,7 +23,7 @@ class Bernot_Graph:
         self._subgraph_map = {}
         self.top_pivot = None
         self.edge_map = {}
-        self.visualization_steps = []
+        self.visualization_steps = [("start", {"points": [self.round_node(node) for node in sources].append(self.round(sink))})]
         self.make_pivot_nodes()
         self.get_bifurcations(self.subgraph_map[str(self.top_pivot)], self.sink)
         self.print_final_graph()

@@ -107,16 +107,11 @@ class BernotNotebook:
             return out
         self.graph = Bernot_Graph(self.source_list, self.sink, self.alpha)
         
-    def make_point_data(self):
-        self.x_values = [self.graph.sink.point.x]
-        self.y_values = [self.graph.sink.point.y]
-        for key in self.graph.subgraph_map:
-            subgraph: Bernot_Subgraph = self.graph.subgraph_map[key]
-            nodes = [subgraph.source1, subgraph.source2, subgraph.pivot_node, subgraph.bifurcation]
-            self.x_values.extend([n.point.x for n in nodes])
-            self.y_values.extend([n.point.y for n in nodes])
-        data = {"x_values": self.x_values, 'y_values': self.y_values}
-        self.point_source =  ColumnDataSource(data=data)
+    def make_point_data(self, nodes):
+        x_values = [n.point.x for n in nodes]
+        y_values = [n.point.y for n in nodes]
+        data = {"x_values": x_values, 'y_values': y_values}
+        self.point_source = ColumnDataSource(data=data)
 
     def make_line_data(self):
         sink = self.graph.get_sink_point()
@@ -130,11 +125,11 @@ class BernotNotebook:
     def get_figure(self):
         if not hasattr(self, "graph"):
             self.make_bernot_graph()
-        self.make_point_data()
+        self.make_point_data(self.graph.visualization_steps[0][1]["points"])
         fig = figure()
         fig.circle(x='x_values', y='y_values', source=self.point_source)
-        fig.xaxis.ticker = SingleIntervalTicker(interval=1)
-        fig.yaxis.ticker = SingleIntervalTicker(interval=1)
+        #fig.xaxis.ticker = SingleIntervalTicker(interval=1)
+        #fig.yaxis.ticker = SingleIntervalTicker(interval=1)
         delattr(self, "graph")
         return fig
 
