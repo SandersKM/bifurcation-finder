@@ -90,7 +90,7 @@ class BernotNotebook:
         valid = True
         for i in range(len(self.source_list) - 1):
             if self.source_list[i] in self.source_list[i + 1:]:
-                widgets.Text("Error: duplicate source ", self.source_list[i])
+                widgets.Text("Error: duplicate source " + str(self.source_list[i]))
                 valid = False
         if (self.sink in self.source_list):
             widgets.Text("Error: sink is also a source")
