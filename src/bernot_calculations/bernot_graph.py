@@ -139,9 +139,9 @@ bernot = Bernot_Graph( [source1, source2], sink, 0.5)
 '''
 
 
-source1 = Node(1, Point(0, 4), NodeType.SOURCE)
-source2 = Node(1, Point(2,4), NodeType.SOURCE)
-source3 = Node(1, Point(4, 3), NodeType.SOURCE)
-sources = [source1, source2, source3]
-sink = Node(3, Point(3, 0), NodeType.SINK)
-bernot = Bernot_Graph( [source1, source2, source3], sink, 0.5)
+#source1 = Node(1, Point(0, 4), NodeType.SOURCE)
+#source2 = Node(1, Point(2,4), NodeType.SOURCE)
+#source3 = Node(1, Point(4, 3), NodeType.SOURCE)
+#sources = [source1, source2, source3]
+#sink = Node(3, Point(3, 0), NodeType.SINK)
+#bernot = Bernot_Graph( [source1, source2, source3], sink, 0.5)

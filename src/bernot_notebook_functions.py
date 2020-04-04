@@ -103,7 +103,7 @@ class BernotNotebook:
         self.get_source_list()
         self.get_sink()
         self.get_parameters()
-        if check_valid_input():
+        if self.check_valid_input():
             self.graph = Bernot_Graph(self.source_list, self.sink, self.alpha)
         
     def make_point_data(self):
