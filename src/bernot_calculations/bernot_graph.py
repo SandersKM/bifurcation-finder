@@ -89,8 +89,10 @@ class Bernot_Graph:
         pivot = [self.round_node(subgraph.pivot_node)]
         self.visualization_steps.append(("get pivot", {"points": points + pivot, "circles": center_circle}))
         points2 = points.copy()
-        points2.remove(subgraph.source2)
-        points2.remove(subgraph.source1)
+        print("points2: ", points2)
+        print("removing:", self.round_node(subgraph.source1), self.round_node(subgraph.source2))
+        points2.remove(self.round_node(subgraph.source2))
+        points2.remove(self.round_node(subgraph.source1))
         self.visualization_steps.append(("collapse points", {"points": points2 + pivot}))
         
     def make_pivot_nodes(self):

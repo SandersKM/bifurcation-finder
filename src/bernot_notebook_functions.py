@@ -28,7 +28,7 @@ class BernotNotebook:
     def get_bounded_float_text_widget(self, value: float, maximum: float, dicription_text: str = ""):
         return widgets.BoundedFloatText(
             value = value, min = BernotNotebook.MIN_WIDGET_VALUE, max = maximum, 
-            step = BernotNotebook.STEP_WIDGET_VALUE, description = discription_text, disabled = False)
+            step = BernotNotebook.STEP_WIDGET_VALUE, description = dicription_text, disabled = False)
 
     # https://github.com/minrk/ipython_extensions/blob/master/extensions/disable_autoscroll.py
     def get_string_to_set_autoscroll_to_false(self) -> str:
@@ -51,11 +51,11 @@ class BernotNotebook:
         return self.source_inputs
         
     def make_sink_tab(self):
-        self.sink_input = widgets.HBox([widgets.FloatText(description="X", value = 0), widgets.FloatText(description="Y", value = 0)])
+        self.sink_input = widgets.HBox([widgets.FloatText(description="X", value = self.source_number.value/2), widgets.FloatText(description="Y", value = 0)])
         return self.sink_input
 
     def make_parameters_tab(self):
-        self.parameters_input = widgets.HBox([widgets.BoundedFloatText(description="alpha", value=0, max = .99, min = .001)])
+        self.parameters_input = widgets.HBox([widgets.BoundedFloatText(description="alpha", value=.5, max = .99, min = .001)])
         return self.parameters_input
 
     def make_tabs(self):
@@ -110,7 +110,11 @@ class BernotNotebook:
     def make_point_data(self, nodes):
         x_values = [float(n.point.x) for n in nodes]
         y_values = [float(n.point.y) for n in nodes]
-        data = {"x_values": x_values, 'y_values': y_values}
+        return {"x_values": x_values, 'y_values': y_values}
+        
+
+    def make_point_source(self, nodes):
+        data = self.make_point_data(nodes)
         self.point_source =  ColumnDataSource(data=data)
 
     def make_line_data(self):
@@ -124,7 +128,7 @@ class BernotNotebook:
 
     def get_figure(self):
         fig = figure()
-        self.make_point_data(self.graph.visualization_steps[0][1]["points"])
+        self.make_point_source(self.graph.visualization_steps[0][1]["points"])
         fig.circle(x='x_values', y='y_values', source=self.point_source)
         fig.xaxis.ticker = SingleIntervalTicker(interval=1)
         fig.yaxis.ticker = SingleIntervalTicker(interval=1)
@@ -141,10 +145,13 @@ class BernotNotebook:
         if description == 'get pivot':
             self.point_source.stream({"x_values": [float(values["points"][-1].point.x)],\
                 "y_values": [float(values["points"][-1].point.y)]})
-            print(self.point_source)
         if description == "collapse points":
-            self.make_point_data(values["points"])
-            print(self.point_source)
+            data = self.make_point_data(values["points"])
+            print(data)
+            self.point_source.remove("x_values")
+            self.point_source.remove("y_values")
+            self.point_source.add(data["x_values"], "x_values")
+            self.point_source.add(data["y_values"], "y_values")
         self.output_text.clear_output()
         self.output_text.append_stdout(description)
         push_notebook() 
