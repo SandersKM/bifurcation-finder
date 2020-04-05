@@ -108,8 +108,8 @@ class BernotNotebook:
         self.graph = Bernot_Graph(self.source_list, self.sink, self.alpha)
         
     def make_point_data(self, nodes):
-        x_values = [n.point.x for n in nodes]
-        y_values = [n.point.y for n in nodes]
+        x_values = [float(n.point.x) for n in nodes]
+        y_values = [float(n.point.y) for n in nodes]
         data = {"x_values": x_values, 'y_values': y_values}
         print(data)
         return ColumnDataSource(data=data)
