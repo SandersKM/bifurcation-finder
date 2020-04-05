@@ -130,7 +130,7 @@ class BernotNotebook:
             self.node_order.append(n)
         data = {"x_values": x_values, 'y_values': y_values, \
             "color": color, "size": size, "alpha": alpha}
-        self.segment_source =  ColumnDataSource(data=segment_data)
+        self.point_source =  ColumnDataSource(data=data)
 
     def make_line_data(self):
         sink = self.graph.get_sink_point()
@@ -143,7 +143,6 @@ class BernotNotebook:
     def get_figure(self):
         fig = figure()
         self.make_point_data(self.graph.visualization_steps[0][1]["points"])
-        self.point_source =  ColumnDataSource(data=self.point_source_data)
         fig.circle(x='x_values', y='y_values', size="size", color="color", alpha="alpha", source=self.point_source)
         fig.xaxis.ticker = SingleIntervalTicker(interval=1)
         fig.yaxis.ticker = SingleIntervalTicker(interval=1)
@@ -160,12 +159,12 @@ class BernotNotebook:
         if description == 'get pivot':
             self.add_pivot_to_point_source(values["point"][-1])
         if description == "collapse points":
-            update_node_visibility((values["point"]))
+            self.update_node_visibility((values["point"]))
         self.output_text.clear_output()
         self.output_text.append_stdout(description)
         push_notebook() 
 
-    def update_node_visibility(nodes):
+    def update_node_visibility(self, nodes):
         for i in range(len(self.node_order)):
             if self.node_order[i] in nodes:
                 self.point_source.patch({"alpha": [i, [0.5]]})
@@ -173,7 +172,7 @@ class BernotNotebook:
                 self.point_source.patch({"alpha": [i, [0]]})
 
 
-    def add_pivot_to_point_source(node: Node):
+    def add_pivot_to_point_source(self, node: Node):
         self.node_order.append(node)
         self.point_source.stream({"color": ["purple"], "x_values": [float(node.point.x)],\
             "y_values": [float(node.point.y)], "alpha": [0.5], "size": [15]})
