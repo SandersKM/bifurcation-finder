@@ -100,7 +100,7 @@ class Bernot_Graph:
             subgraph = self.get_next_subgraph(startnodes)
             startnodes.remove(subgraph.source1)
             startnodes.remove(subgraph.source2)
-            self.make_pivot_visualization_steps(subgraph, startnodes)
+            self.make_pivot_visualization_steps(subgraph)
             startnodes.append(subgraph.pivot_node)
             startnodes = self.get_clockwise_ordering(startnodes)
             self._subgraph_map[str(subgraph.pivot_node)] = subgraph
