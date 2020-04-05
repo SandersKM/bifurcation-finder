@@ -139,12 +139,12 @@ class BernotNotebook:
         description = current_step[0]
         values = current_step[1]
         if description == 'get pivot':
-            print("yes")
             self.point_source.stream({"x_values": [float(values["points"][-1].point.x)],\
                 "y_values": [float(values["points"][-1].point.y)]})
+            print(self.point_source)
         if description == "collapse points":
-            print("yes2")
             self.make_point_data(values["points"])
+            print(self.point_source)
         self.output_text.clear_output()
         self.output_text.append_stdout(description)
         push_notebook() 
