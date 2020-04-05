@@ -111,8 +111,7 @@ class BernotNotebook:
         x_values = [float(n.point.x) for n in nodes]
         y_values = [float(n.point.y) for n in nodes]
         data = {"x_values": x_values, 'y_values': y_values}
-        print(data)
-        return ColumnDataSource(data=data)
+        return data
 
     def make_line_data(self):
         sink = self.graph.get_sink_point()
@@ -125,7 +124,8 @@ class BernotNotebook:
 
     def get_figure(self):
         fig = figure()
-        fig.circle(x='x_values', y='y_values', source=self.make_point_data(self.graph.visualization_steps[0][1]["points"]))
+        source = ColumnDataSource(data=self.make_point_data(self.graph.visualization_steps[0][1]["points"]))
+        fig.circle(x='x_values', y='y_values', source=source)
         fig.xaxis.ticker = SingleIntervalTicker(interval=1)
         fig.yaxis.ticker = SingleIntervalTicker(interval=1)
         return fig
