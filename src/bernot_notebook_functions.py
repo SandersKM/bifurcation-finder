@@ -164,6 +164,11 @@ class BernotNotebook:
         current_step = self.graph.visualization_steps[step]
         description = current_step[0]
         values = current_step[1]
+        if len(values["circles"]) > 0:
+            for circle in values["circles"]:
+                if not circle in self.circle_order:
+                    self.add_circle_to_circle_source(circle)
+        self.update_circle_visibility()
         if description == 'get pivot' and not (values["points"][-1] in self.node_order):
             self.add_pivot_to_point_source(values["points"][-1])
         self.update_node_visibility((values["points"]))
@@ -172,12 +177,11 @@ class BernotNotebook:
         push_notebook() 
 
     def update_circle_visibility(self, circles):
-        if len(circles) > 0:
-            for i in range(len(self.circle_order)):
-                if self.circle_order[i] in circles:
-                    self.point_source.patch({"color": [(i, ["white"])]})
-                else:
-                    self.point_source.patch({"color": [(i, ["white"])]})
+        for i in range(len(self.circle_order)):
+            if self.circle_order[i] in circles:
+                self.point_source.patch({"color": [(i, ["white"])]})
+            else:
+                self.point_source.patch({"color": [(i, ["white"])]})
 
     def add_circle_to_circle_source(self, circle: (Point, float)):
         self.circle_order.append(circle)
