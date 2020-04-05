@@ -157,9 +157,9 @@ class BernotNotebook:
         description = current_step[0]
         values = current_step[1]
         if description == 'get pivot':
-            self.add_pivot_to_point_source(values["point"][-1])
+            self.add_pivot_to_point_source(values["points"][-1])
         if description == "collapse points":
-            self.update_node_visibility((values["point"]))
+            self.update_node_visibility((values["points"]))
         self.output_text.clear_output()
         self.output_text.append_stdout(description)
         push_notebook() 
