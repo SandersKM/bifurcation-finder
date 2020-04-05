@@ -185,8 +185,8 @@ class BernotNotebook:
 
     def add_circle_to_circle_source(self, circle: (Point, float)):
         self.circle_order.append(circle)
-        self.circle_source.stream({"x_values": [circle[0].x], 'y_values': [circle[0].y],\
-             "color": ["grey"], "radius": [circle[1]]})
+        self.circle_source.stream({"x_values": [float(circle[0].x)], 'y_values': [float(circle[0].y)],\
+             "color": ["grey"], "radius": [float(circle[1])]})
 
     def update_node_visibility(self, nodes):
         for i in range(len(self.node_order)):
