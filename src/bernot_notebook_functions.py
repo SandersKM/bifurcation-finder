@@ -164,11 +164,11 @@ class BernotNotebook:
         current_step = self.graph.visualization_steps[step]
         description = current_step[0]
         values = current_step[1]
-        if len(values["circles"]) > 0:
+        if "circles" in values:
             for circle in values["circles"]:
                 if not circle in self.circle_order:
                     self.add_circle_to_circle_source(circle)
-        self.update_circle_visibility()
+            self.update_circle_visibility(values["circles"])
         if description == 'get pivot' and not (values["points"][-1] in self.node_order):
             self.add_pivot_to_point_source(values["points"][-1])
         self.update_node_visibility((values["points"]))
