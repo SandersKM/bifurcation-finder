@@ -111,6 +111,7 @@ class BernotNotebook:
         x_values = [n.point.x for n in nodes]
         y_values = [n.point.y for n in nodes]
         data = {"x_values": x_values, 'y_values': y_values}
+        print(data)
         return ColumnDataSource(data=data)
 
     def make_line_data(self):
@@ -123,13 +124,10 @@ class BernotNotebook:
         self.segment_source =  ColumnDataSource(data=segment_data)
 
     def get_figure(self):
-        if not hasattr(self, "graph"):
-            self.make_bernot_graph()
         fig = figure()
         fig.circle(x='x_values', y='y_values', source=self.make_point_data(self.graph.visualization_steps[0][1]["points"]))
         fig.xaxis.ticker = SingleIntervalTicker(interval=1)
         fig.yaxis.ticker = SingleIntervalTicker(interval=1)
-        delattr(self, "graph")
         return fig
 
 
