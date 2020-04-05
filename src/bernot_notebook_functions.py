@@ -158,8 +158,7 @@ class BernotNotebook:
         values = current_step[1]
         if description == 'get pivot':
             self.add_pivot_to_point_source(values["points"][-1])
-        if description == "collapse points":
-            self.update_node_visibility((values["points"]))
+        self.update_node_visibility((values["points"]))
         self.output_text.clear_output()
         self.output_text.append_stdout(description)
         push_notebook() 
@@ -167,9 +166,9 @@ class BernotNotebook:
     def update_node_visibility(self, nodes):
         for i in range(len(self.node_order)):
             if self.node_order[i] in nodes:
-                self.point_source.patch({"alpha": [i, [0.5]]})
+                self.point_source.patch({"alpha": [(i, [0.5])]})
             else:
-                self.point_source.patch({"alpha": [i, [0]]})
+                self.point_source.patch({"alpha": [(i, [0])]})
 
 
     def add_pivot_to_point_source(self, node: Node):
