@@ -51,7 +51,9 @@ class BernotNotebook:
         return self.source_inputs
         
     def make_sink_tab(self):
-        self.sink_input = widgets.HBox([widgets.FloatText(description="X", value = self.source_number.value/2), widgets.FloatText(description="Y", value = 0)])
+        self.sink_input = widgets.HBox([widgets.FloatText(description="X", \
+            value = float(self.source_number.value)/2),\
+                 widgets.FloatText(description="Y", value = 0)])
         return self.sink_input
 
     def make_parameters_tab(self):
@@ -147,11 +149,8 @@ class BernotNotebook:
                 "y_values": [float(values["points"][-1].point.y)]})
         if description == "collapse points":
             data = self.make_point_data(values["points"])
+            self.point_source = ColumnDataSource(data=data)
             print(data)
-            self.point_source.remove("x_values")
-            self.point_source.remove("y_values")
-            self.point_source.add(data["x_values"], "x_values")
-            self.point_source.add(data["y_values"], "y_values")
         self.output_text.clear_output()
         self.output_text.append_stdout(description)
         push_notebook() 
