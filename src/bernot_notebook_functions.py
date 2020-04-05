@@ -132,6 +132,11 @@ class BernotNotebook:
             "color": color, "size": size, "alpha": alpha}
         self.point_source =  ColumnDataSource(data=data)
 
+    def make_circle_data(self):
+        self.circle_order = []
+        data = {"x_values": [], 'y_values': [], "color": [], "radius": [], "visible": []}
+        self.circle_source =  ColumnDataSource(data=data)
+
     def make_line_data(self):
         sink = self.graph.get_sink_point()
         x0 = [n.x for n in self.graph.get_source_points() + [sink]]
@@ -144,6 +149,9 @@ class BernotNotebook:
         fig = figure()
         self.make_point_data(self.graph.visualization_steps[0][1]["points"])
         fig.circle(x='x_values', y='y_values', size="size", color="color", alpha="alpha", source=self.point_source)
+        self.make_circle_data()
+        fig.ellipse(x="x_values", y="y_values", width="radius", height="radius",\
+            color="color", fill_color=None, visible="visible" line_width=2, source=self.circle_source)
         fig.xaxis.ticker = SingleIntervalTicker(interval=1)
         fig.yaxis.ticker = SingleIntervalTicker(interval=1)
         return fig
@@ -156,12 +164,25 @@ class BernotNotebook:
         current_step = self.graph.visualization_steps[step]
         description = current_step[0]
         values = current_step[1]
-        if description == 'get pivot':
+        if description == 'get pivot' and not (values["points"][-1] in self.node_order):
             self.add_pivot_to_point_source(values["points"][-1])
         self.update_node_visibility((values["points"]))
         self.output_text.clear_output()
         self.output_text.append_stdout(description)
         push_notebook() 
+
+    def update_circle_visibility(self, circles):
+        if len(circles) > 0:
+            for i in range(len(self.circle_order)):
+            if self.circle_order[i] in circles:
+                self.point_source.patch({"visible": [(i, [True])]})
+            else:
+                self.point_source.patch({"visible": [(i, [False])]})
+
+    def add_circle_to_circle_source(self, circle: (Point, float)):
+        self.circle_order.append(circle)
+        self.circle_source.stream({"x_values": [circle[0].x], 'y_values': [circle[0].y],\
+             "color": ["grey"], "radius": [circle[1]]})
 
     def update_node_visibility(self, nodes):
         for i in range(len(self.node_order)):
@@ -169,7 +190,6 @@ class BernotNotebook:
                 self.point_source.patch({"alpha": [(i, [0.5])]})
             else:
                 self.point_source.patch({"alpha": [(i, [0])]})
-
 
     def add_pivot_to_point_source(self, node: Node):
         self.node_order.append(node)
