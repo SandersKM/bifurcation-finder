@@ -151,7 +151,7 @@ class BernotNotebook:
         fig.circle(x='x_values', y='y_values', size="size", color="color", alpha="alpha", source=self.point_source)
         self.make_circle_data()
         fig.ellipse(x="x_values", y="y_values", width="radius", height="radius",\
-            color="color", fill_color=None, visible="visible" line_width=2, source=self.circle_source)
+            color="color", fill_color=None, visible="visible", line_width=2, source=self.circle_source)
         fig.xaxis.ticker = SingleIntervalTicker(interval=1)
         fig.yaxis.ticker = SingleIntervalTicker(interval=1)
         return fig
