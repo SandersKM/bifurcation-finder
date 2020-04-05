@@ -179,9 +179,9 @@ class BernotNotebook:
     def update_circle_visibility(self, circles):
         for i in range(len(self.circle_order)):
             if self.circle_order[i] in circles:
-                self.point_source.patch({"color": [(i, ["white"])]})
+                self.circle_source.patch({"color": [(i, ["grey"])]})
             else:
-                self.point_source.patch({"color": [(i, ["white"])]})
+                self.circle_source.patch({"color": [(i, ["white"])]})
 
     def add_circle_to_circle_source(self, circle: (Point, float)):
         self.circle_order.append(circle)
