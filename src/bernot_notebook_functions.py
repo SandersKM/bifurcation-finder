@@ -122,10 +122,7 @@ class BernotNotebook:
             y_values.append(float(n.point.y))
             size.append(15)
             alpha.append(0.5)
-            if n.node_type == NodeType.SOURCE:
-                color.append("green")
-            else:
-                color.append("red")
+            color.append(self.get_node_color(n))
             nodeType.append(n.node_type)
             self.node_order.append(n)
         data = {"x_values": x_values, 'y_values': y_values, \
@@ -172,7 +169,7 @@ class BernotNotebook:
         else:
             self.update_circle_visibility([])
         if description == 'get pivot' and not (values["points"][-1] in self.node_order):
-            self.add_pivot_to_point_source(values["points"][-1])
+            self.add_point_to_point_source(values["points"][-1])
         self.update_node_visibility((values["points"]))
         self.output_text.clear_output()
         self.output_text.append_stdout(description)
@@ -197,10 +194,19 @@ class BernotNotebook:
             else:
                 self.point_source.patch({"alpha": [(i, [0])]})
 
-    def add_pivot_to_point_source(self, node: Node):
+    def add_point_to_point_source(self, node: Node):
         self.node_order.append(node)
-        self.point_source.stream({"color": ["purple"], "x_values": [float(node.point.x)],\
+        self.point_source.stream({"color": [self.get_node_color(node)], "x_values": [float(node.point.x)],\
             "y_values": [float(node.point.y)], "alpha": [0.5], "size": [15]})
-        
+
+    def get_node_color(self, node):
+        if node.node_type == NodeType.PIVOT:
+            return "purple"
+        elif node.node_type == NodeType.BIFURCATION:
+            return "blue"
+        elif node.node_type == NodeType.SOURCE:
+            return "green"
+        else:
+            return "red"
 
     

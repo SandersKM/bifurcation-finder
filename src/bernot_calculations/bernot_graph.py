@@ -89,11 +89,23 @@ class Bernot_Graph:
         pivot = [self.round_node(subgraph.pivot_node)]
         self.visualization_steps.append(("get pivot", {"points": points + pivot, "circles": center_circle}))
         points2 = points.copy()
-        print("points2: ", points2)
-        print("removing:", self.round_node(subgraph.source1), self.round_node(subgraph.source2))
         points2.remove(self.round_node(subgraph.source2))
         points2.remove(self.round_node(subgraph.source1))
         self.visualization_steps.append(("collapse points", {"points": points2 + pivot}))
+
+    def make_bifurcation_visualization_steps(self, subgraph: Bernot_Subgraph, endnode: Node):
+        points = self.visualization_steps[-1][1]["points"].copy()
+        center_circle = [(self.round_point(subgraph.center), self.round(subgraph.radius))]
+        lines = [(self.round_point(subgraph.pivot_node.point), self.round_point(endnode.point))]
+        self.visualization_steps.append(("find bifurcation point", {"points": points, \
+            "circles": center_circle, "lines": lines}))
+        lines2 = [(self.round_point(subgraph.pivot_node.point), self.round_point(subgraph.bifurcation.point))\
+            , (self.round_point(subgraph.source1.point), self.round_point(subgraph.bifurcation.point))\
+                , (self.round_point(subgraph.source2.point), self.round_point(subgraph.bifurcation.point))]
+        points2 = points.copy()
+        points2.append(self.round_node(subgraph.source1))
+        points2.append(self.round_node(subgraph.source2))
+        self.visualization_steps.append(("connect bifurcation", {"points": points2, "lines": lines2}))
         
     def make_pivot_nodes(self):
         startnodes = self.sources.copy()
@@ -106,10 +118,10 @@ class Bernot_Graph:
             startnodes = self.get_clockwise_ordering(startnodes)
             self._subgraph_map[str(subgraph.pivot_node)] = subgraph
         self.top_pivot = startnodes[0]
-        print("top pivot", self.top_pivot)
     
     def get_bifurcations(self, subgraph: Bernot_Subgraph, endnode: Node):
         subgraph.get_bifurcation_point(endnode.point)
+        self.make_pivot_visualization_steps(subgraph, endnode)
         endnode = subgraph.bifurcation
         if subgraph.source1.node_type == NodeType.PIVOT:
             self.get_bifurcations(self.subgraph_map[str(subgraph.source1)], endnode)
