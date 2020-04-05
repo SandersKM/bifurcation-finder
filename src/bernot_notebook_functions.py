@@ -134,4 +134,17 @@ class BernotNotebook:
         self.output_text = widgets.Output(layout={'border': '1px solid black'})
         return self.output_text
 
+    def update(self, step: int = 0):
+        current_step = self.graph.visualization_steps[step]
+        description = current_step[0]
+        values = current_step[1]
+        if description == 'get pivot':
+            self.point_source.stream({"x_values": [float(values["points"][-1].point.x)],\
+                "y_values": [float(values["points"][-1].point.y)]})
+        if description == "collapse points":
+            self.make_point_data(values["points"])
+        self.output_text.clear_output()
+        self.output_text.append_stdout(description)
+        push_notebook() 
+
     

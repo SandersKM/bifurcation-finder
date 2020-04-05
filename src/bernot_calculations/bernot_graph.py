@@ -93,7 +93,6 @@ class Bernot_Graph:
         points2.remove(subgraph.source1)
         self.visualization_steps.append(("collapse points", {"points": points2 + pivot}))
         
-    
     def make_pivot_nodes(self):
         startnodes = self.sources.copy()
         while len(startnodes) > 1:
