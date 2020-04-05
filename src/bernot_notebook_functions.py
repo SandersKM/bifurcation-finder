@@ -134,7 +134,7 @@ class BernotNotebook:
 
     def make_circle_data(self):
         self.circle_order = []
-        data = {"x_values": [], 'y_values': [], "color": [], "radius": [], "visible": []}
+        data = {"x_values": [], 'y_values': [], "color": [], "radius": []}
         self.circle_source =  ColumnDataSource(data=data)
 
     def make_line_data(self):
@@ -151,7 +151,7 @@ class BernotNotebook:
         fig.circle(x='x_values', y='y_values', size="size", color="color", alpha="alpha", source=self.point_source)
         self.make_circle_data()
         fig.ellipse(x="x_values", y="y_values", width="radius", height="radius",\
-            color="color", fill_color=None, visible="visible", line_width=2, source=self.circle_source)
+            color="color", fill_color=None, line_width=2, source=self.circle_source)
         fig.xaxis.ticker = SingleIntervalTicker(interval=1)
         fig.yaxis.ticker = SingleIntervalTicker(interval=1)
         return fig
@@ -175,9 +175,9 @@ class BernotNotebook:
         if len(circles) > 0:
             for i in range(len(self.circle_order)):
                 if self.circle_order[i] in circles:
-                    self.point_source.patch({"visible": [(i, [True])]})
+                    self.point_source.patch({"color": [(i, ["white"])]})
                 else:
-                    self.point_source.patch({"visible": [(i, [False])]})
+                    self.point_source.patch({"color": [(i, ["white"])]})
 
     def add_circle_to_circle_source(self, circle: (Point, float)):
         self.circle_order.append(circle)
