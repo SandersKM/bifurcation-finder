@@ -100,7 +100,7 @@ class Bernot_Graph:
         segments = [(self.round_point(subgraph.pivot_node.point), self.round_point(endnode.point))]
         self.visualization_steps.append(("find bifurcation point", {"points": points, \
             "circles": center_circle, "segments": segments}))
-        segments2 = [(self.round_point(subgraph.pivot_node.point), self.round_point(subgraph.bifurcation.point))\
+        segments2 = [(self.round_point(endnode.point), self.round_point(subgraph.bifurcation.point))\
             , (self.round_point(subgraph.source1.point), self.round_point(subgraph.bifurcation.point))\
                 , (self.round_point(subgraph.source2.point), self.round_point(subgraph.bifurcation.point))]
         points2 = points.copy()
