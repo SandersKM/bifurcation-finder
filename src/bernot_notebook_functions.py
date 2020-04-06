@@ -134,13 +134,9 @@ class BernotNotebook:
         data = {"x_values": [], 'y_values': [], "color": [], "diameter": [], "line_alpha": []}
         self.circle_source =  ColumnDataSource(data=data)
 
-    def make_line_data(self):
-        sink = self.graph.get_sink_point()
-        x0 = []
-        y0 = []
-        x1 = []
-        y1 = []
-        data = {"x0": x0, "y0": y0, "x1": x1, "y1": y1}
+    def make_segment_data(self):
+        self.segment_order = []
+        data = {"x0": [], "y0": [], "x1": [], "y1": [], "line_alpha": []}
         self.segment_source =  ColumnDataSource(data=data)
 
     def get_figure(self):
@@ -150,6 +146,8 @@ class BernotNotebook:
         self.make_circle_data()
         fig.ellipse(x="x_values", y="y_values", width="diameter", height="diameter",\
             color="color", fill_color=None, line_width=2, line_alpha = "line_alpha", source=self.circle_source)
+        self.make_segment_data()
+        fig.segment(x0 = "x0", y0="y0", x1="x1", y1="y1", color="black", line_width=3, source=self.segment_source)
         fig.xaxis.ticker = SingleIntervalTicker(interval=1)
         fig.yaxis.ticker = SingleIntervalTicker(interval=1)
         return fig
@@ -169,17 +167,36 @@ class BernotNotebook:
             self.update_circle_visibility(values["circles"])
         else:
             self.update_circle_visibility([])
-        if description == 'get pivot' and not (values["points"][-1] in self.node_order):
+        if "lines" in values:
+            for segment in values["lines"]:
+                if not segment in self.segment_order:
+                    self.add_segment_to_segment_source(segment)
+            self.update_segment_visibility(values["lines"])
+        else:
+            self.update_segment_visibility([])
+        if not (values["points"][-1] in self.node_order):
             self.add_point_to_point_source(values["points"][-1])
         self.update_node_visibility((values["points"]))
         self.output_text.clear_output()
         self.output_text.append_stdout(description)
         push_notebook() 
 
+    def add_segment_to_segment_source(self, segment: (Point, Point)):
+        self.segment_order(segment)
+        self.segment_source.stream({"x0": [segment[0].x], "y0": [segment[0].y],\
+             "x1": [segment[1].x], "y1": [segment[1].y], "line_alpha": [1]})
+
+    def update_segment_visibility(self, segments):
+        for i in range(len(self.segment_order)):
+            if self.segment_order[i] in segments:
+                self.segment_source.patch({"line_alpha": [(i, [1])]})
+            else:
+                self.segment_source.patch({"line_alpha": [(i, [0])]})
+
     def update_circle_visibility(self, circles):
         for i in range(len(self.circle_order)):
             if self.circle_order[i] in circles:
-                self.circle_source.patch({"line_alpha": [(i, [0])]})
+                self.circle_source.patch({"line_alpha": [(i, [1])]})
             else:
                 self.circle_source.patch({"line_alpha": [(i, [0])]})
 
