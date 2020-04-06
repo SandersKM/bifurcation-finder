@@ -112,6 +112,7 @@ class Bernot_Graph:
     def make_pivot_nodes(self):
         startnodes = self.sources.copy()
         while len(startnodes) > 1:
+            print([self.round_node(n) for n in startnodes])
             subgraph = self.get_next_subgraph(startnodes)
             startnodes.remove(subgraph.source1)
             startnodes.remove(subgraph.source2)
