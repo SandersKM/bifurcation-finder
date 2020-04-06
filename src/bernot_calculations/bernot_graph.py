@@ -95,18 +95,19 @@ class Bernot_Graph:
 
     def make_bifurcation_visualization_steps(self, subgraph: Bernot_Subgraph, endnode: Node):
         points = self.visualization_steps[-1][1]["points"].copy()
+        points.append(self.round_node(subgraph.bifurcation))
         center_circle = [(self.round_point(subgraph.center), self.round(subgraph.radius))]
-        lines = [(self.round_point(subgraph.pivot_node.point), self.round_point(endnode.point))]
+        segments = [(self.round_point(subgraph.pivot_node.point), self.round_point(endnode.point))]
         self.visualization_steps.append(("find bifurcation point", {"points": points, \
-            "circles": center_circle, "lines": lines}))
-        lines2 = [(self.round_point(subgraph.pivot_node.point), self.round_point(subgraph.bifurcation.point))\
+            "circles": center_circle, "segments": segments}))
+        segments2 = [(self.round_point(subgraph.pivot_node.point), self.round_point(subgraph.bifurcation.point))\
             , (self.round_point(subgraph.source1.point), self.round_point(subgraph.bifurcation.point))\
                 , (self.round_point(subgraph.source2.point), self.round_point(subgraph.bifurcation.point))]
         points2 = points.copy()
         points2.remove(self.round_node(subgraph.pivot_node))
         points2.append(self.round_node(subgraph.source1))
         points2.append(self.round_node(subgraph.source2))
-        self.visualization_steps.append(("connect bifurcation", {"points": points2, "lines": lines2}))
+        self.visualization_steps.append(("connect bifurcation", {"points": points2, "segments": segments2}))
         
     def make_pivot_nodes(self):
         startnodes = self.sources.copy()
