@@ -121,7 +121,7 @@ class Bernot_Graph:
     
     def get_bifurcations(self, subgraph: Bernot_Subgraph, endnode: Node):
         subgraph.get_bifurcation_point(endnode.point)
-        self.make_pivot_visualization_steps(subgraph, endnode)
+        self.make_bifurcation_visualization_steps(subgraph, endnode)
         endnode = subgraph.bifurcation
         if subgraph.source1.node_type == NodeType.PIVOT:
             self.get_bifurcations(self.subgraph_map[str(subgraph.source1)], endnode)
