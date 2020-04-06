@@ -15,8 +15,6 @@ class Bernot_Subgraph:
     def __init__(self, source1: Node, source2: Node, sink: Node, alpha: float):
         self.source1: Node = source1 # source1 should be the first in clockwise ordering
         self.source2: Node = source2 
-        print("sources", self.source1.point.x.round(3), self.source2.point.x.round(3))
-        print("sources", self.source1.node_type, self.source2.node_type)
         self.sink: Node = sink 
         self.alpha = alpha
         self.radius = self.get_circle_radius()
@@ -59,15 +57,16 @@ class Bernot_Subgraph:
         return Node(weight, location, NodeType.PIVOT)
 
     def get_center(self):
-        print("sources...", self.source1.point.x.round(3), self.source2.point.x.round(3))
         circle1: Circle = Circle(self.source1.point, self.radius)
         circle2: Circle = Circle(self.source2.point, self.radius)
         intersects = circle1.intersection(circle2)
-        print("radius", self.radius)
-        print("intersection", intersects)
         if (len(intersects) == 1):
             return intersects[0]
-        return self.get_closer_point(intersects[0], intersects[1], self.sink.point)
+        elif (len(intersects) > 1):
+            return self.get_closer_point(intersects[0], intersects[1], self.sink.point)
+        seg = Line(self.source1.point, self.source2.point)
+        intersect = circle1.intersection(seg)
+        return intersect[0]
 
     def get_circle_radius(self):
         numerator: float = abs(self.source1.get_distance_to(self.source2))
