@@ -60,6 +60,8 @@ class Bernot_Subgraph:
         circle1: Circle = Circle(self.source1.point, self.radius)
         circle2: Circle = Circle(self.source2.point, self.radius)
         intersects = circle1.intersection(circle2)
+        print("radius", self.radius)
+        print("intersection", intersects)
         if (len(intersects) == 1):
             return intersects[0]
         return self.get_closer_point(intersects[0], intersects[1], self.sink.point)
