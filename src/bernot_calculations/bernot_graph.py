@@ -103,6 +103,7 @@ class Bernot_Graph:
             , (self.round_point(subgraph.source1.point), self.round_point(subgraph.bifurcation.point))\
                 , (self.round_point(subgraph.source2.point), self.round_point(subgraph.bifurcation.point))]
         points2 = points.copy()
+        points2.remove(self.round_node(subgraph.pivot_node))
         points2.append(self.round_node(subgraph.source1))
         points2.append(self.round_node(subgraph.source2))
         self.visualization_steps.append(("connect bifurcation", {"points": points2, "lines": lines2}))

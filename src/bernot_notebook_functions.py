@@ -131,16 +131,17 @@ class BernotNotebook:
 
     def make_circle_data(self):
         self.circle_order = []
-        data = {"x_values": [], 'y_values': [], "color": [], "diameter": []}
+        data = {"x_values": [], 'y_values': [], "color": [], "diameter": [], "line_alpha": []}
         self.circle_source =  ColumnDataSource(data=data)
 
     def make_line_data(self):
         sink = self.graph.get_sink_point()
-        x0 = [n.x for n in self.graph.get_source_points() + [sink]]
-        y0 = [n.y for n in self.graph.get_source_points() + [sink]]
-        x1 = [sink.x, sink.x, sink.x]
-        y1 = [sink.y, sink.y, sink.y]
-        segment_data = {"x0": x0, "y0": y0, "x1": x1, "y1": y1}
+        x0 = []
+        y0 = []
+        x1 = []
+        y1 = []
+        data = {"x0": x0, "y0": y0, "x1": x1, "y1": y1}
+        self.segment_source =  ColumnDataSource(data=data)
 
     def get_figure(self):
         fig = figure()
@@ -148,7 +149,7 @@ class BernotNotebook:
         fig.circle(x='x_values', y='y_values', size="size", color="color", alpha="alpha", source=self.point_source)
         self.make_circle_data()
         fig.ellipse(x="x_values", y="y_values", width="diameter", height="diameter",\
-            color="color", fill_color=None, line_width=2, source=self.circle_source)
+            color="color", fill_color=None, line_width=2, line_alpha = "line_alpha", source=self.circle_source)
         fig.xaxis.ticker = SingleIntervalTicker(interval=1)
         fig.yaxis.ticker = SingleIntervalTicker(interval=1)
         return fig
@@ -178,14 +179,14 @@ class BernotNotebook:
     def update_circle_visibility(self, circles):
         for i in range(len(self.circle_order)):
             if self.circle_order[i] in circles:
-                self.circle_source.patch({"color": [(i, ["grey"])]})
+                self.circle_source.patch({"line_alpha": [(i, [0])]})
             else:
-                self.circle_source.patch({"color": [(i, ["white"])]})
+                self.circle_source.patch({"line_alpha": [(i, [0])]})
 
     def add_circle_to_circle_source(self, circle: (Point, float)):
         self.circle_order.append(circle)
         self.circle_source.stream({"x_values": [float(circle[0].x)], 'y_values': [float(circle[0].y)],\
-             "color": ["grey"], "diameter": [float(circle[1])*2]})
+             "color": ["grey"], "diameter": [float(circle[1])*2], "line_alpha": [1]})
 
     def update_node_visibility(self, nodes):
         for i in range(len(self.node_order)):
