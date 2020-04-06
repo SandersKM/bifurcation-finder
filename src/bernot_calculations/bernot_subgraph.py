@@ -61,6 +61,7 @@ class Bernot_Subgraph:
         circle2: Circle = Circle(self.source2.point, self.radius)
         intersects = circle1.intersection(circle2)
         print("radius", self.radius)
+        print("sources", self.source1.point.x.round(3), self.source2.point.x.round(3))
         print("intersection", intersects)
         if (len(intersects) == 1):
             return intersects[0]
@@ -69,7 +70,6 @@ class Bernot_Subgraph:
     def get_circle_radius(self):
         numerator: float = abs(self.source1.get_distance_to(self.source2))
         denominator: float = 2 * math.sin(self.calculate_optimal_theta_combined())
-        print("radius calcs,", numerator, denominator)
         return numerator / denominator
     
     # Returns angle in radians
