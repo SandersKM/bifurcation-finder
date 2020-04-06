@@ -16,6 +16,7 @@ class Bernot_Subgraph:
         self.source1: Node = source1 # source1 should be the first in clockwise ordering
         self.source2: Node = source2 
         print("sources", self.source1.point.x.round(3), self.source2.point.x.round(3))
+        print("sources", self.source1.node_type, self.source2.node_type)
         self.sink: Node = sink 
         self.alpha = alpha
         self.radius = self.get_circle_radius()

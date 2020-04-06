@@ -60,6 +60,7 @@ class Bernot_Graph:
 
     def get_next_subgraph(self, source_list):
         if (len(source_list) == 2):
+            print("WHAT", [self.round_node(source_list[0]), self.round_node(source_list[1])])
             return self.subgraph_with_sources(source_list[0], source_list[1])
         right_closeness = abs(source_list[0].get_distance_to(source_list[1]))
         left_closeness = abs(source_list[-1].get_distance_to(source_list[-2]))
