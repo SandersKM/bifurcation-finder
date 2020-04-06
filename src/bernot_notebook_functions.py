@@ -147,7 +147,8 @@ class BernotNotebook:
         fig.ellipse(x="x_values", y="y_values", width="diameter", height="diameter",\
             color="color", fill_color=None, line_width=2, line_alpha = "line_alpha", source=self.circle_source)
         self.make_segment_data()
-        fig.segment(x0 = "x0", y0="y0", x1="x1", y1="y1", color="black", line_width=3, source=self.segment_source)
+        fig.segment(x0 = "x0", y0="y0", x1="x1", y1="y1", color="black",\
+             line_alpha = "line_alpha", line_width=2, source=self.segment_source)
         fig.xaxis.ticker = SingleIntervalTicker(interval=1)
         fig.yaxis.ticker = SingleIntervalTicker(interval=1)
         return fig
