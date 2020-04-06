@@ -183,8 +183,8 @@ class BernotNotebook:
 
     def add_segment_to_segment_source(self, segment: (Point, Point)):
         self.segment_order.append(segment)
-        self.segment_source.stream({"x0": [segment[0].x], "y0": [segment[0].y],\
-             "x1": [segment[1].x], "y1": [segment[1].y], "line_alpha": [1]})
+        self.segment_source.stream({"x0": [float(segment[0].x)], "y0": [float(segment[0].y)],\
+             "x1": [float(segment[1].x)], "y1": [float(segment[1].y)], "line_alpha": [1]})
 
     def update_segment_visibility(self, segments):
         for i in range(len(self.segment_order)):
