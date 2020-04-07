@@ -52,7 +52,7 @@ class BernotNotebook:
         
     def make_sink_tab(self):
         self.sink_input = widgets.HBox([widgets.FloatText(description="X", \
-            value = float(self.source_number.value)/2),\
+            value = (self.source_number.value - 1)/2),\
                  widgets.FloatText(description="Y", value = 0)])
         return self.sink_input
 

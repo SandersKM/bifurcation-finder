@@ -98,6 +98,7 @@ class FlowNotebook:
         self.steps = flow.steps
         self.theta = flow.theta
         self.cost = flow.cost
+        self.m_alpha = flow.m_alpha
 
     def make_point_data(self):
         self.x_values = [
@@ -148,5 +149,5 @@ class FlowNotebook:
         self.segment_source.patch({"x1": [(slice(3), [current_step.x, current_step.x, current_step.x])]})
         self.segment_source.patch({"y1": [(slice(3), [current_step.y, current_step.y, current_step.y])]})
         self.output_text.clear_output()
-        self.output_text.append_stdout(f"Theta: {self.theta[step]}\t Cost: {self.cost[step]}\t Location: {current_step}")
+        self.output_text.append_stdout(f"Theta: {self.theta[step]}\t M alpha: {self.m_alpha[step]}\t Total Cost: {self.cost[step]}\t Location: {current_step}")
         push_notebook() 

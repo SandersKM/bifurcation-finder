@@ -22,6 +22,7 @@ class Flow:
         self.optimal_angle: float = network.calculate_optimal_angle()
         self.steps = []
         self.cost = []
+        self.m_alpha = []
         self.theta = []
 
     def should_repeat(self, i: int):
@@ -37,6 +38,7 @@ class Flow:
     def update_lists(self, bifurcation: Node):
         self.steps.append(bifurcation.point)
         self.cost.append(self.network.calculate_g(bifurcation.point.point_as_array()))
+        self.m_alpha.append(self.network.calculate_transportation_cost(bifurcation.point.point_as_array()))
         self.theta.append(self.network.calculate_bifurcation_angle())
         #logging.warning(f"{self.steps[-1]}\t{self.cost[-1]}\t{self.theta[-1]}")
         
