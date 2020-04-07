@@ -3,3 +3,4 @@ scipy
 ipywidgets
 bokeh
 numpy
+sympy
