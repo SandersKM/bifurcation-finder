@@ -9,7 +9,7 @@ class NodeType(Enum):
     BIFURCATION = 3
     PIVOT = 4
 
-class Node:
+class BerNode:
     """ A class used to represent a transportation network node.
     Attributes
     ----------

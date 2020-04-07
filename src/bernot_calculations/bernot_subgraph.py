@@ -6,9 +6,9 @@ import math
 import numpy as np   
 import operator
 try:
-    from src.bernot_calculations.node import Node, NodeType
+    from src.bernot_calculations.bernot_node import BerNode, NodeType
 except ImportError:
-    from node import Node, NodeType
+    from bernot_node import BerNode, NodeType
 
 class Bernot_Subgraph:
 

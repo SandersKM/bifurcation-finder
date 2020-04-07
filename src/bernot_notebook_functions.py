@@ -9,13 +9,13 @@ from typing import List
 try:
     from src.bernot_calculations.bernot_subgraph import Bernot_Subgraph
     from src.bernot_calculations.bernot_graph import Bernot_Graph
-    from src.bernot_calculations.node import Node, NodeType
+    from src.bernot_calculations.bernot_node import BerNode, NodeType
 except ImportError:
     import sys
     sys.path.insert(0,'./bernot_calculations/')
     from bernot_graph import Bernot_Graph
     from bernot_subgraph import Bernot_Subgraph
-    from node import Node, NodeType
+    from bernot_node import BerNode, NodeType
 
 class BernotNotebook:
     MAX_POINT_VALUE = 10
