@@ -31,6 +31,8 @@ class Bernot_Subgraph:
         return point2
 
     def get_probable_bifurcation(self, circle: Circle, endpoint: Point):
+        if self.pivot_node.point == endpoint:
+            return endpoint
         seg = Line(self.pivot_node.point, endpoint)
         intersect = circle.intersection(seg)
         if len(intersect) == 1:
