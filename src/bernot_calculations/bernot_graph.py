@@ -28,7 +28,7 @@ class Bernot_Graph:
         self.visualization_steps = [("start", {"points": starting_points})]
         self.make_pivot_nodes()
         self.get_bifurcations(self.subgraph_map[str(self.top_pivot)], self.sink)
-        self.print_final_graph()
+        #self.print_final_graph()
 
     @property
     def sources(self):
@@ -120,7 +120,6 @@ class Bernot_Graph:
     def make_pivot_nodes(self):
         startnodes = self.sources.copy()
         while len(startnodes) > 1:
-            print([self.round_node(n) for n in startnodes])
             subgraph = self.get_next_subgraph(startnodes)
             startnodes.remove(subgraph.source1)
             startnodes.remove(subgraph.source2)
