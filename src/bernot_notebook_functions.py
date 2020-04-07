@@ -140,7 +140,7 @@ class BernotNotebook:
         self.segment_source =  ColumnDataSource(data=data)
 
     def get_figure(self):
-        fig = figure()
+        fig = figure(match_aspect=True)
         self.make_point_data(self.graph.visualization_steps[0][1]["points"])
         fig.circle(x='x_values', y='y_values', size="size", color="color", alpha="alpha", source=self.point_source)
         self.make_circle_data()
