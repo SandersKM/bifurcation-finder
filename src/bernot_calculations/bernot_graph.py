@@ -93,7 +93,7 @@ class Bernot_Graph:
         points2.remove(self.round_node(subgraph.source1))
         self.visualization_steps.append(("collapse points", {"points": points2 + pivot}))
 
-    def make_bifurcation_visualization_steps(self, subgraph: Bernot_Subgraph, endnode: Node):
+    def make_bifurcation_visualization_steps(self, subgraph: Bernot_Subgraph, endnode: BerNode):
         points = self.visualization_steps[-1][1]["points"].copy()
         points.append(self.round_node(subgraph.bifurcation))
         center_circle = [(self.round_point(subgraph.center), self.round(subgraph.radius))]
