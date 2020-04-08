@@ -16,9 +16,9 @@ except ImportError:
 class Bernot_Graph:
     SIG_FIGS = 3
 
-    def __init__(self, sources: [Node], sink: Node, alpha: float) -> None:
-        self._sink: Node = sink
-        self._sources: [Node] = self.get_clockwise_ordering(sources)
+    def __init__(self, sources: [BerNode], sink: BerNode, alpha: float) -> None:
+        self._sink: BerNode = sink
+        self._sources: [BerNode] = self.get_clockwise_ordering(sources)
         self._alpha: float = alpha
         self._subgraph_map = {}
         self.top_pivot = None
@@ -55,7 +55,7 @@ class Bernot_Graph:
     def get_clockwise_ordering(self, nodes):
         return sorted(nodes, key=lambda node: self.get_arctan(node))
 
-    def subgraph_with_sources(self, source1: Node, source2:Node):
+    def subgraph_with_sources(self, source1: BerNode, source2:BerNode):
         return Bernot_Subgraph(source1, source2, self.sink, self.alpha)
 
     def get_next_subgraph(self, source_list):
@@ -73,8 +73,8 @@ class Bernot_Graph:
     def round_point(self, point: Point):
         return Point( self.round(point.x) , self.round(point.y))
 
-    def round_node(self, node: Node):
-        return Node(node.weight, self.round_point(node.point), node.node_type)
+    def round_node(self, node: BerNode):
+        return BerNode(node.weight, self.round_point(node.point), node.node_type)
 
     def round(self, n: float):
         return n.round(Bernot_Graph.SIG_FIGS)
@@ -129,7 +129,7 @@ class Bernot_Graph:
             self._subgraph_map[str(subgraph.pivot_node)] = subgraph
         self.top_pivot = startnodes[0]
     
-    def get_bifurcations(self, subgraph: Bernot_Subgraph, endnode: Node):
+    def get_bifurcations(self, subgraph: Bernot_Subgraph, endnode: BerNode):
         subgraph.get_bifurcation_point(endnode.point)
         self.make_bifurcation_visualization_steps(subgraph, endnode)
         endnode = subgraph.bifurcation

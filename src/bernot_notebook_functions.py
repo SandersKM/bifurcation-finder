@@ -74,7 +74,7 @@ class BernotNotebook:
             weight = row.children[2].value
             x = row.children[0].value
             y = row.children[1].value
-            self.source_list.append(Node(weight, Point(x, y), NodeType.SOURCE))
+            self.source_list.append(BerNode(weight, Point(x, y), NodeType.SOURCE))
 
     def get_sink(self):
         x = self.sink_input.children[0].value
@@ -82,7 +82,7 @@ class BernotNotebook:
         weight = 0
         for source in self.source_list:
             weight += source.weight
-        self.sink = Node(weight, Point(x, y), NodeType.SINK)
+        self.sink = BerNode(weight, Point(x, y), NodeType.SINK)
 
     def get_parameters(self):
         self.alpha = self.parameters_input.children[0].value
@@ -213,7 +213,7 @@ class BernotNotebook:
             else:
                 self.point_source.patch({"alpha": [(i, [0])]})
 
-    def add_point_to_point_source(self, node: Node):
+    def add_point_to_point_source(self, node: BerNode):
         self.node_order.append(node)
         self.point_source.stream({"color": [self.get_node_color(node)], "x_values": [float(node.point.x)],\
             "y_values": [float(node.point.y)], "alpha": [0.5], "size": [15]})

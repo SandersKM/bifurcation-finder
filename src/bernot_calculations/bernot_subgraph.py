@@ -12,10 +12,10 @@ except ImportError:
 
 class Bernot_Subgraph:
 
-    def __init__(self, source1: Node, source2: Node, sink: Node, alpha: float):
-        self.source1: Node = source1 # source1 should be the first in clockwise ordering
-        self.source2: Node = source2 
-        self.sink: Node = sink 
+    def __init__(self, source1: BerNode, source2: BerNode, sink: BerNode, alpha: float):
+        self.source1: BerNode = source1 # source1 should be the first in clockwise ordering
+        self.source2: BerNode = source2 
+        self.sink: BerNode = sink 
         self.alpha = alpha
         self.radius = self.get_circle_radius()
         self.center: Point = self.get_center()
@@ -43,20 +43,20 @@ class Bernot_Subgraph:
         weight = self.source2.weight + self.source1.weight
         circle = Circle(self.center, self.radius)
         if self.is_v_degeneracy(circle, endpoint):
-            self.bifurcation = Node(weight, endpoint, NodeType.BIFURCATION)
+            self.bifurcation = BerNode(weight, endpoint, NodeType.BIFURCATION)
         else:
             potential_bifurcation = self.get_probable_bifurcation(circle, endpoint)
             closest_to_endpoint = self.get_closer_point(
                 self.source1.point, self.source2.point, endpoint)
             bifurcation_point = self.get_closer_point(
                 potential_bifurcation, closest_to_endpoint, endpoint)
-            self.bifurcation = Node(weight, bifurcation_point, NodeType.BIFURCATION)
+            self.bifurcation = BerNode(weight, bifurcation_point, NodeType.BIFURCATION)
 
     def get_pivot_node(self):
         degree_radians = 2 * self.calculate_optimal_theta2()
         location = self.source2.point.rotate(degree_radians, self.center)
         weight = self.source1.weight + self.source2.weight
-        return Node(weight, location, NodeType.PIVOT)
+        return BerNode(weight, location, NodeType.PIVOT)
 
     def get_center(self):
         circle1: Circle = Circle(self.source1.point, self.radius)
