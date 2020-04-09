@@ -54,6 +54,7 @@ class Bernot_Graph:
         for seg in segments.keys(): 
             length: float = float(abs(seg[0].distance(seg[1])))
             weight: float = segments[seg]
+            print(length, weight)
             M_alpha += (weight**self.alpha) * length
         return round(M_alpha)
 
