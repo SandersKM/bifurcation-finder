@@ -49,11 +49,11 @@ class Bernot_Graph:
     def subgraph_map(self):
         return self._subgraph_map  
 
-    def get_M_alpha(self, edges: (Point, Point, float)):
+    def get_M_alpha(self, segments: Dict[(Point, Point), float]):
         M_alpha = 0
-        for edge in edges: 
-            length: float = float(abs(edge[0][0].distance(edge[0][1])))
-            weight: float = edge[1]
+        for seg in segments.keys(): 
+            length: float = float(abs(seg[0].distance(seg[1])))
+            weight: float = segments[seg]
             M_alpha += (weight**self.alpha) * length
         return round(M_alpha)
 
@@ -107,25 +107,21 @@ class Bernot_Graph:
         points = self.visualization_steps[-1][1]["points"].copy()
         points.append(self.round_node(subgraph.bifurcation))
         center_circle = [(self.round_point(subgraph.center), self.round(subgraph.radius))]
-        big_line = ((self.round_point(subgraph.pivot_node.point), self.round_point(endnode.point)), None)
+        big_line = (self.round_point(subgraph.pivot_node.point), self.round_point(endnode.point))
         if not ("segments" in self.visualization_steps[-1][1]):
-            segments = []
+            segments = {}
         else:
             segments = self.visualization_steps[-1][1]["segments"].copy()
-        if big_line[0] not in [seg[0] for seg in segments]:
-            segments.append(big_line)
+        if big_line not in segments:
+            segments[big_line] = None
         self.visualization_steps.append(("bifurcation point found at (" + str(round(subgraph.bifurcation.point.x)) + \
             ", " + str(round(subgraph.bifurcation.point.y)) + ")", {"points": points, \
             "circles": center_circle, "segments": segments}))
         segments2 = segments.copy()
-        segments2.remove(big_line)
-        bifurcation_endnode_segment = ((self.round_point(endnode.point), \
-            self.round_point(subgraph.bifurcation.point)), subgraph.bifurcation.weight)
-        source1_bifurcation_segment = ((self.round_point(subgraph.source1.point), \
-            self.round_point(subgraph.bifurcation.point)), subgraph.source1.weight)
-        source2_bifurcation_segment = ((self.round_point(subgraph.source2.point), \
-            self.round_point(subgraph.bifurcation.point)), subgraph.source2.weight)
-        segments2.extend([bifurcation_endnode_segment, source1_bifurcation_segment, source2_bifurcation_segment])
+        del segments2[big_line]
+        segments2[(self.round_point(endnode.point), self.round_point(subgraph.bifurcation.point))] = subgraph.bifurcation.weight
+        segments2[(self.round_point(subgraph.source1.point), self.round_point(subgraph.bifurcation.point))] = subgraph.source1.weight
+        segments2[(self.round_point(subgraph.source2.point), self.round_point(subgraph.bifurcation.point))] = subgraph.source2.weight
         points2 = points.copy()
         points2.remove(self.round_node(subgraph.pivot_node))
         points2.append(self.round_node(subgraph.source1))
