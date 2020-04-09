@@ -52,8 +52,8 @@ class Bernot_Graph:
     def get_M_alpha(self, edges: (Point, Point, float)):
         M_alpha = 0
         for edge in edges: 
-            length = abs(edge[0][0].distance(edge[0][1]))
-            weight = edge[1]
+            length: float = float(abs(edge[0][0].distance(edge[0][1])))
+            weight: float = edge[1]
             M_alpha += (weight**self.alpha) * length
         return round(M_alpha)
 
