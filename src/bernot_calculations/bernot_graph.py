@@ -67,7 +67,7 @@ class Bernot_Graph:
                 if distance < closest_distance:
                     closest_distance = distance
                     closest_sources = (source_list[i], source_list[j])
-        return self.subgraph_with_sources(source_list[i], source_list[j])
+        return self.subgraph_with_sources(closest_sources[0], closest_sources[1])
 
     def round_point(self, point: Point):
         return Point( self.round(point.x) , self.round(point.y))
