@@ -170,9 +170,9 @@ class BernotNotebook:
             self.update_circle_visibility([])
         if "segments" in values:
             for segment in values["segments"]:
-                if not segment in self.segment_order:
-                    self.add_segment_to_segment_source(segment)
-            self.update_segment_visibility(values["segments"])
+                if not segment[0] in self.segment_order:
+                    self.add_segment_to_segment_source(segment[0])
+            self.update_segment_visibility(values["segments"][0])
         else:
             self.update_segment_visibility([])
         if not (values["points"][-1] in self.node_order):
