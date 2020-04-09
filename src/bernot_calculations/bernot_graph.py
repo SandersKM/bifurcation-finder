@@ -46,11 +46,9 @@ class Bernot_Graph:
     def subgraph_map(self):
         return self._subgraph_map  
 
-
     def get_arctan(self, node):
         return math.atan2(node.point.x - self.sink.point.x, \
             node.point.y - self.sink.point.y)
-
 
     def get_clockwise_ordering(self, nodes):
         return sorted(nodes, key=lambda node: self.get_arctan(node))
@@ -61,14 +59,15 @@ class Bernot_Graph:
     def get_next_subgraph(self, source_list):
         if (len(source_list) == 2):
             return self.subgraph_with_sources(source_list[0], source_list[1])
-        right_closeness = abs(source_list[0].get_distance_to(source_list[1]))
-        left_closeness = abs(source_list[-1].get_distance_to(source_list[-2]))
-        across_closeness = abs(source_list[-1].get_distance_to(source_list[0]))
-        if right_closeness <= left_closeness and right_closeness <= across_closeness:
-            return self.subgraph_with_sources(source_list[0], source_list[1])
-        elif left_closeness <= right_closeness and left_closeness <= across_closeness:
-            return self.subgraph_with_sources(source_list[-2], source_list[-1])
-        return self.subgraph_with_sources(source_list[-1], source_list[0])
+        closest_sources = (source_list[0], source_list[1])
+        closest_distance = abs(source_list[0].get_distance_to(source_list[1]))
+        for i in range(len(source_list)):
+            for j in range(i + 1, len(source_list)):
+                distance = abs(source_list[i].get_distance_to(source_list[j]))
+                if distance < closest_distance:
+                    closest_distance = distance
+                    closest_sources = (source_list[i], source_list[j])
+        return self.subgraph_with_sources(source_list[i], source_list[j])
 
     def round_point(self, point: Point):
         return Point( self.round(point.x) , self.round(point.y))
