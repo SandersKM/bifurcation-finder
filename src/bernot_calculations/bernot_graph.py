@@ -103,7 +103,8 @@ class Bernot_Graph:
             segments = self.visualization_steps[-1][1]["segments"].copy()
         if big_line not in segments:
             segments.append(big_line)
-        self.visualization_steps.append(("find bifurcation point", {"points": points, \
+        self.visualization_steps.append(("bifurcation point found at (" + str(subgraph.bifurcation.point.x) + \
+            ", " + str(subgraph.bifurcation.point.y) + ")", {"points": points, \
             "circles": center_circle, "segments": segments}))
         segments2 = segments.copy()
         segments2.remove(big_line)
