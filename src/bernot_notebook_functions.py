@@ -209,9 +209,9 @@ class BernotNotebook:
     def update_node_visibility(self, nodes):
         for i in range(len(self.node_order)):
             if self.node_order[i] in nodes:
-                self.point_source.patch({"alpha": [(i, [0.5])]})
+                self.point_source.patch({"alpha": [(i, [0.8])]})
             else:
-                self.point_source.patch({"alpha": [(i, [0])]})
+                self.point_source.patch({"alpha": [(i, [0.1])]})
 
     def add_point_to_point_source(self, node: BerNode):
         self.node_order.append(node)
