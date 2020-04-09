@@ -172,7 +172,7 @@ class BernotNotebook:
             for segment in values["segments"].keys():
                 if not segment in self.segment_order:
                     self.add_segment_to_segment_source(segment)
-            self.update_segment_visibility(values["segments"][0])
+            self.update_segment_visibility(values["segments"].keys())
         else:
             self.update_segment_visibility([])
         if not (values["points"][-1] in self.node_order):
