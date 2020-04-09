@@ -123,7 +123,7 @@ class Bernot_Graph:
         source1_bifurcation_segment = (self.round_point(subgraph.source1.point), \
             self.round_point(subgraph.bifurcation.point), subgraph.source1.weight)
         source2_bifurcation_segment = (self.round_point(subgraph.source2.point), \
-            self.round_point(subgraph.bifurcation.point), subgraph.source2.weight)])
+            self.round_point(subgraph.bifurcation.point), subgraph.source2.weight))
         segments2.extend([bifurcation_endnode_segment, source1_bifurcation_segment, source2_bifurcation_segment])
         points2 = points.copy()
         points2.remove(self.round_node(subgraph.pivot_node))
