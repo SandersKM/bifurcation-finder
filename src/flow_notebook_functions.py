@@ -124,7 +124,7 @@ class FlowNotebook:
             self.get_optimal_bifurcation_point()
         self.make_line_data()
         self.make_point_data()
-        fig = figure()
+        fig = figure(match_aspect=True)
         fig.circle(x='x_values', y='y_values', source=self.point_source)
         fig.segment(x0 = "x0", y0="y0", x1="x1", y1="y1", color="navy", line_width=3, source=self.segment_source)
         fig.xaxis.ticker = SingleIntervalTicker(interval=1)
@@ -135,7 +135,9 @@ class FlowNotebook:
     def get_optimal_bifurcation_point(self, verbose=False):
         self.make_steps(verbose)
         out = widgets.Output(layout={'border': '1px solid black'})
-        out.append_stdout(f'Location: {self.steps[-1]} \t Cost: {self.cost[-1]} \t Theta: {self.theta[-1]}')
+        current_step = self.steps[-1]
+        out.append_stdout(f'Location:  ({round(current_step.x, 3)}, {round(current_step.y,3)}) \t'\
+            + f' M alpha: {round(self.m_alpha[-1], 3)}\t Total Cost: {round(self.cost[-1])} \t Theta: {round(self.theta[-1])}')
         return out
 
     def get_output(self):
@@ -149,5 +151,6 @@ class FlowNotebook:
         self.segment_source.patch({"x1": [(slice(3), [current_step.x, current_step.x, current_step.x])]})
         self.segment_source.patch({"y1": [(slice(3), [current_step.y, current_step.y, current_step.y])]})
         self.output_text.clear_output()
-        self.output_text.append_stdout(f"Theta: {self.theta[step]}\t M alpha: {self.m_alpha[step]}\t Total Cost: {self.cost[step]}\t Location: {current_step}")
+        self.output_text.append_stdout(f"Theta: {round(self.theta[step], 3)}\t M alpha: {round(self.m_alpha[step], 3)}"\
+            + f"\t Total Cost: {round(self.cost[step],3)}\t Location: ({round(current_step.x, 3)}, {round(current_step.y,3)})")
         push_notebook() 

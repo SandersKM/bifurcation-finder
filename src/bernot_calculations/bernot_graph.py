@@ -55,7 +55,7 @@ class Bernot_Graph:
             length: float = float(abs(seg[0].distance(seg[1])))
             weight: float = segments[seg]
             M_alpha += (weight**self.alpha) * length
-        return round(M_alpha, 2)
+        return round(M_alpha, 3)
 
     def get_arctan(self, node):
         return math.atan2(node.point.x - self.sink.point.x, \
