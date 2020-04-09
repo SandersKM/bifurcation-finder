@@ -107,7 +107,8 @@ class FlowNotebook:
         self.y_values = [
             n.y for n in self.graph.get_source_points() + [self.graph.get_sink_point()]
             + [self.graph.get_sink_point()] ]
-        data = {"x_values": self.x_values, 'y_values': self.y_values}
+        colors = ["green", "green", "red", "blue"]
+        data = {"x_values": self.x_values, 'y_values': self.y_values, "colors": colors}
         self.point_source =  ColumnDataSource(data=data)
 
     def make_line_data(self):
@@ -125,7 +126,7 @@ class FlowNotebook:
         self.make_line_data()
         self.make_point_data()
         fig = figure(match_aspect=True)
-        fig.circle(x='x_values', y='y_values', source=self.point_source)
+        fig.circle(x='x_values', y='y_values', color='colors', source=self.point_source)
         fig.segment(x0 = "x0", y0="y0", x1="x1", y1="y1", color="navy", line_width=3, source=self.segment_source)
         fig.xaxis.ticker = SingleIntervalTicker(interval=1)
         fig.yaxis.ticker = SingleIntervalTicker(interval=1)
