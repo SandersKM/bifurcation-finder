@@ -49,7 +49,7 @@ class Bernot_Graph:
     def subgraph_map(self):
         return self._subgraph_map  
 
-    def get_M_alpha(self, segments: Dict[(Point, Point), float]):
+    def get_M_alpha(self, segments):
         M_alpha = 0
         for seg in segments.keys(): 
             length: float = float(abs(seg[0].distance(seg[1])))
