@@ -28,8 +28,9 @@ class Bernot_Graph:
         self.visualization_steps = [("start", {"points": starting_points})]
         self.make_pivot_nodes()
         self.get_bifurcations(self.subgraph_map[str(self.top_pivot)], self.sink)
-        self.visualization_steps[len(self.visualization_steps) - 1][0] = "Final network. M alpha Cost: " + \
-            str(self.get_M_alpha(self.visualization_steps[-1][1]["segments"]))
+        last_visualization_values = self.visualization_steps[-1][1]
+        last_label = "Final network. M alpha Cost: " +  str(self.get_M_alpha(last_visualization_values["segments"]))
+        self.visualization_steps[len(self.visualization_steps) - 1] = (last_label, last_visualization_values)
         #self.print_final_graph()
 
     @property
