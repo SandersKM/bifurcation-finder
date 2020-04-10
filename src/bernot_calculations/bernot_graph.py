@@ -70,15 +70,21 @@ class Bernot_Graph:
     def get_next_subgraph(self, source_list):
         if (len(source_list) == 2):
             return self.subgraph_with_sources(source_list[0], source_list[1])
-        closest_sources = (source_list[0], source_list[1])
-        closest_distance = abs(source_list[0].get_distance_to(source_list[1]))
+        farthest_source_from_sink = None
+        max_distance = 0
         for i in range(len(source_list)):
-            for j in range(i + 1, len(source_list)):
-                distance = abs(source_list[i].get_distance_to(source_list[j]))
-                if distance < closest_distance:
-                    closest_distance = distance
-                    closest_sources = (source_list[i], source_list[j])
-        return self.subgraph_with_sources(closest_sources[0], closest_sources[1])
+            this_distance = source_list[i].get_distance_to(self.sink)
+            if  this_distance > max_distance:
+                max_distance = this_distance
+                farthest_source_from_sink = source_list[i]
+        next_closest_source = None
+        min_distance = float("inf")
+        for i in range(len(source_list)):
+            this_distance = source_list[i].get_distance_to(farthest_source_from_sink)
+            if  this_distance < min_distance:
+                min_distance = this_distance
+                next_closest_source = source_list[i]
+        return self.subgraph_with_sources(farthest_source_from_sink, next_closest_source)
 
     def round_point(self, point: Point):
         return Point( self.round(point.x) , self.round(point.y))
