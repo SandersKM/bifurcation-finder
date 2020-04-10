@@ -142,8 +142,12 @@ class BernotNotebook:
     def get_figure(self):
         fig = figure(match_aspect=True)
         self.make_point_data(self.graph.visualization_steps[0][1]["points"])
-        fig.circle(x='x_values', y='y_values', size="size", color="color", alpha="alpha",\
-            legend_group='label', source=self.point_source)
+        try:
+            fig.circle(x='x_values', y='y_values', size="size", color="color", alpha="alpha",\
+                legend_group='label', source=self.point_source)
+        except:
+            fig.circle(x='x_values', y='y_values', size="size", color="color", alpha="alpha",\
+                source=self.point_source)
         self.make_circle_data()
         fig.ellipse(x="x_values", y="y_values", width="diameter", height="diameter",\
             color="color", fill_color=None, line_width=2, line_alpha = "line_alpha", source=self.circle_source)
@@ -216,9 +220,13 @@ class BernotNotebook:
 
     def add_point_to_point_source(self, node: BerNode):
         self.node_order.append(node)
-        self.point_source.stream({"color": [self.get_node_color(node)], "x_values": [float(node.point.x)],\
-            "y_values": [float(node.point.y)], "alpha": [0.5], "size": [15], "label": [node.node_type.name]})
-
+        try:
+            self.point_source.stream({"color": [self.get_node_color(node)], "x_values": [float(node.point.x)],\
+                "y_values": [float(node.point.y)], "alpha": [0.5], "size": [15], "label": [node.node_type.name]})
+        except:
+            self.point_source.stream({"color": [self.get_node_color(node)], "x_values": [float(node.point.x)],\
+                "y_values": [float(node.point.y)], "alpha": [0.5], "size": [15]})
+      
     def get_node_color(self, node):
         if node.node_type == NodeType.PIVOT:
             return "purple"
