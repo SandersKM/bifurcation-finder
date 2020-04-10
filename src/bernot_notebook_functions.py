@@ -217,7 +217,7 @@ class BernotNotebook:
     def add_point_to_point_source(self, node: BerNode):
         self.node_order.append(node)
         self.point_source.stream({"color": [self.get_node_color(node)], "x_values": [float(node.point.x)],\
-            "y_values": [float(node.point.y)], "alpha": [0.5], "size": [15], "label": node.node_type.name})
+            "y_values": [float(node.point.y)], "alpha": [0.5], "size": [15], "label": [node.node_type.name]})
 
     def get_node_color(self, node):
         if node.node_type == NodeType.PIVOT:
