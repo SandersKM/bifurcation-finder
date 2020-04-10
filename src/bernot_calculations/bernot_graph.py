@@ -67,16 +67,23 @@ class Bernot_Graph:
     def subgraph_with_sources(self, source1: BerNode, source2:BerNode):
         return Bernot_Subgraph(source1, source2, self.sink, self.alpha)
 
+    def is_only_pivots(source_list):
+        for i in range(len(source_list)):
+            if source[i].node_type == NodeType.SOURCE:
+                return False
+        return True
+
     def get_next_subgraph(self, source_list):
         if (len(source_list) == 2):
             return self.subgraph_with_sources(source_list[0], source_list[1])
         farthest_source_from_sink = None
         max_distance = 0
         for i in range(len(source_list)):
-            this_distance = source_list[i].get_distance_to(self.sink)
-            if  this_distance > max_distance:
-                max_distance = this_distance
-                farthest_source_from_sink = source_list[i]
+            if source_list[i].node_type == NodeType.SOURCE or self.is_only_pivots(source_list):
+                this_distance = source_list[i].get_distance_to(self.sink)
+                if  this_distance > max_distance:
+                    max_distance = this_distance
+                    farthest_source_from_sink = source_list[i]
         next_closest_source = None
         min_distance = float("inf")
         for i in range(len(source_list)):
