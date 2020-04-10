@@ -91,7 +91,8 @@ class Bernot_Graph:
             if  this_distance < min_distance and (source_list[i] != farthest_source_from_sink):
                 min_distance = this_distance
                 next_closest_source = source_list[i]
-        return self.subgraph_with_sources(farthest_source_from_sink, next_closest_source)
+        sorted_nodes = get_clockwise_ordering([farthest_source_from_sink, next_closest_source])
+        return self.subgraph_with_sources(sorted_nodes[0], sorted_nodes[1])
 
     def round_point(self, point: Point):
         return Point( self.round(point.x) , self.round(point.y))
