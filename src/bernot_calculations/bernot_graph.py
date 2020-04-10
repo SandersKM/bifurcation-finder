@@ -67,9 +67,9 @@ class Bernot_Graph:
     def subgraph_with_sources(self, source1: BerNode, source2:BerNode):
         return Bernot_Subgraph(source1, source2, self.sink, self.alpha)
 
-    def is_only_pivots(source_list):
+    def is_only_pivots(self, source_list):
         for i in range(len(source_list)):
-            if source[i].node_type == NodeType.SOURCE:
+            if source_list[i].node_type == NodeType.SOURCE:
                 return False
         return True
 
