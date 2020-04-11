@@ -120,7 +120,7 @@ class BernotNotebook:
         for n in nodes:
             x_values.append(float(n.point.x))
             y_values.append(float(n.point.y))
-            size.append(15)
+            size.append(self.get_node_size(node))
             alpha.append(0.5)
             color.append(self.get_node_color(n))
             nodeType.append(n.node_type.name)
@@ -222,10 +222,10 @@ class BernotNotebook:
         self.node_order.append(node)
         try:
             self.point_source.stream({"color": [self.get_node_color(node)], "x_values": [float(node.point.x)],\
-                "y_values": [float(node.point.y)], "alpha": [0.5], "size": [15], "label": [node.node_type.name]})
+                "y_values": [float(node.point.y)], "alpha": [0.5], "size": [self.get_node_size(node)], "label": [node.node_type.name]})
         except:
             self.point_source.stream({"color": [self.get_node_color(node)], "x_values": [float(node.point.x)],\
-                "y_values": [float(node.point.y)], "alpha": [0.5], "size": [15]})
+                "y_values": [float(node.point.y)], "alpha": [0.5], "size": [self.get_node_size(node)]})
       
     def get_node_color(self, node):
         if node.node_type == NodeType.PIVOT:
@@ -236,5 +236,10 @@ class BernotNotebook:
             return "green"
         else:
             return "red"
+
+    def get_node_size(self, node):
+        if node.node_type == NodeType.PIVOT or node.node_type == NodeType.BIFURCATION:
+            return 12
+        return 17
 
     
