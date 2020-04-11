@@ -153,7 +153,7 @@ class BernotNotebook:
             fig.circle(x='x_values', y='y_values', size="size", color="color", alpha="alpha",\
                 source=self.point_source)
         fig.add_layout(LabelSet(x='x_values', y='y_values', text='weight', level='glyph',
-              x_offset=5, y_offset=5, source=self.point_source, render_mode='canvas'))
+              x_offset="x_offset", y_offset=5, source=self.point_source, render_mode='canvas'))
         self.make_circle_data()
         fig.ellipse(x="x_values", y="y_values", width="diameter", height="diameter",\
             color="color", fill_color=None, line_width=2, line_alpha = "line_alpha", source=self.circle_source)
