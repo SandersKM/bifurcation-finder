@@ -31,7 +31,7 @@ class Bernot_Graph:
         last_visualization_values = self.visualization_steps[-1][1]
         last_label = "Final network. M alpha Cost: " +  str(self.get_M_alpha(last_visualization_values["segments"]))
         self.visualization_steps[len(self.visualization_steps) - 1] = (last_label, last_visualization_values)
-        self.print_final_graph()
+        #self.print_final_graph()
 
     @property
     def sources(self):

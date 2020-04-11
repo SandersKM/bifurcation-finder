@@ -1,6 +1,6 @@
 from ipywidgets import interact, widgets
 from IPython.display import display, Javascript
-from bokeh.models import ColumnDataSource, SingleIntervalTicker
+from bokeh.models import ColumnDataSource, SingleIntervalTicker, LabelSet
 from bokeh.plotting import figure
 from bokeh.io import push_notebook
 from sympy.geometry import *
@@ -116,6 +116,7 @@ class BernotNotebook:
         alpha = []
         color = []
         nodeType = []
+        weight = []
         self.node_order = []
         for n in nodes:
             x_values.append(float(n.point.x))
@@ -124,8 +125,9 @@ class BernotNotebook:
             alpha.append(0.5)
             color.append(self.get_node_color(n))
             nodeType.append(n.node_type.name)
+            weight.append(n.weight)
             self.node_order.append(n)
-        data = {"x_values": x_values, 'y_values': y_values, \
+        data = {"x_values": x_values, 'y_values': y_values, "weight": weight,\
             "color": color, "size": size, "alpha": alpha, "label": nodeType}
         self.point_source =  ColumnDataSource(data=data)
 
@@ -148,6 +150,8 @@ class BernotNotebook:
         except:
             fig.circle(x='x_values', y='y_values', size="size", color="color", alpha="alpha",\
                 source=self.point_source)
+        fig.add_layout(LabelSet(x='x_values', y='y_values', text='weight', level='glyph',
+              x_offset=5, y_offset=5, source=self.point_source, render_mode='canvas'))
         self.make_circle_data()
         fig.ellipse(x="x_values", y="y_values", width="diameter", height="diameter",\
             color="color", fill_color=None, line_width=2, line_alpha = "line_alpha", source=self.circle_source)
@@ -222,10 +226,11 @@ class BernotNotebook:
         self.node_order.append(node)
         try:
             self.point_source.stream({"color": [self.get_node_color(node)], "x_values": [float(node.point.x)],\
-                "y_values": [float(node.point.y)], "alpha": [0.5], "size": [self.get_node_size(node)], "label": [node.node_type.name]})
+                "y_values": [float(node.point.y)], "alpha": [0.5], "size": [self.get_node_size(node)], \
+                    "label": [node.node_type.name], "weight": [node.weight]})
         except:
             self.point_source.stream({"color": [self.get_node_color(node)], "x_values": [float(node.point.x)],\
-                "y_values": [float(node.point.y)], "alpha": [0.5], "size": [self.get_node_size(node)]})
+                "y_values": [float(node.point.y)], "alpha": [0.5], "size": [self.get_node_size(node)], "weight": [node.weight]})
       
     def get_node_color(self, node):
         if node.node_type == NodeType.PIVOT:
@@ -239,7 +244,7 @@ class BernotNotebook:
 
     def get_node_size(self, node):
         if node.node_type == NodeType.PIVOT or node.node_type == NodeType.BIFURCATION:
-            return 12
+            return 10
         return 17
 
     
