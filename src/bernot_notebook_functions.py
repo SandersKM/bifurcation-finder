@@ -127,7 +127,7 @@ class BernotNotebook:
             color.append(self.get_node_color(n))
             offset.append(self.get_node_offset(n))
             nodeType.append(n.node_type.name)
-            weight.append(n.weight)
+            weight.append(self.get_node_weight(n))
             self.node_order.append(n)
         data = {"x_values": x_values, 'y_values': y_values, "weight": weight,\
             "color": color, "size": size, "alpha": alpha, "label": nodeType, "x_offset": offset}
@@ -231,11 +231,11 @@ class BernotNotebook:
         try:
             self.point_source.stream({"color": [self.get_node_color(node)], "x_values": [float(node.point.x)],\
                 "y_values": [float(node.point.y)], "alpha": [0.5], "size": [self.get_node_size(node)], \
-                    "label": [node.node_type.name], "weight": [node.weight], "x_offset": [self.get_node_offset(node)]})
+                    "label": [node.node_type.name], "weight": [self.get_node_weight(node)], "x_offset": [self.get_node_offset(node)]})
         except:
             self.point_source.stream({"color": [self.get_node_color(node)], "x_values": [float(node.point.x)],\
                 "y_values": [float(node.point.y)], "alpha": [0.5], "size": [self.get_node_size(node)],\
-                     "weight": [node.weight], "x_offset": [self.get_node_offset(node)]})
+                     "weight": [self.get_node_weight(node)], "x_offset": [self.get_node_offset(node)]})
       
     def get_node_color(self, node):
         if node.node_type == NodeType.PIVOT:
@@ -256,5 +256,10 @@ class BernotNotebook:
         if node.node_type == NodeType.PIVOT or node.node_type == NodeType.BIFURCATION:
             return -5
         return 5
+
+    def get_node_weight(self, node):
+        if node.node_type == NodeType.PIVOT or node.node_type == NodeType.BIFURCATION:
+            return ""
+        return node.weight
 
     
