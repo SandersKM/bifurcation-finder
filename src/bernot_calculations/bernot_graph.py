@@ -123,15 +123,17 @@ class Bernot_Graph:
         points = self.visualization_steps[-1][1]["points"].copy()
         circles = [(self.round_point(subgraph.source1.point), self.round(subgraph.radius)), \
             (self.round_point(subgraph.source2.point), self.round(subgraph.radius))]
-        self.visualization_steps.append(("get circles", {"points": points, "circles": circles}))
+        self.visualization_steps.append(("get circles", {"points": points, "circles": circles, "segments": segments}))
         center_circle = [(self.round_point(subgraph.center), self.round(subgraph.radius))]
-        self.visualization_steps.append(("get intersection circle", {"points": points, "circles": circles + center_circle}))
+        self.visualization_steps.append(("get intersection circle", {"points": points, \
+            "circles": circles + center_circle, "segments": segments}))
         pivot = [self.round_node(subgraph.pivot_node)]
-        self.visualization_steps.append(("get pivot", {"points": points + pivot, "circles": center_circle}))
+        self.visualization_steps.append(("get pivot", {"points": points + pivot,\
+             "circles": center_circle, "segments": segments}))
         points2 = points.copy()
         points2.remove(self.round_node(subgraph.source2))
         points2.remove(self.round_node(subgraph.source1))
-        self.visualization_steps.append(("collapse points", {"points": points2 + pivot}))
+        self.visualization_steps.append(("collapse points", {"points": points2 + pivot, "segments": segments}))
 
     def make_bifurcation_visualization_steps(self, subgraph: Bernot_Subgraph, endnode: BerNode):
         points = self.visualization_steps[-1][1]["points"].copy()
