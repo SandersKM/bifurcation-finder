@@ -220,7 +220,7 @@ class BernotNotebook:
     def update_node_visibility(self, nodes):
         for i in range(len(self.node_order)):
             if self.node_order[i] in nodes:
-                self.point_source.patch({"alpha": [(i, [0.8]), "weight": [self.node_order[i].weight]})
+                self.point_source.patch({"alpha": [(i, [0.8])], "weight": [self.node_order[i].weight]})
             else:
                 self.point_source.patch({"alpha": [(i, [0.1])], "weight": [" "]})
 
