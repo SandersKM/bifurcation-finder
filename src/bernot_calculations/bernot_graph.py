@@ -116,6 +116,10 @@ class Bernot_Graph:
         return n.round(Bernot_Graph.SIG_FIGS)
 
     def make_pivot_visualization_steps(self, subgraph: Bernot_Subgraph):
+        if not ("segments" in self.visualization_steps[-1][1]):
+            segments = {}
+        else:
+            segments = self.visualization_steps[-1][1]["segments"].copy()
         points = self.visualization_steps[-1][1]["points"].copy()
         circles = [(self.round_point(subgraph.source1.point), self.round(subgraph.radius)), \
             (self.round_point(subgraph.source2.point), self.round(subgraph.radius))]
@@ -134,10 +138,7 @@ class Bernot_Graph:
         points.append(self.round_node(subgraph.bifurcation))
         center_circle = [(self.round_point(subgraph.center), self.round(subgraph.radius))]
         big_line = (self.round_point(subgraph.pivot_node.point), self.round_point(endnode.point))
-        if not ("segments" in self.visualization_steps[-1][1]):
-            segments = {}
-        else:
-            segments = self.visualization_steps[-1][1]["segments"].copy()
+        segments = self.visualization_steps[-1][1]["segments"].copy()
         if big_line not in segments:
             segments[big_line] = None
         self.visualization_steps.append(("bifurcation point found at (" + str(round(subgraph.bifurcation.point.x)) + \
