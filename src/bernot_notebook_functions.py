@@ -117,6 +117,7 @@ class BernotNotebook:
         color = []
         nodeType = []
         weight = []
+        offset = []
         self.node_order = []
         for n in nodes:
             x_values.append(float(n.point.x))
@@ -124,11 +125,12 @@ class BernotNotebook:
             size.append(self.get_node_size(n))
             alpha.append(0.5)
             color.append(self.get_node_color(n))
+            offset.append(self.get_node_offset(n))
             nodeType.append(n.node_type.name)
             weight.append(n.weight)
             self.node_order.append(n)
         data = {"x_values": x_values, 'y_values': y_values, "weight": weight,\
-            "color": color, "size": size, "alpha": alpha, "label": nodeType}
+            "color": color, "size": size, "alpha": alpha, "label": nodeType, "x_offset": offset}
         self.point_source =  ColumnDataSource(data=data)
 
     def make_circle_data(self):
@@ -218,19 +220,20 @@ class BernotNotebook:
     def update_node_visibility(self, nodes):
         for i in range(len(self.node_order)):
             if self.node_order[i] in nodes:
-                self.point_source.patch({"alpha": [(i, [0.8])]})
+                self.point_source.patch({"alpha": [(i, [0.8]), "weight": [self.node_order[i].weight]})
             else:
-                self.point_source.patch({"alpha": [(i, [0.1])]})
+                self.point_source.patch({"alpha": [(i, [0.1])], "weight": [" "]})
 
     def add_point_to_point_source(self, node: BerNode):
         self.node_order.append(node)
         try:
             self.point_source.stream({"color": [self.get_node_color(node)], "x_values": [float(node.point.x)],\
                 "y_values": [float(node.point.y)], "alpha": [0.5], "size": [self.get_node_size(node)], \
-                    "label": [node.node_type.name], "weight": [node.weight]})
+                    "label": [node.node_type.name], "weight": [node.weight], "x_offset": [self.get_node_offset(node)]})
         except:
             self.point_source.stream({"color": [self.get_node_color(node)], "x_values": [float(node.point.x)],\
-                "y_values": [float(node.point.y)], "alpha": [0.5], "size": [self.get_node_size(node)], "weight": [node.weight]})
+                "y_values": [float(node.point.y)], "alpha": [0.5], "size": [self.get_node_size(node)],\
+                     "weight": [node.weight], "x_offset": [self.get_node_offset(node)})
       
     def get_node_color(self, node):
         if node.node_type == NodeType.PIVOT:
@@ -246,5 +249,10 @@ class BernotNotebook:
         if node.node_type == NodeType.PIVOT or node.node_type == NodeType.BIFURCATION:
             return 10
         return 17
+    
+    def get_node_offset(self, node):
+        if node.node_type == NodeType.PIVOT or node.node_type == NodeType.BIFURCATION:
+            return -5
+        return 5
 
     
