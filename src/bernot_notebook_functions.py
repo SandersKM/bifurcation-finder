@@ -57,7 +57,7 @@ class BernotNotebook:
         return self.sink_input
 
     def make_parameters_tab(self):
-        self.parameters_input = widgets.HBox([widgets.BoundedFloatText(description="alpha", value=.5, max = .99, min = .001)])
+        self.parameters_input = widgets.HBox([widgets.BoundedFloatText(description="alpha", value=.5, max = .99, min = .49999)])
         return self.parameters_input
 
     def make_tabs(self):
