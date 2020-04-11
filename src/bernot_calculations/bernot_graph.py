@@ -75,7 +75,7 @@ class Bernot_Graph:
 
     def get_next_subgraph(self, source_list):
         if (len(source_list) == 2):
-            return self.subgraph_with_sources(source_list[0], source_list[1])
+            return (True, self.subgraph_with_sources(source_list[0], source_list[1]))
         farthest_source_from_sink = None
         max_distance = 0
         for i in range(len(source_list)):
@@ -91,8 +91,20 @@ class Bernot_Graph:
             if  this_distance < min_distance and (source_list[i] != farthest_source_from_sink):
                 min_distance = this_distance
                 next_closest_source = source_list[i]
+        if (min_distance >= farthest_source_from_sink.get_distance_to(self.sink)):
+            self.make_line_to_sink(farthest_source_from_sink)
+            return (False, farthest_source_from_sink)
         sorted_nodes = self.get_clockwise_ordering([farthest_source_from_sink, next_closest_source])
-        return self.subgraph_with_sources(sorted_nodes[0], sorted_nodes[1])
+        return (True, self.subgraph_with_sources(sorted_nodes[0], sorted_nodes[1]))
+
+    def make_line_to_sink(self, node):
+        if not ("segments" in self.visualization_steps[-1][1]):
+            segments = {}
+        else:
+            segments = self.visualization_steps[-1][1]["segments"].copy()
+        segments[(self.round_point(self.sink.point), self.round_point(node.point))] = node.weight
+        self.visualization_steps.append(("connect bifurcation", {"points": self.visualization_steps[-1][1]["points"], "segments": segments}))
+        
 
     def round_point(self, point: Point):
         return Point( self.round(point.x) , self.round(point.y))
@@ -145,13 +157,16 @@ class Bernot_Graph:
     def make_pivot_nodes(self):
         startnodes = self.sources.copy()
         while len(startnodes) > 1:
-            subgraph = self.get_next_subgraph(startnodes)
-            startnodes.remove(subgraph.source1)
-            startnodes.remove(subgraph.source2)
-            self.make_pivot_visualization_steps(subgraph)
-            startnodes.append(subgraph.pivot_node)
-            startnodes = self.get_clockwise_ordering(startnodes)
-            self._subgraph_map[str(subgraph.pivot_node)] = subgraph
+            is_subgraph, result = self.get_next_subgraph(startnodes)
+            if is_subgraph:
+                startnodes.remove(subgraph.result)
+                startnodes.remove(subgraph.result)
+                self.make_pivot_visualization_steps(result)
+                startnodes.append(result.pivot_node)
+                startnodes = self.get_clockwise_ordering(startnodes)
+                self._subgraph_map[str(result.pivot_node)] = result
+            else:
+                startnodes.remove(result)
         self.top_pivot = startnodes[0]
     
     def get_bifurcations(self, subgraph: Bernot_Subgraph, endnode: BerNode):
