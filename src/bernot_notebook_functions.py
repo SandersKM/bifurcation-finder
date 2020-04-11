@@ -221,10 +221,10 @@ class BernotNotebook:
         for i in range(len(self.node_order)):
             if self.node_order[i] in nodes:
                 self.point_source.patch({"alpha": [(i, [0.8])]})
-                self.point_source.patch({"x_offset": [(i, [self.node_order[i].weight])]})
+                self.point_source.patch({"weight": [(i, [self.node_order[i].weight])]})
             else:
                 self.point_source.patch({"alpha": [(i, [0.1])]})
-                self.point_source.patch({"x_offset": [(i, [" "])]})
+                self.point_source.patch({"weight": [(i, [" "])]})
 
     def add_point_to_point_source(self, node: BerNode):
         self.node_order.append(node)
