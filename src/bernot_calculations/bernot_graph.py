@@ -31,7 +31,7 @@ class Bernot_Graph:
         last_visualization_values = self.visualization_steps[-1][1]
         last_label = "Final network. M alpha Cost: " +  str(self.get_M_alpha(last_visualization_values["segments"]))
         self.visualization_steps[len(self.visualization_steps) - 1] = (last_label, last_visualization_values)
-        #self.print_final_graph()
+        self.print_final_graph()
 
     @property
     def sources(self):
@@ -55,7 +55,7 @@ class Bernot_Graph:
             length: float = float(abs(seg[0].distance(seg[1])))
             weight: float = segments[seg]
             M_alpha += (weight**self.alpha) * length
-        return self.round(M_alpha)
+        return round(M_alpha, Bernot_Graph.SIG_FIGS)
 
     def get_arctan(self, node):
         return math.atan2(node.point.x - self.sink.point.x, \
@@ -142,9 +142,10 @@ class Bernot_Graph:
         segments = self.visualization_steps[-1][1]["segments"].copy()
         if big_line not in segments:
             segments[big_line] = None
-        self.visualization_steps.append(("bifurcation point found at (" + str(self.round(subgraph.bifurcation.point.x)) + \
-            ", " + str(self.round(subgraph.bifurcation.point.y)) + ")", {"points": points, \
-            "circles": center_circle, "segments": segments}))
+        self.visualization_steps.append(("bifurcation point found at (" +\
+             str(round(subgraph.bifurcation.point.x, Bernot_Graph.SIG_FIGS)) + \
+                  ", " + str(round(subgraph.bifurcation.point.y, Bernot_Graph.SIG_FIGS)) + ")", \
+                      {"points": points, "circles": center_circle, "segments": segments}))
         segments2 = segments.copy()
         del segments2[big_line]
         segments2[(self.round_point(endnode.point), self.round_point(subgraph.bifurcation.point))] = subgraph.bifurcation.weight

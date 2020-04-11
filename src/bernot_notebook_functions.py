@@ -120,7 +120,7 @@ class BernotNotebook:
         for n in nodes:
             x_values.append(float(n.point.x))
             y_values.append(float(n.point.y))
-            size.append(self.get_node_size(node))
+            size.append(self.get_node_size(n))
             alpha.append(0.5)
             color.append(self.get_node_color(n))
             nodeType.append(n.node_type.name)
