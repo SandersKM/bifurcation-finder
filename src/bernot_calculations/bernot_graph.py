@@ -159,8 +159,8 @@ class Bernot_Graph:
         while len(startnodes) > 1:
             is_subgraph, result = self.get_next_subgraph(startnodes)
             if is_subgraph:
-                startnodes.remove(subgraph.result)
-                startnodes.remove(subgraph.result)
+                startnodes.remove(result.source1)
+                startnodes.remove(result.source2)
                 self.make_pivot_visualization_steps(result)
                 startnodes.append(result.pivot_node)
                 startnodes = self.get_clockwise_ordering(startnodes)
