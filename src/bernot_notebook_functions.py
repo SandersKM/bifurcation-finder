@@ -233,7 +233,7 @@ class BernotNotebook:
         except:
             self.point_source.stream({"color": [self.get_node_color(node)], "x_values": [float(node.point.x)],\
                 "y_values": [float(node.point.y)], "alpha": [0.5], "size": [self.get_node_size(node)],\
-                     "weight": [node.weight], "x_offset": [self.get_node_offset(node)})
+                     "weight": [node.weight], "x_offset": [self.get_node_offset(node)]})
       
     def get_node_color(self, node):
         if node.node_type == NodeType.PIVOT:
