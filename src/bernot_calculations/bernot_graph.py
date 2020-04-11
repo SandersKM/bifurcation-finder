@@ -103,8 +103,7 @@ class Bernot_Graph:
         else:
             segments = self.visualization_steps[-1][1]["segments"].copy()
         segments[(self.round_point(self.sink.point), self.round_point(node.point))] = node.weight
-        self.visualization_steps.append(("connect bifurcation", {"points": self.visualization_steps[-1][1]["points"], "segments": segments}))
-        
+        self.visualization_steps.append(("connect isolated point", {"points": self.visualization_steps[-1][1]["points"], "segments": segments}))
 
     def round_point(self, point: Point):
         return Point( self.round(point.x) , self.round(point.y))

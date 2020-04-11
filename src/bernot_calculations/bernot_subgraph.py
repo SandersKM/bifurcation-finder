@@ -54,7 +54,11 @@ class Bernot_Subgraph:
 
     def get_pivot_node(self):
         degree_radians = 2 * self.calculate_optimal_theta2()
-        location = self.source2.point.rotate(degree_radians, self.center)
+        location: Point = self.source2.point.rotate(degree_radians, self.center)
+        location_to_sink: float = location.distance(self.sink.point) 
+        if location_to_sink < self.source1.get_distance_to(self.sink) and  location_to_sink < self.source2.get_distance_to(self.sink):
+            degree_radians = 2 * self.calculate_optimal_theta1()
+            location: Point = self.source1.point.rotate(degree_radians, self.center)
         weight = self.source1.weight + self.source2.weight
         return BerNode(weight, location, NodeType.PIVOT)
 
