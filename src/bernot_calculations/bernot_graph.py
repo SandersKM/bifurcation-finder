@@ -85,7 +85,7 @@ class Bernot_Graph:
             return self.subgraph_with_sources(sorted_nodes[0], sorted_nodes[1])
         sorted_nodes = self.get_clockwise_ordering([source_list[-1], source_list[0]])
         return self.subgraph_with_sources(sorted_nodes[0], sorted_nodes[1])
-
+ 
     def get_next_subgraph(self, source_list):
         if (len(source_list) == 2):
             return (True, self.subgraph_with_sources(source_list[0], source_list[1]))
