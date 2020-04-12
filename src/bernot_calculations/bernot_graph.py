@@ -106,9 +106,9 @@ class Bernot_Graph:
             if  this_distance < min_distance and (source_list[i] != farthest_source_from_sink):
                 min_distance = this_distance
                 next_closest_source = source_list[i]
-        if min_distance >= farthest_source_from_sink.get_distance_to(self.sink):
-            self.make_line_to_sink(farthest_source_from_sink)
-            return (False, farthest_source_from_sink)
+        #if min_distance >= farthest_source_from_sink.get_distance_to(self.sink):
+        #    self.make_line_to_sink(farthest_source_from_sink)
+        #    return (False, farthest_source_from_sink)
         sorted_nodes = self.get_clockwise_ordering([farthest_source_from_sink, next_closest_source])
         return (True, self.subgraph_with_sources(sorted_nodes[0], sorted_nodes[1]))
 
