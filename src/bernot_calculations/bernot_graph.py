@@ -77,10 +77,10 @@ class Bernot_Graph:
         right_closeness = abs(source_list[0].get_distance_to(source_list[1]))
         left_closeness = abs(source_list[-1].get_distance_to(source_list[-2]))
         across_closeness = abs(source_list[-1].get_distance_to(source_list[0]))
-        if right_closeness < left_closeness and right_closeness < across_closeness:
+        if right_closeness <= left_closeness and right_closeness <= across_closeness:
             sorted_nodes = self.get_clockwise_ordering([source_list[0], source_list[1]])
             return self.subgraph_with_sources(sorted_nodes[0], sorted_nodes[1])
-        elif left_closeness < right_closeness and left_closeness < across_closeness:
+        elif left_closeness <= right_closeness and left_closeness <= across_closeness:
             sorted_nodes = self.get_clockwise_ordering([source_list[-2], source_list[-1]])
             return self.subgraph_with_sources(sorted_nodes[0], sorted_nodes[1])
         sorted_nodes = self.get_clockwise_ordering([source_list[-1], source_list[0]])
