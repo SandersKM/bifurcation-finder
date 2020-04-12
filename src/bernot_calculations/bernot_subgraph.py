@@ -42,9 +42,9 @@ class Bernot_Subgraph:
     def get_bifurcation_point(self, endpoint: Point):
         weight = self.source2.weight + self.source1.weight
         circle = Circle(self.center, self.radius)
-        if (self.get_closer_point(endpoint, self.source1.point) != endpoint):
+        if (self.get_closer_point(endpoint, self.source1.point, self.sink.point) != endpoint):
             endpoint = self.source1.point
-        if (self.get_closer_point(endpoint, self.source2.point) != endpoint):
+        if (self.get_closer_point(endpoint, self.source2.point, self.sink.point) != endpoint):
             endpoint = self.source2.point
         if self.is_v_degeneracy(circle, endpoint):
             self.bifurcation = BerNode(weight, endpoint, NodeType.BIFURCATION)
