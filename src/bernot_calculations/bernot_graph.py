@@ -90,7 +90,7 @@ class Bernot_Graph:
         if (len(source_list) == 2):
             return (True, self.subgraph_with_sources(source_list[0], source_list[1]))
         if self.is_only_pivots(source_list):
-            return self.get_next_subgraph_only_pivots(source_list)
+            return (True, self.get_next_subgraph_only_pivots(source_list))
         farthest_source_from_sink = None
         max_distance = 0
         for i in range(len(source_list)):
