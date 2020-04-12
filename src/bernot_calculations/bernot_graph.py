@@ -74,25 +74,17 @@ class Bernot_Graph:
         return True
 
     def get_next_subgraph_only_pivots(self, source_list):
-        closest_source_to_sink = None
-        min_distance = float("inf")
-        for i in range(len(source_list)):
-            this_distance = source_list[i].get_distance_to(self.sink)
-            if  this_distance < min_distance:
-                min_distance = this_distance
-                closest_source_to_sink = source_list[i]
-        next_closest_source = None
-        min_distance = float("inf")
-        for i in range(len(source_list)):
-            this_distance = source_list[i].get_distance_to(closest_source_to_sink)
-            if  this_distance < min_distance and (source_list[i] != closest_source_to_sink):
-                min_distance = this_distance
-                next_closest_source = source_list[i]
-        if min_distance >= closest_source_to_sink.get_distance_to(self.sink):
-            self.make_line_to_sink(closest_source_to_sink)
-            return (False, closest_source_to_sink)
-        sorted_nodes = self.get_clockwise_ordering([closest_source_to_sink, next_closest_source])
-        return (True, self.subgraph_with_sources(sorted_nodes[0], sorted_nodes[1]))
+        right_closeness = abs(source_list[0].get_distance_to(source_list[1]))
+        left_closeness = abs(source_list[-1].get_distance_to(source_list[-2]))
+        across_closeness = abs(source_list[-1].get_distance_to(source_list[0]))
+        if right_closeness < left_closeness and right_closeness < across_closeness:
+            sorted_nodes = self.get_clockwise_ordering([source_list[0], source_list[1]])
+            return self.subgraph_with_sources(sorted_nodes[0], sorted_nodes[1])
+        elif left_closeness < right_closeness and left_closeness < across_closeness:
+            sorted_nodes = self.get_clockwise_ordering(source_list[-2], source_list[-1])
+            return self.subgraph_with_sources(sorted_nodes[0], sorted_nodes[1])
+        sorted_nodes = self.get_clockwise_ordering(source_list[-1], source_list[0])
+        return self.subgraph_with_sources(sorted_nodes[0], sorted_nodes[1])
 
     def get_next_subgraph(self, source_list):
         if (len(source_list) == 2):
