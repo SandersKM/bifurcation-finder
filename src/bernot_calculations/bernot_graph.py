@@ -73,13 +73,36 @@ class Bernot_Graph:
                 return False
         return True
 
+    def get_next_subgraph_only_pivots(self, source_list):
+        closest_source_to_sink = None
+        min_distance = float("inf")
+        for i in range(len(source_list)):
+            this_distance = source_list[i].get_distance_to(self.sink)
+            if  this_distance < min_distance:
+                min_distance = this_distance
+                closest_source_to_sink = source_list[i]
+        next_closest_source = None
+        min_distance = float("inf")
+        for i in range(len(source_list)):
+            this_distance = source_list[i].get_distance_to(closest_source_to_sink)
+            if  this_distance < min_distance and (source_list[i] != closest_source_to_sink):
+                min_distance = this_distance
+                next_closest_source = source_list[i]
+        if min_distance >= closest_source_to_sink.get_distance_to(self.sink):
+            self.make_line_to_sink(closest_source_to_sink)
+            return (False, closest_source_to_sink)
+        sorted_nodes = self.get_clockwise_ordering([closest_source_to_sink, next_closest_source])
+        return (True, self.subgraph_with_sources(sorted_nodes[0], sorted_nodes[1]))
+
     def get_next_subgraph(self, source_list):
         if (len(source_list) == 2):
             return (True, self.subgraph_with_sources(source_list[0], source_list[1]))
+        if self.is_only_pivots(source_list):
+            return self.get_next_subgraph_only_pivots(source_list)
         farthest_source_from_sink = None
         max_distance = 0
         for i in range(len(source_list)):
-            if source_list[i].node_type == NodeType.SOURCE or self.is_only_pivots(source_list):
+            if source_list[i].node_type == NodeType.SOURCE:
                 this_distance = source_list[i].get_distance_to(self.sink)
                 if  this_distance > max_distance:
                     max_distance = this_distance
@@ -91,7 +114,7 @@ class Bernot_Graph:
             if  this_distance < min_distance and (source_list[i] != farthest_source_from_sink):
                 min_distance = this_distance
                 next_closest_source = source_list[i]
-        if (min_distance >= farthest_source_from_sink.get_distance_to(self.sink) and farthest_source_from_sink.node_type == NodeType.SOURCE ):
+        if min_distance >= farthest_source_from_sink.get_distance_to(self.sink):
             self.make_line_to_sink(farthest_source_from_sink)
             return (False, farthest_source_from_sink)
         sorted_nodes = self.get_clockwise_ordering([farthest_source_from_sink, next_closest_source])
