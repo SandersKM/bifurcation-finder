@@ -50,6 +50,8 @@ class Bernot_Subgraph:
                 self.source1.point, self.source2.point, endpoint)
             bifurcation_point = self.get_closer_point(
                 potential_bifurcation, closest_to_endpoint, endpoint)
+            closest_to_sink = self.get_closer_point(self.source1.point, self.source2.point, self.sink.point)
+            bifurcation_point = self.get_closer_point(bifurcation_point, closest_to_sink, self.sink.point)
             self.bifurcation = BerNode(weight, bifurcation_point, NodeType.BIFURCATION)
 
     def get_pivot_node(self):
