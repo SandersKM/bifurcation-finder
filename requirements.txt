@@ -3,4 +3,4 @@ scipy
 ipywidgets
 bokeh
 numpy
-sympy
+sympy==1.3
